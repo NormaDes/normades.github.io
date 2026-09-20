@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RefSim — Entrena tus decisiones arbitrales | Simulador IFAB</title>
+<meta name="description" content="Simulador de arbitraje basado en las Reglas del Juego de la IFAB. Practica jugadas reales, haz el examen oficial de 25 jugadas y compite con tu escuela. Gratis, en castellano y euskera.">
+<meta name="theme-color" content="#070E0C">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="canonical" href="index.html">
+
+<!-- Redes sociales -->
+<meta property="og:title" content="RefSim — Simulador arbitral IFAB">
+<meta property="og:description" content="Entrena tus decisiones como en la sala VAR. Casos reales de las Reglas del Juego de la IFAB.">
+<meta property="og:image" content="logo-completo.png">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ==========================================================================
+   RefSim — Landing de campaña (Google Ads)
+   Página independiente: no depende de style.css ni de ningún JS.
+   Su único objetivo es presentar RefSim y llevar al usuario a index.html.
+   ========================================================================== */
+
+:root {
+    --noche: #070E0C;
+    --noche-2: #0A1512;
+    --panel: #0F1A16;
+    --panel-alto: #142520;
+    --linea: rgba(237, 237, 230, 0.10);
+    --linea-fuerte: rgba(237, 237, 230, 0.22);
+    --amarilla: #F5C518;
+    --amarilla-clara: #FFD95A;
+    --roja: #E63946;
+    --verde: #2E9B5E;
+    --verde-claro: #3FD684;
+    --papel: #EDEDE6;
+    --tenue: #93A79E;
+    --tenue-oscuro: #62786F;
+    --fuente-display: 'Barlow Condensed', 'Inter', sans-serif;
+    --fuente-texto: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --radio-s: 8px;
+    --radio-m: 14px;
+    --radio-l: 20px;
+    --radio-pill: 999px;
+    --sombra: 0 24px 50px -24px rgba(0, 0, 0, 0.85);
+    --rapido: 140ms ease;
+    --medio: 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+    min-height: 100vh;
+    font-family: var(--fuente-texto);
+    font-size: 1rem;
+    line-height: 1.55;
+    color: var(--papel);
+    background:
+        radial-gradient(1100px 620px at 50% -12%, rgba(46, 155, 94, 0.20), transparent 62%),
+        radial-gradient(760px 420px at 88% 8%, rgba(245, 197, 24, 0.10), transparent 60%),
+        var(--noche);
+    -webkit-font-smoothing: antialiased;
+}
+
+.envoltorio {
+    width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 28px 20px 0;
+}
+
+/* --- Cabecera mínima --- */
+.cab {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 44px;
+}
+
+.cab__marca {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.cab__marca img { width: 38px; height: 38px; }
+
+.cab__marca strong {
+    font-family: var(--fuente-display);
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    line-height: 1;
+}
+
+.cab__marca span {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--tenue);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.cab__enlace {
+    padding: 9px 18px;
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--papel);
+    text-decoration: none;
+    border: 1px solid var(--linea-fuerte);
+    border-radius: var(--radio-pill);
+    transition: background var(--rapido), border-color var(--rapido);
+}
+
+.cab__enlace:hover { background: rgba(237, 237, 230, 0.08); border-color: var(--verde-claro); }
+
+/* --- Hero --- */
+.hero { text-align: center; }
+
+.hero__kicker {
+    display: inline-block;
+    margin-bottom: 16px;
+    padding: 6px 15px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--amarilla-clara);
+    background: rgba(245, 197, 24, 0.10);
+    border: 1px solid rgba(245, 197, 24, 0.30);
+    border-radius: var(--radio-pill);
+}
+
+.hero h1 {
+    font-family: var(--fuente-display);
+    font-size: clamp(2.3rem, 7vw, 4.1rem);
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    margin-bottom: 16px;
+}
+
+.hero h1 em {
+    font-style: normal;
+    color: var(--verde-claro);
+}
+
+.hero__sub {
+    max-width: 640px;
+    margin: 0 auto 28px;
+    font-size: clamp(1rem, 2.4vw, 1.16rem);
+    color: var(--tenue);
+}
+
+.hero__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 15px 30px;
+    font-family: var(--fuente-texto);
+    font-size: 1.02rem;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: var(--radio-pill);
+    transition: transform var(--rapido), filter var(--rapido), box-shadow var(--rapido);
+}
+
+.cta--principal {
+    color: var(--noche);
+    background: linear-gradient(180deg, var(--verde-claro), var(--verde));
+    box-shadow: 0 14px 34px -16px rgba(63, 214, 132, 0.9);
+}
+
+.cta--secundaria {
+    color: var(--papel);
+    background: rgba(237, 237, 230, 0.06);
+    border: 1px solid var(--linea-fuerte);
+}
+
+.cta:hover { transform: translateY(-2px); filter: brightness(1.06); }
+.cta:active { transform: translateY(0); }
+
+.hero__nota {
+    font-size: 0.8rem;
+    color: var(--tenue-oscuro);
+}
+
+/* --- Vista previa clicable de la web --- */
+.vistazo {
+    display: block;
+    margin: 42px auto 0;
+    max-width: 900px;
+    text-decoration: none;
+    color: inherit;
+    border-radius: var(--radio-l);
+    transition: transform var(--medio), box-shadow var(--medio);
+}
+
+.vistazo:hover { transform: translateY(-6px); }
+.vistazo:focus-visible { outline: 3px solid var(--amarilla); outline-offset: 6px; }
+
+.navegador {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--linea-fuerte);
+    border-radius: var(--radio-l);
+    background: var(--noche-2);
+    box-shadow: var(--sombra);
+}
+
+.navegador__barra {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 14px;
+    background: #101C18;
+    border-bottom: 1px solid var(--linea);
+}
+
+.punto { width: 10px; height: 10px; border-radius: 50%; }
+.punto--r { background: #FF5F57; }
+.punto--a { background: #FEBC2E; }
+.punto--v { background: #28C840; }
+
+.navegador__url {
+    flex: 1;
+    margin-left: 10px;
+    padding: 5px 14px;
+    font-size: 0.74rem;
+    color: var(--tenue);
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: var(--radio-pill);
+    text-align: center;
+}
+
+/* Captura real de la web (sustituible) */
+.navegador__captura {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* Maqueta dibujada con CSS: se muestra si no hay captura */
+.maqueta { padding: 22px; }
+
+.maqueta__cab {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid var(--linea);
+}
+
+.maqueta__marca {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: var(--fuente-display);
+    font-size: 1.25rem;
+    font-weight: 800;
+}
+
+.maqueta__marca img { width: 26px; height: 26px; }
+
+.maqueta__nav {
+    display: flex;
+    gap: 16px;
+    font-size: 0.76rem;
+    color: var(--tenue);
+}
+
+.maqueta__nav span:first-child { color: var(--verde-claro); font-weight: 600; }
+
+.maqueta__cuerpo {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 16px;
+}
+
+.monitor {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    border-radius: var(--radio-m);
+    border: 1px solid var(--linea);
+    background:
+        repeating-linear-gradient(90deg, #2B8F58 0 34px, #24794A 34px 68px);
+    overflow: hidden;
+}
+
+.monitor::after {
+    content: "";
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    top: 12%;
+    bottom: 12%;
+    border: 2px solid rgba(255, 255, 255, 0.55);
+    border-radius: 4px;
+}
+
+.monitor__var {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    padding: 3px 10px;
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    color: var(--noche);
+    background: var(--amarilla);
+    border-radius: var(--radio-pill);
+}
+
+.monitor__jugador {
+    position: absolute;
+    z-index: 2;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.monitor__jugador--a { background: #FFFFFF; top: 46%; left: 38%; }
+.monitor__jugador--b { background: var(--roja); top: 52%; left: 47%; }
+.monitor__balon {
+    position: absolute;
+    z-index: 2;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    top: 62%;
+    left: 44%;
+}
+
+.panel-lat { display: flex; flex-direction: column; gap: 10px; }
+
+.chip-stats {
+    display: flex;
+    gap: 8px;
+}
+
+.chip {
+    flex: 1;
+    padding: 9px 8px;
+    text-align: center;
+    background: var(--panel);
+    border: 1px solid var(--linea);
+    border-radius: var(--radio-s);
+}
+
+.chip b {
+    display: block;
+    font-family: var(--fuente-display);
+    font-size: 1.15rem;
+    color: var(--verde-claro);
+}
+
+.chip span {
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--tenue-oscuro);
+}
+
+.falsa-pregunta {
+    padding: 11px 12px;
+    font-size: 0.76rem;
+    color: var(--tenue);
+    background: var(--panel);
+    border: 1px solid var(--linea);
+    border-radius: var(--radio-s);
+}
+
+.falsas-opciones { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+
+.falsa-op {
+    padding: 9px 6px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--papel);
+    background: var(--panel-alto);
+    border: 1px solid var(--linea);
+    border-radius: var(--radio-s);
+}
+
+.falsa-op--amarilla { border-color: rgba(245, 197, 24, 0.5); color: var(--amarilla-clara); }
+.falsa-op--roja { border-color: rgba(230, 57, 70, 0.5); color: #FF8A93; }
+
+/* Capa "Entrar" sobre la vista previa */
+.vistazo__capa {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(7, 14, 12, 0.55);
+    opacity: 0;
+    transition: opacity var(--medio);
+}
+
+.vistazo:hover .vistazo__capa,
+.vistazo:focus-visible .vistazo__capa { opacity: 1; }
+
+.vistazo__boton {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 14px 28px;
+    font-weight: 700;
+    color: var(--noche);
+    background: var(--amarilla);
+    border-radius: var(--radio-pill);
+    box-shadow: 0 16px 36px -18px rgba(245, 197, 24, 0.9);
+}
+
+.vistazo__pie {
+    margin-top: 12px;
+    font-size: 0.8rem;
+    text-align: center;
+    color: var(--tenue-oscuro);
+}
+
+/* --- Ventajas --- */
+.ventajas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 16px;
+    margin-top: 58px;
+}
+
+.ventaja {
+    padding: 22px 20px;
+    background: rgba(20, 37, 32, 0.62);
+    border: 1px solid var(--linea);
+    border-radius: var(--radio-m);
+}
+
+.ventaja__icono {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 13px;
+    color: var(--verde-claro);
+    background: rgba(63, 214, 132, 0.12);
+    border-radius: var(--radio-s);
+}
+
+.ventaja h3 {
+    font-family: var(--fuente-display);
+    font-size: 1.22rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.ventaja p { font-size: 0.9rem; color: var(--tenue); }
+
+/* --- Cierre --- */
+.cierre {
+    margin: 58px 0 0;
+    padding: 40px 24px;
+    text-align: center;
+    background: linear-gradient(180deg, rgba(46, 155, 94, 0.16), rgba(46, 155, 94, 0.04));
+    border: 1px solid rgba(63, 214, 132, 0.28);
+    border-radius: var(--radio-l);
+}
+
+.cierre h2 {
+    font-family: var(--fuente-display);
+    font-size: clamp(1.8rem, 4.6vw, 2.5rem);
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.cierre p {
+    max-width: 520px;
+    margin: 0 auto 22px;
+    color: var(--tenue);
+}
+
+/* --- Pie --- */
+.pie {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 42px;
+    padding: 22px 0 30px;
+    font-size: 0.8rem;
+    color: var(--tenue-oscuro);
+    border-top: 1px solid var(--linea);
+}
+
+.pie__links { display: flex; flex-wrap: wrap; gap: 14px; }
+
+.pie a {
+    color: var(--tenue);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.pie a:hover { color: var(--papel); text-decoration: underline; }
+
+/* --- Responsive --- */
+@media (max-width: 720px) {
+    .envoltorio { padding-top: 20px; }
+    .cab { margin-bottom: 30px; }
+    .cab__enlace { display: none; }
+    .maqueta__nav { display: none; }
+    .maqueta__cuerpo { grid-template-columns: 1fr; }
+    .cta { width: 100%; justify-content: center; }
+    .vistazo__capa { opacity: 1; background: rgba(7, 14, 12, 0.30); }
+    .vistazo__boton { padding: 12px 22px; font-size: 0.92rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        transition-duration: 0.001ms !important;
+        animation-duration: 0.001ms !important;
+    }
+    html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+
+<div class="envoltorio">
+
+    <!-- CABECERA -->
+    <header class="cab">
+        <a class="cab__marca" href="index.html">
+            <img src="logo-simbolo.png" alt="" aria-hidden="true" width="38" height="38">
+            <div>
+                <strong>RefSim</strong>
+                <span>Simulador arbitral IFAB</span>
+            </div>
+        </a>
+        <a class="cab__enlace" href="index.html">Entrar a la web</a>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <span class="hero__kicker">Formación arbitral · Gratis</span>
+        <h1>Entrena tus decisiones <em>como en la sala VAR</em></h1>
+        <p class="hero__sub">
+            Jugadas reales basadas en las Reglas del Juego de la IFAB, con explicación reglamentaria
+            tras cada decisión. Práctica rápida, examen oficial de 25 jugadas y ligas privadas para tu
+            escuela de árbitros. En castellano y euskera.
+        </p>
+
+        <div class="hero__acciones">
+            <a class="cta cta--principal" href="index.html">
+                Entrar en RefSim
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a class="cta cta--secundaria" href="modo-practica.html">Probar una jugada</a>
+        </div>
+        <p class="hero__nota">Sin instalación · Funciona en móvil y ordenador · Puedes jugar sin registrarte</p>
+    </section>
+
+    <!-- ==================================================================
+         VISTA PREVIA CLICABLE DE LA WEB
+         Para usar una captura real: haz una captura de index.html,
+         guárdala como captura-refsim.png junto a este archivo y sustituye
+         todo el bloque <div class="maqueta"> ... </div> por:
+             <img class="navegador__captura" src="captura-refsim.png"
+                  alt="Pantalla principal de RefSim" width="1600" height="1000">
+         ================================================================== -->
+    <a class="vistazo" href="index.html" aria-label="Abrir RefSim">
+        <div class="navegador">
+            <div class="navegador__barra">
+                <span class="punto punto--r"></span>
+                <span class="punto punto--a"></span>
+                <span class="punto punto--v"></span>
+                <span class="navegador__url">refsim · Simulador arbitral IFAB</span>
+            </div>
+
+            <div class="maqueta">
+                <div class="maqueta__cab">
+                    <div class="maqueta__marca">
+                        <img src="logo-simbolo.png" alt="" aria-hidden="true" width="26" height="26">
+                        RefSim
+                    </div>
+                    <div class="maqueta__nav">
+                        <span>Inicio</span><span>Práctica</span><span>Examen</span><span>Estadísticas</span><span>Ligas</span>
+                    </div>
+                </div>
+
+                <div class="maqueta__cuerpo">
+                    <div class="monitor">
+                        <span class="monitor__var">VAR · Repetición</span>
+                        <span class="monitor__jugador monitor__jugador--a"></span>
+                        <span class="monitor__jugador monitor__jugador--b"></span>
+                        <span class="monitor__balon"></span>
+                    </div>
+
+                    <div class="panel-lat">
+                        <div class="chip-stats">
+                            <div class="chip"><b>1.240</b><span>Puntos</span></div>
+                            <div class="chip"><b>87%</b><span>Precisión</span></div>
+                            <div class="chip"><b>9</b><span>Racha</span></div>
+                        </div>
+                        <div class="falsa-pregunta">
+                            Minuto 74 · Área de penalti — El defensa llega tarde y golpea la pierna del atacante. ¿Cuál es tu decisión?
+                        </div>
+                        <div class="falsas-opciones">
+                            <div class="falsa-op">No hay falta</div>
+                            <div class="falsa-op">Penalti</div>
+                            <div class="falsa-op falsa-op--amarilla">Penalti + Amarilla</div>
+                            <div class="falsa-op falsa-op--roja">Falta + Roja</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="vistazo__capa">
+                <span class="vistazo__boton">
+                    Abrir el simulador
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+            </div>
+        </div>
+    </a>
+    <p class="vistazo__pie">Haz clic en la imagen para entrar en RefSim</p>
+
+    <!-- VENTAJAS -->
+    <section class="ventajas">
+        <article class="ventaja">
+            <div class="ventaja__icono">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="2"/><path d="M12 8v4l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3>Práctica rápida</h3>
+            <p>Jugadas aleatorias con feedback inmediato y la explicación de la regla IFAB que se aplica en cada caso.</p>
+        </article>
+
+        <article class="ventaja">
+            <div class="ventaja__icono">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8.5 12.5l2 2 4-4.2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3>Examen oficial</h3>
+            <p>Simulacro cronometrado de 25 jugadas sin repetición, con acta final y revisión detallada de cada respuesta.</p>
+        </article>
+
+        <article class="ventaja">
+            <div class="ventaja__icono">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 21h8M12 17v4M6 4h12v3a6 6 0 0 1-12 0V4z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3>Ligas y clasificación</h3>
+            <p>Crea una liga privada para tu escuela con un código de invitación y compite en el ranking de la comunidad.</p>
+        </article>
+    </section>
+
+    <!-- CIERRE -->
+    <section class="cierre">
+        <h2>Tu próxima decisión, mejor tomada</h2>
+        <p>Empieza ahora mismo: no hace falta instalar nada y puedes jugar sin crear cuenta.</p>
+        <a class="cta cta--principal" href="index.html">
+            Entrar en RefSim
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+    </section>
+
+    <!-- PIE -->
+    <footer class="pie">
+        <span>&copy; 2026 RefSim — Basado en las Reglas del Juego de la IFAB.</span>
+        <nav class="pie__links">
+            <a href="index.html">Inicio</a>
+            <a href="#privacidad" onclick="alert('Política de Privacidad: RefSim utiliza almacenamiento local para guardar tu progreso de juego. No recopilamos datos personales sin tu consentimiento.')">Política de Privacidad</a>
+            <a href="#contacto" onclick="alert('Contacto: Para consultas o sugerencias escribe a soporte@refsim.com')">Contacto</a>
+        </nav>
+    </footer>
+
+</div>
+
+</body>
+</html>
