@@ -1,8 +1,11 @@
 import Link from "next/link";
+import { Chalkboard, TeacherNote } from "@/components/classroom";
 import { ExamCountdown } from "@/components/exam-countdown";
+import { Greeting } from "@/components/greeting";
 import { HomeStats } from "@/components/home-stats";
 import { ArrowIcon, PAPER_ICONS } from "@/components/icons";
 import { PAPERS, partsOfPaper } from "@/config/exam";
+import { tipOfTheDay } from "@/lib/tips";
 
 const PAPER_BLURB: Record<string, string> = {
   reading: "Textos, huecos y transformaciones. Corrección con la explicación de cada opción.",
@@ -12,39 +15,43 @@ const PAPER_BLURB: Record<string, string> = {
 };
 
 export default function Home() {
+  const tip = tipOfTheDay();
   return (
     <div className="mx-auto max-w-4xl">
-      {/* Cabecera de marca */}
-      <section className="relative overflow-hidden rounded-xl bg-ink px-6 py-9 text-white md:px-10 md:py-12">
-        <div aria-hidden className="stripes pointer-events-none absolute inset-y-0 right-0 w-3/5 md:w-1/2" />
-        <p className="eyebrow relative text-white/70">Cambridge C1 Advanced · CAE</p>
-        <h1 className="relative mt-3 max-w-md font-serif text-4xl font-bold leading-[1.08] md:text-5xl">
+      {/* La pizarra de hoy */}
+      <Chalkboard className="px-6 pb-12 pt-8 md:px-10 md:pb-14 md:pt-10">
+        <div aria-hidden className="stripes pointer-events-none absolute inset-y-0 right-0 w-2/5 opacity-70" />
+        <Greeting />
+        <h1 className="hand relative mt-5 max-w-md text-[3.1rem] leading-[0.98] md:text-[4.2rem]">
           Practice.
           <br />
           Improve.
           <br />
-          Succeed<span className="text-accent">.</span>
+          <span className="chalk-underline inline-block">
+            Succeed<span className="text-[#ff8a8f]">!</span>
+          </span>
         </h1>
-        <p className="relative mt-4 max-w-sm text-[15px] leading-relaxed text-white/80">
-          Ejercicios con el formato oficial, corrección inmediata y explicaciones de por qué cada respuesta es correcta o falla.
+        <p className="relative mt-5 max-w-sm font-sans text-[15px] leading-relaxed text-white/80">
+          Hoy en clase: ejercicios con el formato oficial, corrección inmediata y la explicación de por qué cada respuesta es correcta o falla.
         </p>
         <ExamCountdown />
         <div className="relative mt-6 flex flex-wrap gap-3">
           <Link href="/practica" className="inline-flex min-h-12 items-center gap-2 rounded-lg bg-white px-5 text-sm font-bold text-ink transition-transform hover:-translate-y-px">
-            Empezar a practicar
+            Entrar a clase
             <ArrowIcon width={18} height={18} />
           </Link>
-          <Link href="/practica/r1" className="inline-flex min-h-12 items-center rounded-lg border border-white/30 px-5 text-sm font-semibold text-white hover:bg-white/10">
-            Reading · Parte 1
+          <Link href="/plan" className="inline-flex min-h-12 items-center rounded-lg border border-white/35 px-5 text-sm font-semibold text-white hover:bg-white/10">
+            Ver mi horario
           </Link>
         </div>
-      </section>
+      </Chalkboard>
 
-      <div className="mt-6">
+      <div className="mt-8 grid gap-6 md:grid-cols-[1fr_17rem] md:items-start">
         <HomeStats />
+        <TeacherNote className="mt-2 md:mt-0">{tip}</TeacherNote>
       </div>
 
-      <h2 className="mb-3 mt-10 font-serif text-2xl font-bold">El examen, por papers</h2>
+      <h2 className="mb-3 mt-10 font-serif text-2xl font-bold">Las asignaturas del examen</h2>
       <div className="grid gap-3 sm:grid-cols-2">
         {PAPERS.map((paper) => {
           const Icon = PAPER_ICONS[paper.id];

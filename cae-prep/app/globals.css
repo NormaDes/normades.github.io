@@ -39,7 +39,8 @@
   --color-bad-soft: var(--bad-soft);
   --color-warn-soft: var(--warn-soft);
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-serif: ui-serif, "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --font-serif: var(--font-display), ui-serif, "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --font-hand: var(--font-hand), "Bradley Hand", "Segoe Print", cursive;
   /* Esquinas más sobrias que las «píldoras» habituales */
   --radius-md: 0.25rem;
   --radius-lg: 0.375rem;
@@ -150,4 +151,97 @@ h2 {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+
+/* ───────── Ambiente de clase ───────── */
+
+/* Pizarra con marco de madera clara y borde de tiza */
+.chalkboard {
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  background-color: #0c2a52;
+  background-image:
+    radial-gradient(ellipse at 18% 12%, rgb(255 255 255 / 0.09), transparent 55%),
+    radial-gradient(ellipse at 86% 88%, rgb(255 255 255 / 0.06), transparent 50%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  border: 7px solid #b48a56;
+  border-image: linear-gradient(135deg, #c9a06a, #a37a47 50%, #c9a06a) 1;
+  box-shadow: inset 0 0 0 2px rgb(0 0 0 / 0.25), 0 18px 34px -24px rgb(1 26 59 / 0.7);
+}
+
+.chalk-tray {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 9px;
+  background: linear-gradient(#c9a06a, #9a7343);
+}
+.chalk-tray i {
+  position: absolute;
+  bottom: 9px;
+  height: 6px;
+  border-radius: 2px 2px 0 0;
+  background: #fff;
+  opacity: 0.92;
+}
+
+.hand {
+  font-family: var(--font-hand);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+/* Subrayado de tiza */
+.chalk-underline {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8 C30 2 60 11 95 6 S160 3 198 7' fill='none' stroke='white' stroke-opacity='.8' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 0.45em;
+  padding-bottom: 0.3em;
+}
+
+/* Nota adhesiva del profesor */
+.sticky-note {
+  position: relative;
+  background: linear-gradient(#fff6b8, #ffef9a);
+  color: #3b2f05;
+  box-shadow: 0 14px 20px -14px rgb(60 40 0 / 0.55);
+  transform: rotate(-1.1deg);
+}
+.sticky-note::before {
+  content: "";
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  width: 70px;
+  height: 18px;
+  transform: translateX(-50%) rotate(2deg);
+  background: rgb(255 255 255 / 0.55);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
+}
+
+/* Papel pautado con margen rojo (redacciones, tarjetas) */
+.ruled {
+  background-color: #fffdf8;
+  background-image:
+    linear-gradient(to right, transparent 2.7rem, rgb(214 90 90 / 0.55) 2.7rem, rgb(214 90 90 / 0.55) calc(2.7rem + 1px), transparent calc(2.7rem + 1px)),
+    linear-gradient(to bottom, transparent 0, transparent 31px, #cfd9ea 31px, #cfd9ea 32px);
+  background-size: 100% 100%, 100% 32px;
+  background-attachment: scroll, local;
+  line-height: 32px;
+  padding: 0 1rem 0 3.4rem;
+}
+
+/* Sello de nota a boli rojo */
+.red-pen {
+  color: var(--accent);
+  font-family: var(--font-hand);
+  font-weight: 700;
+}
+
+/* Tarjeta de horario */
+.timetable-cell {
+  background-image: repeating-linear-gradient(to bottom, transparent 0 27px, rgb(1 43 111 / 0.05) 27px 28px);
 }

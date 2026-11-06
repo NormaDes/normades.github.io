@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { RedPenGrade } from "@/components/classroom";
 import { CRITERIA, bandHint, totalScore, type WritingEvaluation } from "@/lib/writing";
 
 const TYPE_ES: Record<string, string> = {
@@ -48,14 +49,13 @@ export function WritingFeedback({ evaluation, text, wordCount }: { evaluation: W
     <div className="space-y-6">
       {/* Puntuación */}
       <section className="rounded-2xl border border-line bg-surface p-5">
-        <p className="text-xs font-semibold uppercase tracking-wide text-muted">Puntuación estimada por la IA</p>
-        <div className="mt-1 flex flex-wrap items-baseline gap-x-4 gap-y-1">
-          <p className="text-3xl font-bold tabular-nums">
-            {total}
-            <span className="text-lg font-medium text-muted">/20</span>
-          </p>
-          <span className={`rounded-full px-3 py-1 text-xs font-semibold ${toneCls}`}>{band.label}</span>
-          <span className="text-xs text-muted">{wordCount} palabras</span>
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <p className="eyebrow text-muted">Corrección del profe (IA)</p>
+            <span className={`mt-2 inline-block rounded-full px-3 py-1 text-xs font-semibold ${toneCls}`}>{band.label}</span>
+            <p className="mt-2 text-xs text-muted">{wordCount} palabras</p>
+          </div>
+          <RedPenGrade value={total} max={20} />
         </div>
 
         <div className="mt-5 space-y-4">
@@ -105,7 +105,7 @@ export function WritingFeedback({ evaluation, text, wordCount }: { evaluation: W
       {/* Texto con errores marcados */}
       <section className="rounded-2xl border border-line bg-surface p-4 md:p-6">
         <h3 className="text-sm font-semibold">Tu texto, con los errores marcados</h3>
-        <p className="exam-text-long mt-3 whitespace-pre-wrap font-serif text-[1.05rem]">
+        <p className="ruled mt-3 whitespace-pre-wrap rounded-lg border border-line font-serif text-[1.05rem]">
           {segments(text, evaluation.errors).map((s, i) =>
             s.err === undefined ? (
               <span key={i}>{s.text}</span>

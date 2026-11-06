@@ -1,5 +1,6 @@
 "use client";
 
+import { RedPenGrade } from "@/components/classroom";
 import { SPEAKING_CRITERIA, speakingTotal, type SpeakingEvaluation } from "@/lib/speaking";
 
 export function SpeakingFeedback({ evaluation }: { evaluation: SpeakingEvaluation }) {
@@ -7,11 +8,10 @@ export function SpeakingFeedback({ evaluation }: { evaluation: SpeakingEvaluatio
   return (
     <div className="space-y-6">
       <section className="rounded-2xl border border-line bg-surface p-5">
-        <p className="text-xs font-semibold uppercase tracking-wide text-muted">Valoración estimada por la IA</p>
-        <p className="mt-1 text-3xl font-bold tabular-nums">
-          {total}
-          <span className="text-lg font-medium text-muted">/20</span>
-        </p>
+        <div className="flex items-center justify-between gap-4">
+          <p className="eyebrow text-muted">Valoración del profe (IA)</p>
+          <RedPenGrade value={total} max={20} />
+        </div>
         <div className="mt-5 space-y-4">
           {SPEAKING_CRITERIA.map((c) => {
             const v = evaluation.scores[c.key];

@@ -313,7 +313,7 @@ export function WritingRunner({ partId }: { partId: PartId }) {
             placeholder="Escribe aquí tu texto en inglés…"
             spellCheck
             autoCapitalize="sentences"
-            className="mt-4 w-full resize-y rounded-2xl border border-line bg-surface p-4 font-serif text-[1.05rem] leading-relaxed focus:border-brand disabled:opacity-60"
+            className="ruled mt-4 w-full resize-y rounded-xl border border-line text-[1.05rem] focus:border-brand disabled:opacity-60"
           />
           <p className="mt-2 text-xs text-muted">
             {words} palabras · objetivo {range.min}–{range.max}. Tu borrador se guarda solo en este dispositivo.

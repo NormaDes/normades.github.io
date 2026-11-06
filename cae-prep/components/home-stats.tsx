@@ -52,7 +52,7 @@ export function HomeStats() {
           className="group mt-4 flex items-center gap-4 rounded-xl border border-line border-l-[3px] border-l-accent bg-surface p-4 transition-shadow hover:shadow-[0_10px_28px_-16px_rgba(1,26,59,0.45)]"
         >
           <div className="min-w-0 flex-1">
-            <p className="eyebrow text-accent">Sugerencia de hoy</p>
+            <p className="eyebrow text-accent">Tarea de hoy</p>
             <p className="mt-1 font-serif text-lg font-bold leading-snug">{part.name}</p>
             <p className="mt-0.5 text-sm text-muted">{s.reason}</p>
           </div>

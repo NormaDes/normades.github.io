@@ -67,3 +67,22 @@ export const PAPER_ICONS: Record<PaperId, (p: SVGProps<SVGSVGElement>) => React.
   listening: ListeningIcon,
   speaking: SpeakingIcon,
 };
+
+export const CalendarIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Svg {...p}><rect x="4" y="5.5" width="16" height="14.5" rx="1.8" /><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4" /><path d="M8 14h2M12 14h2M8 17h2" /></Svg>
+);
+export const TeacherIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Svg {...p}><path d="m3 9.5 9-4.5 9 4.5-9 4.5-9-4.5z" /><path d="M7 11.8V16c0 1.3 2.2 2.5 5 2.5s5-1.2 5-2.5v-4.2" /><path d="M21 9.5V15" /></Svg>
+);
+export const MoreIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Svg {...p}><circle cx="6" cy="12" r="1.3" fill="currentColor" /><circle cx="12" cy="12" r="1.3" fill="currentColor" /><circle cx="18" cy="12" r="1.3" fill="currentColor" /></Svg>
+);
+export const PlusIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Svg {...p}><path d="M12 5v14M5 12h14" /></Svg>
+);
+export const PlayIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Svg {...p}><path d="M8 5.5v13l11-6.5-11-6.5z" fill="currentColor" /></Svg>
+);
+export const CheckIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Svg {...p}><path d="m5 12.5 4.5 4.5L19 7.5" /></Svg>
+);
