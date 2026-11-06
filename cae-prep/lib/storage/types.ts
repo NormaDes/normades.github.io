@@ -1,5 +1,6 @@
 import type { PartId } from "@/config/exam";
 import type { Exercise } from "@/lib/schemas";
+import type { WritingSubmission } from "@/lib/writing";
 
 /** Resultado de una pregunta dentro de un intento */
 export interface AttemptDetail {
@@ -46,6 +47,9 @@ export interface Repository {
 
   addMistakes(m: Mistake[]): Promise<void>;
   listMistakes(): Promise<Mistake[]>;
+
+  saveWriting(w: WritingSubmission): Promise<void>;
+  listWritings(): Promise<WritingSubmission[]>;
 
   /** Ejercicios generados con IA cacheados (los seeds viven en el código) */
   saveExercise(e: Exercise): Promise<void>;

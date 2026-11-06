@@ -1,5 +1,5 @@
 import { KWT_RULES, getPart } from "@/config/exam";
-import type { Exercise } from "@/lib/schemas";
+import { letterOf, type AutoGradedExercise } from "@/lib/schemas";
 
 /** Respuestas del usuario: número de pregunta → texto (o índice de opción como string en Part 1) */
 export type UserAnswers = Record<number, string>;
@@ -74,12 +74,13 @@ export function containsWholeWord(haystack: string, word: string): boolean {
   return new RegExp(`(^|[^\\p{L}'])${esc}($|[^\\p{L}'])`, "iu").test(haystack);
 }
 
-export function checkExercise(exercise: Exercise, answers: UserAnswers): ExerciseResult {
+export function checkExercise(exercise: AutoGradedExercise, answers: UserAnswers): ExerciseResult {
   const part = getPart(exercise.partId);
   const results: QuestionResult[] = [];
 
   switch (exercise.partId) {
-    case "r1": {
+    case "r1":
+    case "r5": {
       for (const q of exercise.data.questions) {
         const given = answers[q.n] ?? "";
         const ok = given !== "" && Number(given) === q.correct;
@@ -89,6 +90,40 @@ export function checkExercise(exercise: Exercise, answers: UserAnswers): Exercis
           given: given === "" ? "" : q.options[Number(given)] ?? "",
           expected: q.options[q.correct],
           skill: q.skill,
+          marks: ok ? part.marksPerQuestion : 0,
+          maxMarks: part.marksPerQuestion,
+        });
+      }
+      break;
+    }
+    // R6 / R8: la respuesta es una letra (texto o sección); R7: letra del párrafo
+    case "r6":
+    case "r8": {
+      for (const q of exercise.data.questions) {
+        const given = answers[q.n] ?? "";
+        const ok = given !== "" && Number(given) === q.correct;
+        results.push({
+          n: q.n,
+          correct: ok,
+          given: given === "" ? "" : letterOf(Number(given)),
+          expected: letterOf(q.correct),
+          skill: q.skill,
+          marks: ok ? part.marksPerQuestion : 0,
+          maxMarks: part.marksPerQuestion,
+        });
+      }
+      break;
+    }
+    case "r7": {
+      for (const g of exercise.data.gaps) {
+        const given = answers[g.n] ?? "";
+        const ok = given !== "" && Number(given) === g.correct;
+        results.push({
+          n: g.n,
+          correct: ok,
+          given: given === "" ? "" : letterOf(Number(given)),
+          expected: letterOf(g.correct),
+          skill: g.skill,
           marks: ok ? part.marksPerQuestion : 0,
           maxMarks: part.marksPerQuestion,
         });

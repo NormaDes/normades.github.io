@@ -84,6 +84,96 @@ ${jsonRules}
 Schema:
 {"title": string, "topic": string, "items": [{"n": 1, "first": string, "keyword": "WORD", "before": string, "after": string, "answers": [string], "explanation": string, "skill": string}]}  // exactly ${n} items`;
 
+    case "r5":
+      return `Write a Cambridge C1 Advanced Reading & Use of English PART 5 (multiple choice, long text).
+
+${topicLine}
+- An original text of 600–720 words (essay, feature article, or a first-person account) with a clear argumentative or narrative development, split into 6–9 paragraphs separated by a blank line.
+- ${n} multiple-choice questions (A–D) in text order, testing: writer's attitude/opinion, purpose, detail, inference, tone, reference words ("what does 'this' refer to"), and the meaning of a phrase in context. Do not test trivial word-matching.
+- Each question has a "stem" (the question text), 4 options, "correct" (0-based) and 4 "explanations" in the SAME ORDER as the options (why the correct one is right and why each wrong one is wrong, referencing the text). Distractors must be plausible but unambiguously wrong according to the text. Vary the correct position.
+- "evidence" is a short literal quote from the text that proves the answer.
+- "skill" examples: "attitude", "detail", "inference", "purpose", "reference", "tone", "meaning in context".
+
+${jsonRules}
+Schema:
+{"title": string, "topic": string, "text": string, "questions": [{"n": 1, "stem": string, "options": [string,string,string,string], "correct": 0-3, "explanations": [string,string,string,string], "evidence": string, "skill": string}]}  // exactly ${n} questions`;
+
+    case "r6": {
+      const t = part.choices ?? 4;
+      return `Write a Cambridge C1 Advanced Reading & Use of English PART 6 (cross-text multiple matching).
+
+${topicLine}
+- ${t} short extracts (labelled A–${String.fromCharCode(64 + t)}), each 100–140 words, by DIFFERENT fictional writers (give each a plausible fictional "author" name and role, never a real person), all discussing the same issue from different, clearly distinguishable standpoints (agreeing on some sub-points, disagreeing on others).
+- "intro": one sentence of context, e.g. "Four writers give their views on…".
+- ${n} questions. The first two (or the first half) ask which writer holds a particular view / has a different opinion from the others on a given sub-point. The remaining ask which writers share an opinion with another named writer on a sub-point (for those, the answer cannot be the writer named in the question). Every question must have exactly ONE defensible answer supported by the texts.
+- "correct" is the 0-based index of the extract (0 = A).
+- "explanation" (in ${LANG}) explains why that extract is the answer and, briefly, why the others are not. "evidence" is a short literal quote from the correct extract.
+- "skill" examples: "contrast of opinions", "shared opinion", "attitude", "inference".
+
+${jsonRules}
+Schema:
+{"title": string, "topic": string, "intro": string, "texts": [{"label": "A", "author": string, "text": string}], "questions": [{"n": 1, "stem": string, "correct": 0-${t - 1}, "explanation": string, "evidence": string, "skill": string}]}  // exactly ${t} texts and ${n} questions`;
+    }
+
+    case "r7": {
+      const p = part.choices ?? 7;
+      return `Write a Cambridge C1 Advanced Reading & Use of English PART 7 (gapped text).
+
+${topicLine}
+- An original article of about 650–750 words with exactly ${n} paragraphs removed. Mark each gap in "text" as {{1}}…{{${n}}} on its own line (a blank line before and after). The text must remain coherent with the gaps filled.
+- Provide ${p} candidate paragraphs (each 40–90 words) labelled A–${String.fromCharCode(64 + p)}: the ${n} correct ones plus ONE extra paragraph that fits nowhere (but is tempting). Shuffle them so the correct letters are NOT in text order.
+- Each correct paragraph must be uniquely identifiable by cohesion: pronoun/reference links to the previous or next paragraph, linking words, time sequence, repeated lexical chains, contrast. A wrong paragraph must break at least one such link.
+- "correct" is the 0-based index (0 = A) of the paragraph for that gap; all ${n} values must be DIFFERENT.
+- "explanation" (in ${LANG}) names the exact cohesive clues before and after the gap. "evidence" is a short literal quote from the text near the gap or from the paragraph that proves the link.
+- "skill" examples: "reference", "linking word", "lexical chain", "time sequence", "contrast".
+
+${jsonRules}
+Schema:
+{"title": string, "topic": string, "text": string, "paragraphs": [{"letter": "A", "text": string}], "gaps": [{"n": 1, "correct": 0-${p - 1}, "explanation": string, "evidence": string, "skill": string}]}  // exactly ${p} paragraphs and ${n} gaps`;
+    }
+
+    case "r8": {
+      const sec = part.choices ?? 5;
+      return `Write a Cambridge C1 Advanced Reading & Use of English PART 8 (multiple matching).
+
+${topicLine}
+- One article of ${sec} sections (labelled A–${String.fromCharCode(64 + sec)}), each 140–180 words with a short "heading" (e.g. a person, a product, or a theme), about related items/people/ideas.
+- "intro": one sentence of context.
+- ${n} statements ("stem") that paraphrase ideas in the sections (never copy phrases verbatim). Each section must be the answer for at least one statement and some sections for two or three. Each statement matches exactly ONE section: check that no other section expresses the same idea.
+- Typical stems: "mentions a drawback that was not anticipated", "describes a change of opinion", "refers to the importance of timing".
+- "correct" is the 0-based index of the section (0 = A).
+- "explanation" (in ${LANG}) shows the paraphrase link; "evidence" is a short literal quote from the correct section.
+- "skill" examples: "paraphrase", "attitude", "detail", "inference".
+
+${jsonRules}
+Schema:
+{"title": string, "topic": string, "intro": string, "sections": [{"label": "A", "heading": string, "text": string}], "questions": [{"n": 1, "stem": string, "correct": 0-${sec - 1}, "explanation": string, "evidence": string, "skill": string}]}  // exactly ${sec} sections and ${n} questions`;
+    }
+
+    case "w1":
+      return `Write a Cambridge C1 Advanced WRITING PART 1 task (compulsory essay).
+
+${topicLine}
+- "question": 2–3 sentences of context in the official style, e.g. "Your class has attended a panel discussion on how cities can reduce traffic congestion. You have made the notes below."
+- "points": EXACTLY 3 strings: two short, concrete, genuinely debatable ideas (3–8 words each) and the third must be exactly "your own idea".
+- The topic must allow a balanced essay of 220–260 words with a clear opinion (society, education, environment, technology, health, work, culture). Avoid topics that require specialised knowledge.
+
+${jsonRules}
+Schema:
+{"title": string, "topic": string, "question": string, "points": [string, string, "your own idea"]}`;
+
+    case "w2":
+      return `Write a Cambridge C1 Advanced WRITING PART 2 set of options.
+
+${topicLine}
+- Provide EXACTLY 3 different tasks, each of a DIFFERENT type chosen from: "letter", "email", "proposal", "report", "review".
+- Each task has a realistic "situation" (2–4 sentences stating who the reader is and the purpose) and "requirements": 2–4 bullet points the writer must cover (e.g. "describe…", "explain…", "recommend…").
+- Tasks must be answerable in 220–260 words without specialised knowledge. Make the audience and register clear so register can be assessed.
+
+${jsonRules}
+Schema:
+{"title": string, "topic": string, "tasks": [{"type": "letter"|"email"|"proposal"|"report"|"review", "situation": string, "requirements": [string]}]}  // exactly 3 tasks`;
+
     default:
       throw new Error(`No prompt for part ${partId} yet`);
   }

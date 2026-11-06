@@ -70,6 +70,10 @@ body {
   line-height: 2.1;
 }
 
+.exam-text-long {
+  line-height: 1.85;
+}
+
 .exam-text p + p {
   margin-top: 1rem;
 }

@@ -31,6 +31,8 @@ export interface PartConfig {
   suggestedMinutes: number;
   /** Rango de palabras (solo Writing) */
   wordRange?: { min: number; max: number };
+  /** Nº de textos / párrafos / secciones entre los que se elige (R6: 4 textos, R7: 7 párrafos, R8: 5 secciones) */
+  choices?: number;
 }
 
 export interface PaperConfig {
@@ -85,19 +87,19 @@ export const PARTS: PartConfig[] = [
     id: "r6", paper: "reading", number: 6, name: "Cross-text multiple matching",
     description: "Cuatro textos cortos sobre un mismo tema; 4 preguntas de relacionar opiniones.",
     instructions: "For questions 37–40, read the four extracts from articles about the same topic and answer the questions.",
-    questionCount: 4, marksPerQuestion: 2, suggestedMinutes: 10,
+    questionCount: 4, marksPerQuestion: 2, suggestedMinutes: 10, choices: 4,
   },
   {
     id: "r7", paper: "reading", number: 7, name: "Gapped text",
     description: "Texto con 6 párrafos eliminados; colócalos en su sitio (hay uno de sobra).",
     instructions: "For questions 41–46, read the article and choose the correct paragraph for each gap. There is one extra paragraph.",
-    questionCount: 6, marksPerQuestion: 2, suggestedMinutes: 12,
+    questionCount: 6, marksPerQuestion: 2, suggestedMinutes: 12, choices: 7,
   },
   {
     id: "r8", paper: "reading", number: 8, name: "Multiple matching",
     description: "Un texto dividido en secciones; 10 enunciados que hay que localizar.",
     instructions: "For questions 47–56, read the text and match each statement to the correct section.",
-    questionCount: 10, marksPerQuestion: 1, suggestedMinutes: 14,
+    questionCount: 10, marksPerQuestion: 1, suggestedMinutes: 14, choices: 5,
   },
 
   // ───────── Writing ─────────

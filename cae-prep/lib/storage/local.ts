@@ -1,6 +1,7 @@
 import type { PartId } from "@/config/exam";
 import type { Exercise } from "@/lib/schemas";
 import type { Attempt, Mistake, Repository } from "@/lib/storage/types";
+import type { WritingSubmission } from "@/lib/writing";
 
 const PREFIX = "cae.v1.";
 const MAX_CACHED_EXERCISES = 200;
@@ -41,6 +42,14 @@ export class LocalRepository implements Repository {
 
   async listMistakes() {
     return read<Mistake[]>("mistakes", []);
+  }
+
+  async saveWriting(w: WritingSubmission) {
+    write("writings", [...read<WritingSubmission[]>("writings", []), w].slice(-100));
+  }
+
+  async listWritings() {
+    return read<WritingSubmission[]>("writings", []);
   }
 
   async saveExercise(e: Exercise) {

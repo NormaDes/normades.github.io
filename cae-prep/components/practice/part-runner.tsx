@@ -7,7 +7,7 @@ import { getPart, partLabel, type PartId } from "@/config/exam";
 import { checkExercise, type ExerciseResult, type UserAnswers } from "@/lib/checking";
 import { ApiError, fetchAiStatus, requestExercise, type AiStatus } from "@/lib/client/api";
 import { countUnseen, pickFromBank } from "@/lib/exercises/bank";
-import type { Exercise } from "@/lib/schemas";
+import type { AutoGradedExercise } from "@/lib/schemas";
 import { clientPrefs, repo, type Mistake } from "@/lib/storage";
 
 type Status = "idle" | "loading" | "doing" | "review";
@@ -28,7 +28,7 @@ export function PartRunner({ partId }: { partId: PartId }) {
   const totalSeconds = part.suggestedMinutes * 60;
 
   const [status, setStatus] = useState<Status>("idle");
-  const [exercise, setExercise] = useState<Exercise | null>(null);
+  const [exercise, setExercise] = useState<AutoGradedExercise | null>(null);
   const [answers, setAnswers] = useState<UserAnswers>({});
   const [result, setResult] = useState<ExerciseResult | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -64,7 +64,7 @@ export function PartRunner({ partId }: { partId: PartId }) {
     return () => window.clearInterval(id);
   }, [status]);
 
-  const begin = (ex: Exercise) => {
+  const begin = (ex: AutoGradedExercise) => {
     setExercise(ex);
     setAnswers({});
     setResult(null);
@@ -86,7 +86,7 @@ export function PartRunner({ partId }: { partId: PartId }) {
       return;
     }
     if (!pick.fresh) setNotice("Ya has hecho todos los ejercicios del banco: te repito el que hiciste hace más tiempo. Genera uno nuevo con IA si quieres variar.");
-    begin(pick.exercise);
+    begin(pick.exercise as AutoGradedExercise);
   };
 
   const fromAi = async () => {
@@ -98,7 +98,7 @@ export function PartRunner({ partId }: { partId: PartId }) {
       await repo.saveExercise(ex);
       setAi((prev) => (prev ? { ...prev, remainingToday } : prev));
       await refreshBank();
-      begin(ex);
+      begin(ex as AutoGradedExercise);
     } catch (e) {
       setStatus(exercise && result ? "review" : "idle");
       setError(e instanceof ApiError || e instanceof Error ? e.message : "No se pudo generar el ejercicio.");

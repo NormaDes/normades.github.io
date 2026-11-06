@@ -2,17 +2,18 @@
 
 Web app para preparar el examen **Cambridge C1 Advanced (CAE)**. Interfaz en español de España; todo el contenido de práctica en inglés. Pensada para usarse mucho desde el móvil.
 
-> Estado: **Fase 1 de 4** — esqueleto, navegación y Reading & Use of English **partes 1-4** con corrección y explicaciones. Ver [`docs/PLAN.md`](docs/PLAN.md).
+> Estado: **Fase 2 de 4** — Reading & Use of English **partes 1-8** y Writing **partes 1-2** con corrección por IA. Ver [`docs/PLAN.md`](docs/PLAN.md).
 
 ## Qué funciona ahora
 
-- Modo práctica de **Reading & Use of English 1-4** (multiple-choice cloze, open cloze, word formation, key word transformations).
+- Modo práctica de **Reading & Use of English 1-8**: multiple-choice cloze, open cloze, word formation, key word transformations, multiple choice (texto largo), cross-text multiple matching, gapped text y multiple matching.
+- **Writing 1 (essay) y 2 (letter/email, proposal, report, review)**: contador de palabras (220-260), temporizador, borrador guardado y corrección por IA con los 4 criterios oficiales (Content, Communicative Achievement, Organisation, Language; 0-5 cada uno), errores marcados en tu texto con su corrección y una versión mejorada.
 - Corrección con explicación de por qué es correcta y por qué fallan las demás opciones, con el fragmento del texto que lo justifica.
 - Respuestas aceptadas múltiples (Open cloze, Word formation, Key word transformations) y comparación tolerante (mayúsculas, comillas tipográficas, contracciones).
 - Temporizador opcional (tiempo sugerido por parte, se corrige solo al terminar).
 - Banco inicial de ejercicios + generación nueva con Claude, **cacheada** en tu navegador.
 - Todos los intentos y fallos se guardan (localStorage), con racha de días en la portada.
-- Resto de secciones (simulacro, biblioteca, vocabulario, errores, progreso) con página «próximamente».
+- Resto de secciones (Listening y Speaking en la Fase 3; simulacro, biblioteca, vocabulario, errores y progreso en la Fase 4) con página «próximamente».
 
 ## Arrancar en local
 
@@ -57,7 +58,7 @@ Este repositorio también contiene un sitio estático en la raíz, por eso la ap
 3. En *Settings → Environment Variables* añade `ANTHROPIC_API_KEY` (y `APP_ACCESS_CODE`, muy recomendable).
 4. *Deploy*.
 
-La generación puede tardar 20-60 s; la ruta declara `maxDuration = 60`.
+La generación de textos largos y la evaluación de Writing pueden tardar 30-90 s; las rutas declaran `maxDuration = 120`. Si tu plan de Vercel limita las funciones a 60 s, baja ese valor en `app/api/*/route.ts` o activa *Fluid Compute*.
 
 ## Configurar el examen
 
@@ -68,6 +69,8 @@ Todo el formato del examen está en [`config/exam.ts`](config/exam.ts): partes, 
 - Claude responde en JSON, que se valida con **zod** (`lib/schemas.ts`) y con reglas semánticas (`lib/validation.ts`): marcadores de hueco, una sola palabra en Open cloze/Word formation, keyword en mayúsculas y **sin cambiar**, y entre **3 y 6 palabras** (contando la keyword y las contracciones como dos) en Key Word Transformations.
 - Si la validación falla, se **reintenta una vez** indicando los errores concretos.
 - Los textos de práctica por parte se marcan siempre como *«texto generado — no es un artículo real»*. Los artículos reales llegarán en la Fase 4.
+- Cada generación y cada evaluación de Writing cuentan como 1 uso de IA del límite diario (`DAILY_GENERATION_LIMIT`).
+- La corrección de Writing la hace la IA con los criterios oficiales parafraseados: es una **estimación orientativa**, no sustituye a un examinador. Las citas de errores que no aparecen literalmente en tu texto se descartan en el servidor.
 - Límite diario configurable (`DAILY_GENERATION_LIMIT`). En Vercel el contador es *best effort* (memoria de la instancia); en la Fase 4 pasará a Supabase.
 
 ## Datos
@@ -76,7 +79,8 @@ Hoy se guardan en `localStorage` (por dispositivo) a través de la interfaz `Rep
 
 ## Limitaciones conocidas
 
-- El banco inicial tiene **2 ejercicios por parte** (8 en total), no 5: el resto se va generando con IA y se cachea. Conviene que alguien con ojo de profesor revise los textos del banco.
+- El banco inicial es más pequeño que los 5 por parte previstos: **2** en las partes 1-4, **1** en las 5-8, **3** enunciados de Writing 1 y **2** juegos de Writing 2. El resto se genera con IA y se cachea. Conviene que alguien con ojo de profesor revise los textos del banco.
+- Los textos de Reading siguen siendo generados (marcados como tal). Los artículos reales llegan en la Fase 4.
 - Key Word Transformations puntúa 0 o 2 por ítem (en el examen real hay 1 punto por cada mitad de la respuesta).
 - Un ejercicio generado con IA se guarda solo en tu navegador hasta la migración a Supabase.
-- No se ha probado la generación contra la API real de Anthropic (no había clave en el entorno de desarrollo): sí están probados el flujo de errores del endpoint, el validador y la corrección.
+- No se ha probado la generación ni la evaluación contra la API real de Anthropic (no había clave en el entorno de desarrollo). Sí están probados: errores de los endpoints, validadores, corrección de las 8 partes de Reading y la pantalla de resultados de Writing (con una respuesta simulada).

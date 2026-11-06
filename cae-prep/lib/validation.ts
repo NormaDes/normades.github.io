@@ -1,6 +1,6 @@
 import { KWT_RULES, getPart, type PartId } from "@/config/exam";
 import { containsWholeWord, countWords } from "@/lib/checking";
-import { schemaForPart, type ExerciseContent } from "@/lib/schemas";
+import { letterOf, schemaForPart, type ExerciseContent } from "@/lib/schemas";
 
 /**
  * Validación semántica además de zod. Devuelve una lista de problemas
@@ -49,6 +49,61 @@ export function validateContent(partId: PartId, data: unknown): string[] {
         const lower = q.options.map((o) => o.trim().toLowerCase());
         if (new Set(lower).size !== 4) problems.push(`P${q.n}: opciones duplicadas.`);
       }
+      break;
+    }
+    case "r5": {
+      const d = content.data;
+      checkNumbering(d.questions.map((q) => q.n), count, problems);
+      for (const q of d.questions) {
+        if (new Set(q.options.map((o) => o.trim().toLowerCase())).size !== 4) problems.push(`P${q.n}: opciones duplicadas.`);
+      }
+      const words = d.text.split(/\s+/).length;
+      if (words < 450) problems.push(`El texto tiene ${words} palabras; debe tener unas 550-750.`);
+      break;
+    }
+    case "r6": {
+      const d = content.data;
+      const n = getPart(partId).choices ?? 4;
+      checkNumbering(d.questions.map((q) => q.n), count, problems);
+      d.texts.forEach((t, i) => {
+        if (t.label !== letterOf(i)) problems.push(`El texto ${i + 1} debe llamarse "${letterOf(i)}".`);
+      });
+      for (const q of d.questions) if (q.correct >= n) problems.push(`P${q.n}: "correct" fuera de rango.`);
+      break;
+    }
+    case "r7": {
+      const d = content.data;
+      const n = getPart(partId).choices ?? 7;
+      checkMarkers(d.text, count, problems);
+      checkNumbering(d.gaps.map((g) => g.n), count, problems);
+      d.paragraphs.forEach((p, i) => {
+        if (p.letter !== letterOf(i)) problems.push(`El párrafo ${i + 1} debe llamarse "${letterOf(i)}".`);
+      });
+      const used = d.gaps.map((g) => g.correct);
+      if (used.some((c) => c >= n)) problems.push(`Hay un "correct" fuera de rango (0-${n - 1}).`);
+      if (new Set(used).size !== used.length) problems.push("Dos huecos usan el mismo párrafo; cada párrafo solo puede usarse una vez.");
+      break;
+    }
+    case "r8": {
+      const d = content.data;
+      const n = getPart(partId).choices ?? 5;
+      checkNumbering(d.questions.map((q) => q.n), count, problems);
+      d.sections.forEach((s, i) => {
+        if (s.label !== letterOf(i)) problems.push(`La sección ${i + 1} debe llamarse "${letterOf(i)}".`);
+      });
+      for (const q of d.questions) if (q.correct >= n) problems.push(`P${q.n}: "correct" fuera de rango.`);
+      const covered = new Set(d.questions.map((q) => q.correct));
+      if (covered.size < n) problems.push("Cada sección debe ser la respuesta de al menos una pregunta.");
+      break;
+    }
+    case "w1": {
+      const d = content.data;
+      if (!/own idea/i.test(d.points[2])) problems.push('El tercer punto debe ser "your own idea".');
+      break;
+    }
+    case "w2": {
+      const d = content.data;
+      if (new Set(d.tasks.map((t) => t.type)).size !== d.tasks.length) problems.push("Las 3 tareas deben ser de tipos distintos.");
       break;
     }
     case "r2": {

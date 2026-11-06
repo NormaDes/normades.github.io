@@ -5,7 +5,7 @@ import { generateExercise } from "@/lib/ai/generate";
 import { IMPLEMENTED_PARTS } from "@/lib/schemas";
 import { consumeGeneration, refundGeneration, remainingToday } from "@/lib/server/usage";
 
-export const maxDuration = 60;
+export const maxDuration = 120;
 
 const bodySchema = z.object({
   partId: z.enum(PARTS.map((p) => p.id) as [PartId, ...PartId[]]),

@@ -1,6 +1,7 @@
 import type { PartId } from "@/config/exam";
 import type { Exercise } from "@/lib/schemas";
 import { clientPrefs } from "@/lib/storage";
+import type { WritingEvaluation } from "@/lib/writing";
 
 export class ApiError extends Error {
   constructor(message: string, public code: string) {
@@ -23,15 +24,13 @@ export async function fetchAiStatus(): Promise<AiStatus | null> {
   }
 }
 
-export async function requestExercise(
-  partId: PartId,
-  topic?: string,
-): Promise<{ exercise: Exercise; remainingToday: number }> {
+/** POST JSON con el código de acceso opcional (se pide una vez si el servidor lo exige) */
+async function postJson<T>(url: string, payload: unknown): Promise<T> {
   const send = (code: string) =>
-    fetch("/api/generate", {
+    fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-access-code": code },
-      body: JSON.stringify({ partId, topic }),
+      body: JSON.stringify(payload),
     });
 
   let res = await send(clientPrefs.get<string>("accessCode", ""));
@@ -42,5 +41,13 @@ export async function requestExercise(
   }
   const body = await res.json().catch(() => ({}));
   if (!res.ok) throw new ApiError(body.error ?? "Error desconocido", body.code ?? "error");
-  return body;
+  return body as T;
+}
+
+export function requestExercise(partId: PartId, topic?: string) {
+  return postJson<{ exercise: Exercise; remainingToday: number }>("/api/generate", { partId, topic });
+}
+
+export function requestEvaluation(input: { taskType: string; task: string; text: string }) {
+  return postJson<{ evaluation: WritingEvaluation; remainingToday: number }>("/api/evaluate", input);
 }
