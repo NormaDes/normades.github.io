@@ -3,6 +3,7 @@ import type { Exercise } from "@/lib/schemas";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { clientPrefs } from "@/lib/storage";
 import type { SpeakingEvaluation, SpokenAnswer } from "@/lib/speaking";
+import type { VocabEnrichment } from "@/lib/vocab";
 import type { WritingEvaluation } from "@/lib/writing";
 
 export class ApiError extends Error {
@@ -62,4 +63,8 @@ export function requestEvaluation(input: { taskType: string; task: string; text:
 
 export function requestSpeakingFeedback(input: { partId: PartId; answers: SpokenAnswer[] }) {
   return postJson<{ evaluation: SpeakingEvaluation; remainingToday: number }>("/api/speaking", input);
+}
+
+export function requestVocabEnrich(items: Array<{ term: string; context?: string }>) {
+  return postJson<{ items: VocabEnrichment[]; remainingToday: number }>("/api/vocab-enrich", { items });
 }

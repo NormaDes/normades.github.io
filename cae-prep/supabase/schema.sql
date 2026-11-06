@@ -101,6 +101,11 @@ create table if not exists public.vocab (                -- vocabulario con repe
   unique (user_id, term)
 );
 
+alter table public.vocab add column if not exists translation  text;
+alter table public.vocab add column if not exists context      text;
+alter table public.vocab add column if not exists source_title text;
+alter table public.vocab add column if not exists lapses       int not null default 0;
+
 create table if not exists public.generation_usage (     -- control de coste de la IA
   user_id uuid not null references auth.users(id) on delete cascade,
   day     date not null default current_date,

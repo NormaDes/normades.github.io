@@ -25,6 +25,26 @@ export interface Attempt {
 }
 
 /** Pregunta fallada, guardada para el cuaderno de errores */
+/** Palabra o expresión del banco de vocabulario, con su estado de repetición espaciada (SM-2) */
+export interface VocabItem {
+  id: string;
+  term: string;
+  definition?: string;
+  example?: string;
+  translation?: string;
+  collocations: string[];
+  /** Frase del texto donde la guardaste */
+  context?: string;
+  sourceTitle?: string;
+  sourceUrl?: string;
+  createdAt: string;
+  ease: number;
+  intervalDays: number;
+  repetitions: number;
+  lapses: number;
+  dueAt: string;
+}
+
 export interface Mistake {
   id: string;
   exerciseId: string;
@@ -55,6 +75,11 @@ export interface Repository {
 
   saveSpeaking(s: SpeakingSubmission): Promise<void>;
   listSpeakings(): Promise<SpeakingSubmission[]>;
+
+  listVocab(): Promise<VocabItem[]>;
+  /** Inserta o actualiza (clave: el término en minúsculas) */
+  saveVocab(v: VocabItem): Promise<void>;
+  deleteVocab(id: string): Promise<void>;
 
   saveWriting(w: WritingSubmission): Promise<void>;
   listWritings(): Promise<WritingSubmission[]>;

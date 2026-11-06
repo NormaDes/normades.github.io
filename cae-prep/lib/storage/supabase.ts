@@ -3,7 +3,7 @@ import type { Exercise } from "@/lib/schemas";
 import type { SpeakingSubmission } from "@/lib/speaking";
 import { getBrowserClient } from "@/lib/supabase/client";
 import type { LocalRepository } from "@/lib/storage/local";
-import type { Attempt, Mistake, Repository } from "@/lib/storage/types";
+import type { Attempt, Mistake, Repository, VocabItem } from "@/lib/storage/types";
 import type { WritingSubmission } from "@/lib/writing";
 
 interface AttemptRow {
@@ -29,6 +29,24 @@ interface MistakeRow {
   given: string | null;
   expected: string | null;
   resolved: boolean;
+  created_at: string;
+}
+
+interface VocabRow {
+  id: string;
+  term: string;
+  definition: string | null;
+  example: string | null;
+  translation: string | null;
+  collocations: string[] | null;
+  context: string | null;
+  source_title: string | null;
+  source_url: string | null;
+  ease: number;
+  interval_days: number;
+  repetitions: number;
+  lapses: number | null;
+  due_at: string;
   created_at: string;
 }
 
@@ -158,6 +176,68 @@ export class SupabaseRepository implements Repository {
       "resolveMistakes",
       () => this.db.from("mistakes").update({ resolved: true }).eq("exercise_id", exerciseId).in("n", ns).eq("resolved", false),
       () => this.fallback.resolveMistakes(exerciseId, ns),
+    );
+  }
+
+  async listVocab(): Promise<VocabItem[]> {
+    const rows = await this.attempt<VocabRow[]>(
+      "listVocab",
+      () => this.db.from("vocab").select("*").order("created_at", { ascending: true }).limit(MAX_ROWS),
+      async () => [],
+    );
+    if (!rows.length) return this.fallback.listVocab();
+    return rows.map((r) => ({
+      id: r.id,
+      term: r.term,
+      definition: r.definition ?? undefined,
+      example: r.example ?? undefined,
+      translation: r.translation ?? undefined,
+      collocations: r.collocations ?? [],
+      context: r.context ?? undefined,
+      sourceTitle: r.source_title ?? undefined,
+      sourceUrl: r.source_url ?? undefined,
+      createdAt: r.created_at,
+      ease: Number(r.ease),
+      intervalDays: r.interval_days,
+      repetitions: r.repetitions,
+      lapses: r.lapses ?? 0,
+      dueAt: r.due_at,
+    }));
+  }
+
+  async saveVocab(v: VocabItem) {
+    await this.attempt<unknown>(
+      "saveVocab",
+      () =>
+        this.db.from("vocab").upsert(
+          {
+            // id solo si ya es un UUID de la base de datos; si no, lo genera Postgres
+            ...(/^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(v.id) ? { id: v.id } : {}),
+            term: v.term.trim().toLowerCase(),
+            definition: v.definition ?? null,
+            example: v.example ?? null,
+            translation: v.translation ?? null,
+            collocations: v.collocations,
+            context: v.context ?? null,
+            source_title: v.sourceTitle ?? null,
+            source_url: v.sourceUrl ?? null,
+            ease: v.ease,
+            interval_days: v.intervalDays,
+            repetitions: v.repetitions,
+            lapses: v.lapses,
+            due_at: v.dueAt,
+          },
+          { onConflict: "user_id,term" },
+        ),
+      () => this.fallback.saveVocab(v),
+    );
+  }
+
+  async deleteVocab(id: string) {
+    await this.attempt<unknown>(
+      "deleteVocab",
+      () => this.db.from("vocab").delete().eq("id", id),
+      () => this.fallback.deleteVocab(id),
     );
   }
 

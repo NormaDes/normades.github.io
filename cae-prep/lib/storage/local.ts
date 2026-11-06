@@ -1,6 +1,6 @@
 import type { PartId } from "@/config/exam";
 import type { Exercise } from "@/lib/schemas";
-import type { Attempt, Mistake, Repository } from "@/lib/storage/types";
+import type { Attempt, Mistake, Repository, VocabItem } from "@/lib/storage/types";
 import type { SpeakingSubmission } from "@/lib/speaking";
 import type { WritingSubmission } from "@/lib/writing";
 
@@ -63,6 +63,20 @@ export class LocalRepository implements Repository {
       "mistakes",
       read<Mistake[]>("mistakes", []).map((m) => (m.exerciseId === exerciseId && ns.includes(m.n) && !m.resolved ? { ...m, resolved: true } : m)),
     );
+  }
+
+  async listVocab() {
+    return read<VocabItem[]>("vocab", []);
+  }
+
+  async saveVocab(v: VocabItem) {
+    const key = v.term.trim().toLowerCase();
+    const all = read<VocabItem[]>("vocab", []).filter((x) => x.term.trim().toLowerCase() !== key && x.id !== v.id);
+    write("vocab", [...all, v]);
+  }
+
+  async deleteVocab(id: string) {
+    write("vocab", read<VocabItem[]>("vocab", []).filter((x) => x.id !== id));
   }
 
   async saveWriting(w: WritingSubmission) {

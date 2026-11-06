@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { ComingSoon } from "@/components/coming-soon";
+import { VocabApp } from "@/components/vocab/vocab-app";
 
 export const metadata: Metadata = { title: "Vocabulario" };
 
-export default function Page() {
+export default function VocabularyPage() {
   return (
-    <ComingSoon
-      title="Banco de vocabulario"
-      phase={4}
-      description="Todo lo que marques en un texto se guarda con definición, ejemplo y collocations para repasarlo con repetición espaciada."
-      bullets={["Repaso con SM-2 simplificado", "Definición, ejemplo y collocations generados con IA", "Importa palabras desde la biblioteca y desde tus errores"]}
-    />
+    <div className="mx-auto max-w-3xl">
+      <p className="eyebrow text-accent">Tarjetas de estudio</p>
+      <h1 className="mt-1 font-serif text-3xl font-bold md:text-4xl">Tu vocabulario</h1>
+      <p className="mb-6 mt-2 max-w-xl text-muted">Guarda palabras y expresiones y repásalas justo cuando estás a punto de olvidarlas (repetición espaciada SM-2).</p>
+      <VocabApp />
+    </div>
   );
 }
