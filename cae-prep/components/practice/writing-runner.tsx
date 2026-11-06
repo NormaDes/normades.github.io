@@ -6,7 +6,7 @@ import { WritingFeedback } from "@/components/practice/writing-feedback";
 import { getPart, partLabel, type PartId } from "@/config/exam";
 import { ApiError, fetchAiStatus, requestEvaluation, requestExercise, type AiStatus } from "@/lib/client/api";
 import { countUnseen, pickFromBank } from "@/lib/exercises/bank";
-import type { WritingExercise } from "@/lib/schemas";
+import { SOURCE_LABEL, type WritingExercise } from "@/lib/schemas";
 import { clientPrefs, repo } from "@/lib/storage";
 import { CRITERIA, countTextWords, totalScore, type WritingEvaluation } from "@/lib/writing";
 
@@ -269,7 +269,7 @@ export function WritingRunner({ partId }: { partId: PartId }) {
 
       <div className="mb-4 flex flex-wrap gap-2 text-xs">
         <span className="rounded-full bg-warn-soft px-2.5 py-1 font-semibold">Enunciado de práctica generado</span>
-        <span className="rounded-full bg-brand-soft px-2.5 py-1 font-semibold text-brand">{exercise.source === "ai" ? "Generado con IA" : "Banco inicial"}</span>
+        <span className="rounded-full bg-brand-soft px-2.5 py-1 font-semibold text-brand">{SOURCE_LABEL[exercise.source]}</span>
       </div>
       {notice && <p className="mb-4 rounded-xl bg-warn-soft p-3 text-sm">{notice}</p>}
 

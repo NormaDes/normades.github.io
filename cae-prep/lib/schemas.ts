@@ -327,7 +327,13 @@ export type ExerciseContent =
   | { partId: "s3"; data: SpeakingCollabContent }
   | { partId: "s4"; data: SpeakingQuestionsContent };
 
-export type ExerciseSource = "seed" | "ai";
+export type ExerciseSource = "seed" | "ai" | "teacher";
+
+export const SOURCE_LABEL: Record<ExerciseSource, string> = {
+  seed: "Banco inicial",
+  ai: "Generado con IA",
+  teacher: "Material de clase",
+};
 
 export type Exercise = ExerciseContent & {
   id: string;

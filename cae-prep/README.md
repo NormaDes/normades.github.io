@@ -2,7 +2,7 @@
 
 Web app para preparar el examen **Cambridge C1 Advanced (CAE)**. Interfaz en español de España; todo el contenido de práctica en inglés. Pensada para usarse mucho desde el móvil.
 
-> Estado: **Fase 3 de 4** — Reading 1-8, Writing 1-2, **Listening 1-4 y Speaking 1-4**. Ver [`docs/PLAN.md`](docs/PLAN.md).
+> Estado: **Fase 4a** — Reading 1-8, Writing 1-2, Listening 1-4, Speaking 1-4 y **cuentas de usuario** (registro, inicio de sesión, datos por usuario). Ver [`docs/PLAN.md`](docs/PLAN.md).
 
 ## Qué funciona ahora
 
@@ -39,6 +39,25 @@ npm run validate:seeds  # valida el banco inicial con las mismas reglas que la I
 npm run build           # build de producción
 ```
 
+## Cuentas de usuario (Supabase)
+
+Si defines `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY`, la app **exige iniciar sesión** (registro con email y contraseña, recuperación de contraseña) y guarda los intentos, errores, redacciones y ejercicios de cada usuario en Supabase, aislados por RLS. Sin esas variables la app funciona en modo local, sin cuentas.
+
+Configuración, una sola vez:
+
+1. Crea el proyecto en [supabase.com](https://supabase.com) y ejecuta [`supabase/schema.sql`](supabase/schema.sql) en *SQL Editor*.
+2. En *Authentication → URL Configuration*: **Site URL** = la URL de tu web (p. ej. `https://cae-prep-normades.vercel.app`) y, en **Redirect URLs**, añade `https://cae-prep-normades.vercel.app/**` (y `http://localhost:3000/**` para desarrollo). Sin esto, los enlaces de los emails de confirmación y de recuperar contraseña no funcionan.
+3. *Authentication → Providers → Email*: activo. Decide si activas **Confirm email**: activado es más seguro (cada alumno confirma su correo); desactivado es más cómodo para una clase pequeña. La app funciona con ambos.
+4. Variables en Vercel: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (tipo *Config*) y `SUPABASE_SERVICE_ROLE_KEY` (tipo *Secret*; se usa para contar los usos de IA por usuario). Después, *Redeploy*.
+5. Regístrate en la app y hazte administrador (así podrás compartir material con la clase):
+
+```sql
+update public.profiles set role = 'admin'
+where id = (select id from auth.users where email = 'TU_EMAIL@ejemplo.com');
+```
+
+Si Supabase falla en algún momento, el resultado de cada ejercicio también se guarda en el dispositivo para no perderlo. Los datos que ya tuvieras en localStorage antes de crear la cuenta **no se migran** automáticamente.
+
 ## Variables de entorno
 
 | Variable | Fase | Cómo conseguirla |
@@ -46,10 +65,10 @@ npm run build           # build de producción
 | `ANTHROPIC_API_KEY` | 1 | [console.anthropic.com](https://console.anthropic.com) → *API keys* → *Create key*. Necesita saldo. Solo se usa en el servidor (`/api/generate`). |
 | `ANTHROPIC_MODEL` (opc.) | 1 | Por defecto `claude-opus-5-5`. Pon `claude-sonnet-5-5` para gastar menos. |
 | `DAILY_GENERATION_LIMIT` (opc.) | 1 | Máx. de ejercicios generados por día (por defecto 15). |
-| `APP_ACCESS_CODE` (opc.) | 1 | Cualquier texto. Si lo defines, la app pide ese código la primera vez que generas. **Recomendado al desplegar**, para que nadie gaste tu saldo. |
+| `APP_ACCESS_CODE` (opc.) | 1 | Cualquier texto. Solo se usa **sin Supabase**: la app pide ese código la primera vez que generas. Con cuentas de usuario no hace falta (la IA solo la usa quien ha iniciado sesión). |
 | `GUARDIAN_API_KEY` | 4 | [open-platform.theguardian.com/access](https://open-platform.theguardian.com/access/) → *Register for a developer key* (gratuita). |
-| `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | 4 | [supabase.com](https://supabase.com) → crear proyecto → *Project Settings → API*: *Project URL* y clave *anon public*. |
-| `SUPABASE_SERVICE_ROLE_KEY` | 4 | Misma pantalla, clave *service_role*. **Secreta**: solo servidor, nunca en el cliente. |
+| `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | 4a | [supabase.com](https://supabase.com) → crear proyecto → *Project Settings → API*: *Project URL* y clave *anon public*. |
+| `SUPABASE_SERVICE_ROLE_KEY` | 4a | Misma pantalla, clave *service_role*. **Secreta**: solo servidor, nunca en el cliente. |
 
 ## Desplegar en Vercel
 
@@ -88,4 +107,5 @@ Hoy se guardan en `localStorage` (por dispositivo) a través de la interfaz `Rep
 - Speaking necesita permiso de micrófono y funciona mejor en Chrome/Edge; en Safari/Firefox la transcripción en directo puede no estar disponible (se puede escribir a mano).
 - Key Word Transformations puntúa 0 o 2 por ítem (en el examen real hay 1 punto por cada mitad de la respuesta).
 - Un ejercicio generado con IA se guarda solo en tu navegador hasta la migración a Supabase.
+- Las cuentas se han probado contra un servidor de Supabase **simulado** (registro, login, cookies, rutas protegidas, guardado por usuario y RLS en un Postgres real), no contra tu proyecto de Supabase. Los enlaces de los emails (confirmar, recuperar contraseña) dependen de la configuración del paso 2.
 - No se ha probado la generación ni la evaluación contra la API real de Anthropic (no había clave en el entorno de desarrollo). Sí están probados: errores de los endpoints, validadores, corrección de Reading y Listening, y las pantallas de Writing y Speaking con respuestas de IA, voz y micrófono simulados. Falta probarlo con una voz y un micrófono reales en el móvil.

@@ -23,6 +23,6 @@ scripts/validate-seeds.ts  valida el banco inicial con las mismas reglas que la 
 1. **Fase 1** (hecha): esqueleto, navegación, Reading & UoE partes 1-4 con corrección y explicaciones, temporizador, banco inicial, generación con IA, progreso local.
 2. **Fase 2** (hecha): Reading 5-8 y Writing con corrección IA (4 criterios, 0-5, errores marcados, versión mejorada, contador de palabras).
 3. **Fase 3** (hecha): Listening (Web Speech API o audio real, 2 reproducciones) y Speaking (MediaRecorder + transcripción + feedback).
-4. **Fase 4a** (siguiente): cuentas (registro e inicio de sesión con Supabase Auth), datos por usuario en Supabase y material del profe en almacenamiento privado, visible solo con sesión iniciada.
+4. **Fase 4a** (hecha): cuentas (registro e inicio de sesión con Supabase Auth), datos por usuario en Supabase y material del profe en almacenamiento privado, visible solo con sesión iniciada.
 5. **Fase 4b**: biblioteca (artículos reales con licencia, vídeos, podcasts, importador de material propio), vocabulario SM-2, dashboard, cuaderno de errores y simulacro.
    _(detalle original:)_ biblioteca (vídeos + artículos reales con licencia), vocabulario SM-2, dashboard, cuaderno de errores, simulacro, migración a Supabase con auth.

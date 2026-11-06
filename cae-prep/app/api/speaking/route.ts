@@ -2,6 +2,7 @@ import { z } from "zod";
 import { getPart } from "@/config/exam";
 import { AiConfigError, AiOutputError } from "@/lib/ai/client";
 import { evaluateSpeaking } from "@/lib/ai/evaluate-speaking";
+import { authorize } from "@/lib/server/guard";
 import { consumeGeneration, refundGeneration, remainingToday } from "@/lib/server/usage";
 import { wordsOf } from "@/lib/speaking";
 
@@ -29,10 +30,9 @@ function json(body: unknown, status = 200) {
 
 /** POST /api/speaking  { partId, answers:[{prompt, transcript, durationSec}] }  →  { evaluation, remainingToday } */
 export async function POST(request: Request) {
-  const accessCode = process.env.APP_ACCESS_CODE;
-  if (accessCode && request.headers.get("x-access-code") !== accessCode) {
-    return json({ error: "Código de acceso incorrecto o ausente.", code: "unauthorized" }, 401);
-  }
+  const auth = await authorize(request);
+  if (!auth.ok) return auth.response;
+  const userId = auth.userId;
 
   const parsed = bodySchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return json({ error: "Petición no válida.", code: "bad_request" }, 400);
@@ -42,15 +42,15 @@ export async function POST(request: Request) {
     return json({ error: `Habla o escribe al menos ${MIN_TOTAL_WORDS} palabras en total para poder evaluarlo.`, code: "too_short" }, 400);
   }
 
-  if (!consumeGeneration()) {
+  if (!(await consumeGeneration(userId))) {
     return json({ error: "Has alcanzado el límite diario de usos de IA.", code: "daily_limit", remainingToday: 0 }, 429);
   }
 
   try {
     const evaluation = await evaluateSpeaking({ partName: `Part ${getPart(partId).number} — ${getPart(partId).name}`, answers });
-    return json({ evaluation, remainingToday: remainingToday() });
+    return json({ evaluation, remainingToday: await remainingToday(userId) });
   } catch (e) {
-    refundGeneration();
+    await refundGeneration(userId);
     if (e instanceof AiConfigError) return json({ error: e.message, code: "not_configured" }, 503);
     if (e instanceof AiOutputError) return json({ error: e.message, code: "invalid_output" }, 502);
     console.error("speaking error", e);

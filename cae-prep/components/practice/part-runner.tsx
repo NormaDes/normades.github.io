@@ -8,7 +8,7 @@ import { getPart, partLabel, type PartId } from "@/config/exam";
 import { checkExercise, type ExerciseResult, type UserAnswers } from "@/lib/checking";
 import { ApiError, fetchAiStatus, requestExercise, type AiStatus } from "@/lib/client/api";
 import { countUnseen, pickFromBank } from "@/lib/exercises/bank";
-import { isListeningExercise, type AutoGradedExercise, type ReadingExercise } from "@/lib/schemas";
+import { SOURCE_LABEL, isListeningExercise, type AutoGradedExercise, type ReadingExercise } from "@/lib/schemas";
 import { clientPrefs, repo, type Mistake } from "@/lib/storage";
 
 type Status = "idle" | "loading" | "doing" | "review";
@@ -258,7 +258,7 @@ export function PartRunner({ partId }: { partId: PartId }) {
           {part.paper === "listening" ? "Guion de práctica con voz sintética — no es una grabación real" : "Texto de práctica generado — no es un artículo real"}
         </span>
         <span className="rounded-full bg-brand-soft px-2.5 py-1 font-semibold text-brand">
-          {exercise.source === "ai" ? "Generado con IA" : "Banco inicial"}
+          {SOURCE_LABEL[exercise.source]}
         </span>
       </div>
 

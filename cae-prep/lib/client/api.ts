@@ -1,5 +1,6 @@
 import type { PartId } from "@/config/exam";
 import type { Exercise } from "@/lib/schemas";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { clientPrefs } from "@/lib/storage";
 import type { SpeakingEvaluation, SpokenAnswer } from "@/lib/speaking";
 import type { WritingEvaluation } from "@/lib/writing";
@@ -35,6 +36,12 @@ async function postJson<T>(url: string, payload: unknown): Promise<T> {
     });
 
   let res = await send(clientPrefs.get<string>("accessCode", ""));
+  if (res.status === 401 && isSupabaseConfigured()) {
+    // Sesión caducada: recarga completa al login (limpia el estado) y de vuelta a donde estabas
+    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+    window.location.href = `/login?next=${encodeURIComponent(window.location.pathname)}`;
+    throw new ApiError("Tu sesión ha caducado. Inicia sesión de nuevo.", "unauthorized");
+  }
   if (res.status === 401) {
     const code = window.prompt("Introduce el código de acceso de la app:") ?? "";
     clientPrefs.set("accessCode", code);

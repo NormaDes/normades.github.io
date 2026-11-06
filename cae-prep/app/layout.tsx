@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { Nav } from "@/components/nav";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -20,12 +19,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="es-ES">
-      <body>
-        <div className="mx-auto flex min-h-dvh max-w-6xl">
-          <Nav />
-          <main className="min-w-0 flex-1 px-4 pb-28 pt-6 md:px-8 md:pb-12 md:pt-10">{children}</main>
-        </div>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
