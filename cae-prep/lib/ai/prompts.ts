@@ -174,6 +174,104 @@ ${jsonRules}
 Schema:
 {"title": string, "topic": string, "tasks": [{"type": "letter"|"email"|"proposal"|"report"|"review", "situation": string, "requirements": [string]}]}  // exactly 3 tasks`;
 
+    case "l1": {
+      const ex = part.choices ?? 3;
+      return `Write a Cambridge C1 Advanced LISTENING PART 1 (${ex} short extracts, 2 three-option questions each).
+
+${topicLine}
+- ${ex} independent extracts of 90–120 words each, on different subjects: mix a two-speaker conversation (speakers "Woman"/"Man") and a monologue. Natural spoken British English with discourse markers, hesitation and self-correction, but written as clean text for a text-to-speech voice (no stage directions, no brackets).
+- Each extract has "context" ("You hear two colleagues talking about…"), "segments" (the script: each {"speaker": string, "gender": "f"|"m", "text": string}) and exactly ${n / ex} questions with 3 options (A–C) testing gist, attitude, opinion, purpose, or function. The right answer must be a paraphrase, never a repeated word sequence; distractors use words from the script in a wrong sense.
+- Number questions 1..${n} across the extracts. "correct" is 0-based. "explanations" has 3 entries in the SAME ORDER as the options (in ${LANG}); "evidence" is a short literal quote from the script.
+
+${jsonRules}
+Schema:
+{"title": string, "topic": string, "extracts": [{"context": string, "segments": [{"speaker": string, "gender": "f"|"m", "text": string}], "questions": [{"n": 1, "stem": string, "options": [string,string,string], "correct": 0-2, "explanations": [string,string,string], "evidence": string, "skill": string}]}]}  // exactly ${ex} extracts`;
+    }
+
+    case "l2":
+      return `Write a Cambridge C1 Advanced LISTENING PART 2 (sentence completion).
+
+${topicLine}
+- A monologue of 280–340 words (a talk by a fictional speaker to an audience), as 3–4 "segments" of one speaker; clean text for text-to-speech, no stage directions.
+- "intro": "You will hear … talking about … For questions 1–${n}, complete the sentences with a word or short phrase."
+- ${n} sentences, in the order the information appears. Each is split into "before" and "after" around ONE gap that is filled with 1–3 words that appear in the script. Paraphrase the sentence (never copy it) so that the learner must listen. Each answer must be unambiguous; list every acceptable form in "answers" (lowercase).
+- "explanation" (in ${LANG}) and a literal "evidence" quote from the script.
+
+${jsonRules}
+Schema:
+{"title": string, "topic": string, "intro": string, "segments": [{"speaker": string, "gender": "f"|"m", "text": string}], "sentences": [{"n": 1, "before": string, "after": string, "answers": [string], "explanation": string, "evidence": string, "skill": string}]}  // exactly ${n} sentences`;
+
+    case "l3":
+      return `Write a Cambridge C1 Advanced LISTENING PART 3 (interview, multiple choice).
+
+${topicLine}
+- An interview of 480–580 words between an "Interviewer" (gender "m" or "f") and ONE fictional guest (never a real person). Alternate speakers in separate "segments". Natural speech; clean text for text-to-speech.
+- "intro": "You will hear an interview with … For questions 1–${n}, choose the answer (A, B, C or D) which fits best according to what you hear."
+- ${n} questions in order, 4 options each, testing attitude, opinion, feeling, purpose, detail. The correct option is a paraphrase; distractors echo words from the script but are wrong. "explanations" has 4 entries in the option order (in ${LANG}); "evidence" is a literal quote.
+
+${jsonRules}
+Schema:
+{"title": string, "topic": string, "intro": string, "segments": [{"speaker": string, "gender": "f"|"m", "text": string}], "questions": [{"n": 1, "stem": string, "options": [string,string,string,string], "correct": 0-3, "explanations": [string,string,string,string], "evidence": string, "skill": string}]}  // exactly ${n} questions`;
+
+    case "l4": {
+      const o = part.choices ?? 8;
+      const sp = n / 2;
+      return `Write a Cambridge C1 Advanced LISTENING PART 4 (multiple matching, two tasks).
+
+${topicLine}
+- ${sp} short monologues (45–65 words each) by ${sp} different fictional speakers (mix of "f" and "m"), each talking about the same general experience; each speaker gives information relevant to BOTH tasks. Put each monologue in "speakers[i].segments" (speaker "Speaker i+1").
+- Two tasks, each with a "stem" ("For questions 1–${sp}, choose from the list (A–H) …") and exactly ${o} "options" (short phrases). Each task has ${sp} correct answers and ${o - sp} distractors that are tempting but wrong; no two speakers share the same option within a task.
+- ${n} questions: n 1..${sp} belong to task 1 (speaker n), n ${sp + 1}..${n} to task 2 (speaker n-${sp}). Fields: "task" (1|2), "speaker" (1..${sp}), "correct" (0-based option index), "explanation" (in ${LANG}), "evidence" (literal quote from the speaker).
+
+${jsonRules}
+Schema:
+{"title": string, "topic": string, "speakers": [{"segments": [{"speaker": "Speaker 1", "gender": "f"|"m", "text": string}]}], "tasks": [{"stem": string, "options": [${o} strings]}, {"stem": string, "options": [${o} strings]}], "questions": [{"n": 1, "task": 1, "speaker": 1, "correct": 0-${o - 1}, "explanation": string, "evidence": string, "skill": string}]}  // ${sp} speakers, 2 tasks, ${n} questions`;
+    }
+
+    case "s1":
+      return `Write a Cambridge C1 Advanced SPEAKING PART 1 (interview) set.
+
+${topicLine}
+- 6 personal questions in the style of the examiner's Part 1 (about the candidate's life, studies, work, interests, plans, opinions on everyday topics), from easy to slightly more reflective. One sentence each.
+
+${jsonRules}
+Schema:
+{"title": string, "topic": string, "questions": [string]}  // 6 questions`;
+
+    case "s2":
+      return `Write a Cambridge C1 Advanced SPEAKING PART 2 (long turn) task.
+
+${topicLine}
+- Two photographs are described in words ("photos[i].description": 1–2 sentences each, concrete and visual) that can be compared on a theme (people, activities, places, feelings).
+- "instruction": the examiner's task: "Compare the two photographs and say … You have about one minute." with a question about reasons/feelings/advantages.
+- "partnerQuestion": the short follow-up question asked about the other candidate's photos (e.g. "Which of these would you prefer to do?").
+
+${jsonRules}
+Schema:
+{"title": string, "topic": string, "instruction": string, "photos": [{"description": string}, {"description": string}], "partnerQuestion": string}`;
+
+    case "s3":
+      return `Write a Cambridge C1 Advanced SPEAKING PART 3 (collaborative task).
+
+${topicLine}
+- "question": a discussion question in the official style ("How effective might these things be in …?").
+- "options": exactly 5 short noun phrases.
+- "decisionQuestion": the final question ("Which two would make the biggest difference?").
+
+${jsonRules}
+Schema:
+{"title": string, "topic": string, "question": string, "options": [string,string,string,string,string], "decisionQuestion": string}`;
+
+    case "s4":
+      return `Write a Cambridge C1 Advanced SPEAKING PART 4 (further discussion).
+
+${topicLine}
+- 4 more abstract, opinion-based questions extending a theme (society, education, technology, work, environment). One sentence each.
+
+${jsonRules}
+Schema:
+{"title": string, "topic": string, "questions": [string]}  // 4 questions`;
+
     default:
       throw new Error(`No prompt for part ${partId} yet`);
   }

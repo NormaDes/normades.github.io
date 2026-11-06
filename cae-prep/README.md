@@ -2,7 +2,7 @@
 
 Web app para preparar el examen **Cambridge C1 Advanced (CAE)**. Interfaz en español de España; todo el contenido de práctica en inglés. Pensada para usarse mucho desde el móvil.
 
-> Estado: **Fase 2 de 4** — Reading & Use of English **partes 1-8** y Writing **partes 1-2** con corrección por IA. Ver [`docs/PLAN.md`](docs/PLAN.md).
+> Estado: **Fase 3 de 4** — Reading 1-8, Writing 1-2, **Listening 1-4 y Speaking 1-4**. Ver [`docs/PLAN.md`](docs/PLAN.md).
 
 ## Qué funciona ahora
 
@@ -10,10 +10,12 @@ Web app para preparar el examen **Cambridge C1 Advanced (CAE)**. Interfaz en esp
 - **Writing 1 (essay) y 2 (letter/email, proposal, report, review)**: contador de palabras (220-260), temporizador, borrador guardado y corrección por IA con los 4 criterios oficiales (Content, Communicative Achievement, Organisation, Language; 0-5 cada uno), errores marcados en tu texto con su corrección y una versión mejorada.
 - Corrección con explicación de por qué es correcta y por qué fallan las demás opciones, con el fragmento del texto que lo justifica.
 - Respuestas aceptadas múltiples (Open cloze, Word formation, Key word transformations) y comparación tolerante (mayúsculas, comillas tipográficas, contracciones).
+- **Listening 1-4**: reproductor con límite de **2 reproducciones** como en el examen, voz del navegador en inglés británico (voces femenina y masculina alternadas) o **audio real** si el ejercicio trae un campo `audio` con la URL de un MP3. Al corregir se muestra el guion.
+- **Speaking 1-4**: grabas tu voz (MediaRecorder; el audio se queda en tu dispositivo), el navegador la transcribe en directo (Web Speech API; si no puede, escribes lo dicho) y la IA da feedback de gramática, vocabulario, fluidez y coherencia, con correcciones, mejoras de vocabulario y respuesta modelo. No evalúa la pronunciación (solo ve el texto).
 - Temporizador opcional (tiempo sugerido por parte, se corrige solo al terminar).
 - Banco inicial de ejercicios + generación nueva con Claude, **cacheada** en tu navegador.
 - Todos los intentos y fallos se guardan (localStorage), con racha de días en la portada.
-- Resto de secciones (Listening y Speaking en la Fase 3; simulacro, biblioteca, vocabulario, errores y progreso en la Fase 4) con página «próximamente».
+- Resto de secciones (simulacro, biblioteca, vocabulario, errores, progreso y cuentas de usuario, en la Fase 4) con página «próximamente».
 
 ## Arrancar en local
 
@@ -79,8 +81,11 @@ Hoy se guardan en `localStorage` (por dispositivo) a través de la interfaz `Rep
 
 ## Limitaciones conocidas
 
-- El banco inicial es más pequeño que los 5 por parte previstos: **2** en las partes 1-4, **1** en las 5-8, **3** enunciados de Writing 1 y **2** juegos de Writing 2. El resto se genera con IA y se cachea. Conviene que alguien con ojo de profesor revise los textos del banco.
-- Los textos de Reading siguen siendo generados (marcados como tal). Los artículos reales llegan en la Fase 4.
+- El banco inicial es más pequeño que los 5 por parte previstos: **2** en las partes 1-4, **1** en las 5-8 y en Listening, **3** enunciados de Writing 1, **2** juegos de Writing 2 y **2** por cada parte de Speaking. El resto se genera con IA y se cachea. Conviene que alguien con ojo de profesor revise los textos del banco.
+- Los textos de Reading y los guiones de Listening son generados (marcados como tal). Los artículos reales llegan en la Fase 4.
+- Las fotos de Speaking 2 se describen con texto; el esquema admite una URL de imagen real (`photos[].image`).
+- La voz sintética del navegador depende de las voces instaladas en el dispositivo; con audio real del profe el problema desaparece.
+- Speaking necesita permiso de micrófono y funciona mejor en Chrome/Edge; en Safari/Firefox la transcripción en directo puede no estar disponible (se puede escribir a mano).
 - Key Word Transformations puntúa 0 o 2 por ítem (en el examen real hay 1 punto por cada mitad de la respuesta).
 - Un ejercicio generado con IA se guarda solo en tu navegador hasta la migración a Supabase.
-- No se ha probado la generación ni la evaluación contra la API real de Anthropic (no había clave en el entorno de desarrollo). Sí están probados: errores de los endpoints, validadores, corrección de las 8 partes de Reading y la pantalla de resultados de Writing (con una respuesta simulada).
+- No se ha probado la generación ni la evaluación contra la API real de Anthropic (no había clave en el entorno de desarrollo). Sí están probados: errores de los endpoints, validadores, corrección de Reading y Listening, y las pantallas de Writing y Speaking con respuestas de IA, voz y micrófono simulados. Falta probarlo con una voz y un micrófono reales en el móvil.

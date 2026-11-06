@@ -4,10 +4,10 @@ import type { ReactNode } from "react";
 import { ChoiceQuestion } from "@/components/practice/choice-question";
 import { Feedback, GapText } from "@/components/practice/gap-text";
 import type { ExerciseResult, UserAnswers } from "@/lib/checking";
-import { letterOf, type AutoGradedExercise } from "@/lib/schemas";
+import { letterOf, type ReadingExercise } from "@/lib/schemas";
 
 interface Props {
-  exercise: AutoGradedExercise;
+  exercise: ReadingExercise;
   answers: UserAnswers;
   onChange: (n: number, value: string) => void;
   /** Si hay resultado, la vista pasa a modo revisión (solo lectura con corrección) */

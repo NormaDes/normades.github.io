@@ -9,6 +9,8 @@ import { r6Seeds } from "@/lib/exercises/seeds/r6";
 import { r7Seeds } from "@/lib/exercises/seeds/r7";
 import { r8Seeds } from "@/lib/exercises/seeds/r8";
 import { w1Seeds, w2Seeds } from "@/lib/exercises/seeds/writing";
+import { l1Seeds, l2Seeds, l3Seeds, l4Seeds } from "@/lib/exercises/seeds/listening";
+import { s1Seeds, s2Seeds, s3Seeds, s4Seeds } from "@/lib/exercises/seeds/speaking";
 
 const SEED_DATE = "2026-11-06T00:00:00.000Z";
 
@@ -31,6 +33,14 @@ export const SEED_EXERCISES: Exercise[] = [
   ...wrap("r8", r8Seeds),
   ...wrap("w1", w1Seeds),
   ...wrap("w2", w2Seeds),
+  ...wrap("l1", l1Seeds),
+  ...wrap("l2", l2Seeds),
+  ...wrap("l3", l3Seeds),
+  ...wrap("l4", l4Seeds),
+  ...wrap("s1", s1Seeds),
+  ...wrap("s2", s2Seeds),
+  ...wrap("s3", s3Seeds),
+  ...wrap("s4", s4Seeds),
 ];
 
 export function seedsForPart(partId: PartId): Exercise[] {

@@ -1,6 +1,7 @@
 import type { PartId } from "@/config/exam";
 import type { Exercise } from "@/lib/schemas";
 import { clientPrefs } from "@/lib/storage";
+import type { SpeakingEvaluation, SpokenAnswer } from "@/lib/speaking";
 import type { WritingEvaluation } from "@/lib/writing";
 
 export class ApiError extends Error {
@@ -50,4 +51,8 @@ export function requestExercise(partId: PartId, topic?: string) {
 
 export function requestEvaluation(input: { taskType: string; task: string; text: string }) {
   return postJson<{ evaluation: WritingEvaluation; remainingToday: number }>("/api/evaluate", input);
+}
+
+export function requestSpeakingFeedback(input: { partId: PartId; answers: SpokenAnswer[] }) {
+  return postJson<{ evaluation: SpeakingEvaluation; remainingToday: number }>("/api/speaking", input);
 }

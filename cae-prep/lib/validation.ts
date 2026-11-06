@@ -96,6 +96,56 @@ export function validateContent(partId: PartId, data: unknown): string[] {
       if (covered.size < n) problems.push("Cada sección debe ser la respuesta de al menos una pregunta.");
       break;
     }
+    case "l1": {
+      const d = content.data;
+      checkNumbering(d.extracts.flatMap((e) => e.questions.map((q) => q.n)), count, problems);
+      for (const q of d.extracts.flatMap((e) => e.questions)) {
+        if (new Set(q.options.map((o) => o.trim().toLowerCase())).size !== 3) problems.push(`P${q.n}: opciones duplicadas.`);
+      }
+      break;
+    }
+    case "l2": {
+      const d = content.data;
+      checkNumbering(d.sentences.map((x) => x.n), count, problems);
+      for (const g of d.sentences) {
+        for (const a of g.answers) {
+          const w = countWords(a);
+          if (w < 1 || w > 3) problems.push(`Frase ${g.n}: "${a}" debe tener entre 1 y 3 palabras.`);
+        }
+      }
+      const words = d.segments.map((x) => x.text).join(" ").split(/\s+/).length;
+      if (words < 150) problems.push(`El guion tiene ${words} palabras; debe tener unas 250-350.`);
+      break;
+    }
+    case "l3": {
+      const d = content.data;
+      checkNumbering(d.questions.map((q) => q.n), count, problems);
+      for (const q of d.questions) {
+        if (new Set(q.options.map((o) => o.trim().toLowerCase())).size !== 4) problems.push(`P${q.n}: opciones duplicadas.`);
+      }
+      const words = d.segments.map((x) => x.text).join(" ").split(/\s+/).length;
+      if (words < 300) problems.push(`La entrevista tiene ${words} palabras; debe tener unas 450-600.`);
+      break;
+    }
+    case "l4": {
+      const d = content.data;
+      const optionCount = getPart(partId).choices ?? 8;
+      checkNumbering(d.questions.map((q) => q.n), count, problems);
+      const perTask = count / 2;
+      for (const task of [1, 2]) {
+        const qs = d.questions.filter((q) => q.task === task);
+        if (qs.length !== perTask) problems.push(`La tarea ${task} debe tener ${perTask} preguntas.`);
+        if (new Set(qs.map((q) => q.correct)).size !== qs.length) problems.push(`Tarea ${task}: dos hablantes comparten la misma respuesta.`);
+        if (new Set(qs.map((q) => q.speaker)).size !== qs.length) problems.push(`Tarea ${task}: cada hablante debe tener una pregunta.`);
+        if (qs.some((q) => q.correct >= optionCount || q.speaker > d.speakers.length)) problems.push(`Tarea ${task}: respuesta u hablante fuera de rango.`);
+      }
+      break;
+    }
+    case "s1":
+    case "s4":
+    case "s2":
+    case "s3":
+      break;
     case "w1": {
       const d = content.data;
       if (!/own idea/i.test(d.points[2])) problems.push('El tercer punto debe ser "your own idea".');

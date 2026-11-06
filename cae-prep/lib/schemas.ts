@@ -173,6 +173,121 @@ export function writingChoiceSchema() {
   return z.object({ ...base, tasks: z.array(writingTask).length(3) });
 }
 
+// ── Listening ──
+/** Fragmento de guion: lo lee la voz del navegador (o se ignora si hay audio real) */
+export const segment = z.object({
+  speaker: z.string().min(1).max(30),
+  gender: z.enum(["f", "m"]),
+  text: z.string().min(2),
+  /** Pausa antes de este fragmento, en ms (p. ej. entre extractos) */
+  pauseBefore: z.number().int().min(0).max(5000).optional(),
+});
+export type Segment = z.infer<typeof segment>;
+
+/** URL o ruta de un archivo de audio real (si existe, se usa en lugar de la voz del navegador) */
+const audio = z.string().min(1).max(500).optional();
+
+const mc3Question = z.object({
+  n: z.number().int().min(1),
+  stem: z.string().min(8),
+  options: z.array(z.string().min(1)).length(3),
+  correct: z.number().int().min(0).max(2),
+  explanations: z.array(z.string().min(3)).length(3),
+  evidence: z.string().min(3),
+  skill,
+});
+
+export function listeningExtractsSchema(count: number, extracts: number) {
+  return z.object({
+    ...base,
+    extracts: z
+      .array(
+        z.object({
+          context: z.string().min(10), // "You hear two colleagues talking about…"
+          audio,
+          segments: z.array(segment).min(1),
+          questions: z.array(mc3Question).length(count / extracts),
+        }),
+      )
+      .length(extracts),
+  });
+}
+
+export const sentenceItem = z.object({
+  n: z.number().int().min(1),
+  before: z.string(),
+  after: z.string(),
+  answers, // una palabra o frase corta (máx. 3 palabras)
+  explanation: z.string().min(3),
+  evidence: z.string().min(3),
+  skill,
+});
+
+export function listeningSentenceSchema(count: number) {
+  return z.object({
+    ...base,
+    intro: z.string().min(10),
+    audio,
+    segments: z.array(segment).min(1),
+    sentences: z.array(sentenceItem).length(count),
+  });
+}
+
+export function listeningInterviewSchema(count: number) {
+  return z.object({
+    ...base,
+    intro: z.string().min(10),
+    audio,
+    segments: z.array(segment).min(2),
+    questions: z.array(mcTextQuestion).length(count),
+  });
+}
+
+export const matchTask = z.object({ stem: z.string().min(8), options: z.array(z.string().min(2)) });
+
+export const listeningMatchQuestion = z.object({
+  n: z.number().int().min(1),
+  task: z.number().int().min(1).max(2),
+  speaker: z.number().int().min(1).max(10),
+  correct: z.number().int().min(0).max(9),
+  explanation: z.string().min(3),
+  evidence: z.string().min(3),
+  skill,
+});
+
+export function listeningMatchSchema(count: number, options: number) {
+  return z.object({
+    ...base,
+    speakers: z.array(z.object({ audio, segments: z.array(segment).min(1) })).length(count / 2),
+    tasks: z.array(matchTask.extend({ options: z.array(z.string().min(2)).length(options) })).length(2),
+    questions: z.array(listeningMatchQuestion).length(count),
+  });
+}
+
+// ── Speaking ──
+export function speakingQuestionsSchema(min: number, max: number) {
+  return z.object({ ...base, questions: z.array(z.string().min(8)).min(min).max(max) });
+}
+
+export function speakingLongTurnSchema() {
+  return z.object({
+    ...base,
+    instruction: z.string().min(20),
+    /** Descripción de las dos fotos (o URL de imagen real en `image`) */
+    photos: z.array(z.object({ description: z.string().min(10), image: z.string().max(500).optional() })).length(2),
+    partnerQuestion: z.string().min(8),
+  });
+}
+
+export function speakingCollabSchema() {
+  return z.object({
+    ...base,
+    question: z.string().min(20),
+    options: z.array(z.string().min(2)).length(5),
+    decisionQuestion: z.string().min(8),
+  });
+}
+
 export type ClozeMcContent = z.infer<ReturnType<typeof clozeMcSchema>>;
 export type OpenClozeContent = z.infer<ReturnType<typeof openClozeSchema>>;
 export type WordFormationContent = z.infer<ReturnType<typeof wordFormationSchema>>;
@@ -184,6 +299,14 @@ export type MultiMatchContent = z.infer<ReturnType<typeof multiMatchSchema>>;
 export type EssayContent = z.infer<ReturnType<typeof essaySchema>>;
 export type WritingChoiceContent = z.infer<ReturnType<typeof writingChoiceSchema>>;
 
+export type ListeningExtractsContent = z.infer<ReturnType<typeof listeningExtractsSchema>>;
+export type ListeningSentenceContent = z.infer<ReturnType<typeof listeningSentenceSchema>>;
+export type ListeningInterviewContent = z.infer<ReturnType<typeof listeningInterviewSchema>>;
+export type ListeningMatchContent = z.infer<ReturnType<typeof listeningMatchSchema>>;
+export type SpeakingQuestionsContent = z.infer<ReturnType<typeof speakingQuestionsSchema>>;
+export type SpeakingLongTurnContent = z.infer<ReturnType<typeof speakingLongTurnSchema>>;
+export type SpeakingCollabContent = z.infer<ReturnType<typeof speakingCollabSchema>>;
+
 export type ExerciseContent =
   | { partId: "r1"; data: ClozeMcContent }
   | { partId: "r2"; data: OpenClozeContent }
@@ -194,7 +317,15 @@ export type ExerciseContent =
   | { partId: "r7"; data: GappedTextContent }
   | { partId: "r8"; data: MultiMatchContent }
   | { partId: "w1"; data: EssayContent }
-  | { partId: "w2"; data: WritingChoiceContent };
+  | { partId: "w2"; data: WritingChoiceContent }
+  | { partId: "l1"; data: ListeningExtractsContent }
+  | { partId: "l2"; data: ListeningSentenceContent }
+  | { partId: "l3"; data: ListeningInterviewContent }
+  | { partId: "l4"; data: ListeningMatchContent }
+  | { partId: "s1"; data: SpeakingQuestionsContent }
+  | { partId: "s2"; data: SpeakingLongTurnContent }
+  | { partId: "s3"; data: SpeakingCollabContent }
+  | { partId: "s4"; data: SpeakingQuestionsContent };
 
 export type ExerciseSource = "seed" | "ai";
 
@@ -206,14 +337,24 @@ export type Exercise = ExerciseContent & {
   isGeneratedText: true;
 };
 
-/** Ejercicios que se corrigen automáticamente (todo menos Writing) */
-export type AutoGradedExercise = Exclude<Exercise, { partId: "w1" | "w2" }>;
+/** Ejercicios que se corrigen automáticamente (Reading y Listening) */
+export type ReadingExercise = Extract<Exercise, { partId: "r1" | "r2" | "r3" | "r4" | "r5" | "r6" | "r7" | "r8" }>;
+export type ListeningExercise = Extract<Exercise, { partId: "l1" | "l2" | "l3" | "l4" }>;
+export type AutoGradedExercise = ReadingExercise | ListeningExercise;
 export type WritingExercise = Extract<Exercise, { partId: "w1" | "w2" }>;
+export type SpeakingExercise = Extract<Exercise, { partId: "s1" | "s2" | "s3" | "s4" }>;
 
 export const isWritingExercise = (e: Exercise): e is WritingExercise => e.partId === "w1" || e.partId === "w2";
+export const isSpeakingExercise = (e: Exercise): e is SpeakingExercise => e.partId.startsWith("s");
+export const isListeningExercise = (e: Exercise): e is ListeningExercise => e.partId.startsWith("l");
 
 /** Partes con generador implementado (se amplía en cada fase) */
-export const IMPLEMENTED_PARTS: PartId[] = ["r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "w1", "w2"];
+export const IMPLEMENTED_PARTS: PartId[] = [
+  "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8",
+  "w1", "w2",
+  "l1", "l2", "l3", "l4",
+  "s1", "s2", "s3", "s4",
+];
 
 export function isImplemented(id: PartId): boolean {
   return IMPLEMENTED_PARTS.includes(id);
@@ -234,6 +375,14 @@ export function schemaForPart(partId: PartId) {
     case "r8": return multiMatchSchema(count, choices);
     case "w1": return essaySchema();
     case "w2": return writingChoiceSchema();
+    case "l1": return listeningExtractsSchema(count, choices);
+    case "l2": return listeningSentenceSchema(count);
+    case "l3": return listeningInterviewSchema(count);
+    case "l4": return listeningMatchSchema(count, choices);
+    case "s1": return speakingQuestionsSchema(4, 8);
+    case "s2": return speakingLongTurnSchema();
+    case "s3": return speakingCollabSchema();
+    case "s4": return speakingQuestionsSchema(3, 6);
     default: throw new Error(`No schema for part ${partId} yet`);
   }
 }

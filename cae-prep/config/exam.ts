@@ -123,7 +123,7 @@ export const PARTS: PartConfig[] = [
     id: "l1", paper: "listening", number: 1, name: "Three short extracts",
     description: "Tres extractos cortos, dos preguntas de opción múltiple cada uno.",
     instructions: "You will hear three different extracts. For questions 1–6, choose the answer (A, B or C) which fits best according to what you hear.",
-    questionCount: 6, marksPerQuestion: 1, suggestedMinutes: 8,
+    questionCount: 6, marksPerQuestion: 1, suggestedMinutes: 8, choices: 3,
   },
   {
     id: "l2", paper: "listening", number: 2, name: "Sentence completion",
@@ -141,7 +141,7 @@ export const PARTS: PartConfig[] = [
     id: "l4", paper: "listening", number: 4, name: "Multiple matching",
     description: "Cinco hablantes; dos tareas de relacionar (5 + 5).",
     instructions: "You will hear five short extracts. For each task, choose the option (A–H) that matches each speaker.",
-    questionCount: 10, marksPerQuestion: 1, suggestedMinutes: 9,
+    questionCount: 10, marksPerQuestion: 1, suggestedMinutes: 9, choices: 8,
   },
 
   // ───────── Speaking ─────────
@@ -179,6 +179,11 @@ export const KWT_RULES = {
   includesKeyword: true,
   /** Las contracciones (n't, 'll, 've, 're, 'm, 'd) cuentan como dos palabras */
   contractionsCountAsTwo: true,
+};
+
+/** Reglas de Listening: en el examen cada audio se oye 2 veces */
+export const LISTENING_RULES = {
+  maxPlays: 2,
 };
 
 /** Idioma de las explicaciones de corrección (el contenido del ejercicio siempre en inglés) */

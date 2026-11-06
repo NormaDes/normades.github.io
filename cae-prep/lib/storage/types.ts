@@ -1,5 +1,6 @@
 import type { PartId } from "@/config/exam";
 import type { Exercise } from "@/lib/schemas";
+import type { SpeakingSubmission } from "@/lib/speaking";
 import type { WritingSubmission } from "@/lib/writing";
 
 /** Resultado de una pregunta dentro de un intento */
@@ -47,6 +48,9 @@ export interface Repository {
 
   addMistakes(m: Mistake[]): Promise<void>;
   listMistakes(): Promise<Mistake[]>;
+
+  saveSpeaking(s: SpeakingSubmission): Promise<void>;
+  listSpeakings(): Promise<SpeakingSubmission[]>;
 
   saveWriting(w: WritingSubmission): Promise<void>;
   listWritings(): Promise<WritingSubmission[]>;

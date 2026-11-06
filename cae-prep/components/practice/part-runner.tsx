@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { ExerciseView } from "@/components/practice/exercise-view";
+import { ListeningView } from "@/components/practice/listening-view";
 import { getPart, partLabel, type PartId } from "@/config/exam";
 import { checkExercise, type ExerciseResult, type UserAnswers } from "@/lib/checking";
 import { ApiError, fetchAiStatus, requestExercise, type AiStatus } from "@/lib/client/api";
 import { countUnseen, pickFromBank } from "@/lib/exercises/bank";
-import type { AutoGradedExercise } from "@/lib/schemas";
+import { isListeningExercise, type AutoGradedExercise, type ReadingExercise } from "@/lib/schemas";
 import { clientPrefs, repo, type Mistake } from "@/lib/storage";
 
 type Status = "idle" | "loading" | "doing" | "review";
@@ -254,7 +255,7 @@ export function PartRunner({ partId }: { partId: PartId }) {
 
       <div className="mb-4 flex flex-wrap gap-2 text-xs">
         <span className="rounded-full bg-warn-soft px-2.5 py-1 font-semibold">
-          Texto de práctica generado — no es un artículo real
+          {part.paper === "listening" ? "Guion de práctica con voz sintética — no es una grabación real" : "Texto de práctica generado — no es un artículo real"}
         </span>
         <span className="rounded-full bg-brand-soft px-2.5 py-1 font-semibold text-brand">
           {exercise.source === "ai" ? "Generado con IA" : "Banco inicial"}
@@ -288,12 +289,21 @@ export function PartRunner({ partId }: { partId: PartId }) {
         </div>
       )}
 
-      <ExerciseView
-        exercise={exercise}
-        answers={answers}
-        onChange={(n, v) => setAnswers((a) => ({ ...a, [n]: v }))}
-        result={status === "review" ? (result ?? undefined) : undefined}
-      />
+      {isListeningExercise(exercise) ? (
+        <ListeningView
+          exercise={exercise}
+          answers={answers}
+          onChange={(n, v) => setAnswers((a) => ({ ...a, [n]: v }))}
+          result={status === "review" ? (result ?? undefined) : undefined}
+        />
+      ) : (
+        <ExerciseView
+          exercise={exercise as ReadingExercise}
+          answers={answers}
+          onChange={(n, v) => setAnswers((a) => ({ ...a, [n]: v }))}
+          result={status === "review" ? (result ?? undefined) : undefined}
+        />
+      )}
 
       {error && <p role="alert" className="mt-4 rounded-xl bg-bad-soft p-3 text-sm text-bad">{error}</p>}
 

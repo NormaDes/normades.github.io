@@ -1,6 +1,7 @@
 import type { PartId } from "@/config/exam";
 import type { Exercise } from "@/lib/schemas";
 import type { Attempt, Mistake, Repository } from "@/lib/storage/types";
+import type { SpeakingSubmission } from "@/lib/speaking";
 import type { WritingSubmission } from "@/lib/writing";
 
 const PREFIX = "cae.v1.";
@@ -42,6 +43,14 @@ export class LocalRepository implements Repository {
 
   async listMistakes() {
     return read<Mistake[]>("mistakes", []);
+  }
+
+  async saveSpeaking(s: SpeakingSubmission) {
+    write("speakings", [...read<SpeakingSubmission[]>("speakings", []), s].slice(-100));
+  }
+
+  async listSpeakings() {
+    return read<SpeakingSubmission[]>("speakings", []);
   }
 
   async saveWriting(w: WritingSubmission) {

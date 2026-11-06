@@ -130,6 +130,71 @@ export function checkExercise(exercise: AutoGradedExercise, answers: UserAnswers
       }
       break;
     }
+    // Listening 1: preguntas dentro de extractos (A-C)
+    case "l1": {
+      for (const q of exercise.data.extracts.flatMap((e) => e.questions)) {
+        const given = answers[q.n] ?? "";
+        const ok = given !== "" && Number(given) === q.correct;
+        results.push({
+          n: q.n,
+          correct: ok,
+          given: given === "" ? "" : q.options[Number(given)] ?? "",
+          expected: q.options[q.correct],
+          skill: q.skill,
+          marks: ok ? part.marksPerQuestion : 0,
+          maxMarks: part.marksPerQuestion,
+        });
+      }
+      break;
+    }
+    case "l3": {
+      for (const q of exercise.data.questions) {
+        const given = answers[q.n] ?? "";
+        const ok = given !== "" && Number(given) === q.correct;
+        results.push({
+          n: q.n,
+          correct: ok,
+          given: given === "" ? "" : q.options[Number(given)] ?? "",
+          expected: q.options[q.correct],
+          skill: q.skill,
+          marks: ok ? part.marksPerQuestion : 0,
+          maxMarks: part.marksPerQuestion,
+        });
+      }
+      break;
+    }
+    case "l4": {
+      for (const q of exercise.data.questions) {
+        const given = answers[q.n] ?? "";
+        const ok = given !== "" && Number(given) === q.correct;
+        results.push({
+          n: q.n,
+          correct: ok,
+          given: given === "" ? "" : letterOf(Number(given)),
+          expected: letterOf(q.correct),
+          skill: q.skill,
+          marks: ok ? part.marksPerQuestion : 0,
+          maxMarks: part.marksPerQuestion,
+        });
+      }
+      break;
+    }
+    case "l2": {
+      for (const g of exercise.data.sentences) {
+        const given = answers[g.n] ?? "";
+        const ok = isAcceptable(given, g.answers);
+        results.push({
+          n: g.n,
+          correct: ok,
+          given,
+          expected: g.answers.join(" / "),
+          skill: g.skill,
+          marks: ok ? part.marksPerQuestion : 0,
+          maxMarks: part.marksPerQuestion,
+        });
+      }
+      break;
+    }
     case "r2":
     case "r3": {
       for (const g of exercise.data.gaps) {
