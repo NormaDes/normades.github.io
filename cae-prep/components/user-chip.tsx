@@ -7,7 +7,7 @@ import { getBrowserClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 
 /** Nombre del usuario y botón «Salir». No se muestra si Supabase no está configurado (modo local). */
-export function UserChip() {
+export function UserChip({ variant }: { variant: "sidebar" | "topbar" }) {
   const router = useRouter();
   const [name, setName] = useState<string | null>(null);
   const enabled = isSupabaseConfigured();
@@ -30,14 +30,26 @@ export function UserChip() {
     router.refresh();
   };
 
-  return (
-    <div className="mb-4 flex items-center justify-end gap-3 text-sm">
-      <span className="truncate text-muted">
-        Hola, <strong className="text-ink">{name}</strong>
-      </span>
-      <button type="button" onClick={logout} className="min-h-9 rounded-lg border border-line px-3 text-xs font-semibold hover:border-brand">
+  const initial = name.charAt(0).toUpperCase();
+
+  if (variant === "topbar") {
+    return (
+      <button type="button" onClick={logout} aria-label={`Salir (${name})`} className="flex items-center gap-2 rounded-lg border border-line bg-surface py-1 pl-1 pr-2.5 text-xs font-semibold">
+        <span className="flex h-6 w-6 items-center justify-center rounded-md bg-brand text-[11px] text-brand-ink">{initial}</span>
         Salir
       </button>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-3 rounded-lg border border-line bg-surface p-2.5">
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-brand text-sm font-bold text-brand-ink">{initial}</span>
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-sm font-semibold">{name}</p>
+        <button type="button" onClick={logout} className="text-xs text-muted underline-offset-2 hover:text-ink hover:underline">
+          Cerrar sesión
+        </button>
+      </div>
     </div>
   );
 }

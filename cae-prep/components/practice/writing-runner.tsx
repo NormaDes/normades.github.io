@@ -250,7 +250,7 @@ export function WritingRunner({ partId }: { partId: PartId }) {
 
   return (
     <div className="mx-auto max-w-3xl">
-      <div className="sticky top-0 z-20 -mx-4 mb-5 flex items-center justify-between gap-3 border-b border-line bg-bg/95 px-4 py-3 backdrop-blur md:-mx-8 md:px-8">
+      <div className="sticky top-14 z-20 -mx-4 md:top-0 mb-5 flex items-center justify-between gap-3 border-b border-line bg-bg/95 px-4 py-3 backdrop-blur md:-mx-8 md:px-8">
         <div className="min-w-0">
           <p className="truncate text-sm font-semibold">{part.name}</p>
           <p className="truncate text-xs text-muted">{exercise.data.title}</p>

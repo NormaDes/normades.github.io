@@ -81,7 +81,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
   };
 
   return (
-    <div className="rounded-2xl border border-line bg-surface p-6">
+    <div className="rounded-xl border border-line border-t-[3px] border-t-brand bg-surface p-6">
       <h1 className="text-2xl font-bold tracking-tight">{copy.title}</h1>
       <p className="mt-1 text-sm text-muted">{copy.subtitle}</p>
 

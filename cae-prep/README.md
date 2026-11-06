@@ -1,6 +1,6 @@
-# CAE Prep — Cambridge C1 Advanced
+# Englora — English Exam Prep
 
-Web app para preparar el examen **Cambridge C1 Advanced (CAE)**. Interfaz en español de España; todo el contenido de práctica en inglés. Pensada para usarse mucho desde el móvil.
+**Englora** es una web app para preparar el examen **Cambridge C1 Advanced (CAE)** (_Practice · Improve · Succeed_). Interfaz en español de España; todo el contenido de práctica en inglés. Pensada para usarse mucho desde el móvil.
 
 > Estado: **Fase 4a** — Reading 1-8, Writing 1-2, Listening 1-4, Speaking 1-4 y **cuentas de usuario** (registro, inicio de sesión, datos por usuario). Ver [`docs/PLAN.md`](docs/PLAN.md).
 
@@ -109,3 +109,9 @@ Hoy se guardan en `localStorage` (por dispositivo) a través de la interfaz `Rep
 - Un ejercicio generado con IA se guarda solo en tu navegador hasta la migración a Supabase.
 - Las cuentas se han probado contra un servidor de Supabase **simulado** (registro, login, cookies, rutas protegidas, guardado por usuario y RLS en un Postgres real), no contra tu proyecto de Supabase. Los enlaces de los emails (confirmar, recuperar contraseña) dependen de la configuración del paso 2.
 - No se ha probado la generación ni la evaluación contra la API real de Anthropic (no había clave en el entorno de desarrollo). Sí están probados: errores de los endpoints, validadores, corrección de Reading y Listening, y las pantallas de Writing y Speaking con respuestas de IA, voz y micrófono simulados. Falta probarlo con una voz y un micrófono reales en el móvil.
+
+## Identidad visual
+
+- Logo y marca en `public/brand/` (PNG con fondo transparente) e iconos de la app en `public/icon-*.png`, `app/icon.png` y `app/apple-icon.png`. `app/manifest.ts` permite instalarla en el móvil («Añadir a pantalla de inicio»).
+- Paleta tomada del logo, definida en `app/globals.css`: azul tinta `#011A3B`, azul real `#012B6F`, rojo acento `#C6131C` (solo como detalle) sobre papel cálido `#F6F4EF`. Titulares con serif y esquinas sobrias.
+- Solo tema claro por ahora (el logo está pensado para fondo claro).

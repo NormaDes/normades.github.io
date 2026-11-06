@@ -41,7 +41,7 @@ export function NewPasswordForm() {
   }
 
   return (
-    <div className="rounded-2xl border border-line bg-surface p-6">
+    <div className="rounded-xl border border-line border-t-[3px] border-t-brand bg-surface p-6">
       <h1 className="text-2xl font-bold tracking-tight">Elige una contraseña nueva</h1>
       <form onSubmit={submit} className="mt-5 space-y-4" noValidate>
         <label className="block text-sm font-medium">

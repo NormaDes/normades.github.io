@@ -2,17 +2,16 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: { default: "CAE Prep — Prepara el Cambridge C1 Advanced", template: "%s · CAE Prep" },
+  title: { default: "Englora · English Exam Prep", template: "%s · Englora" },
   description:
-    "Practica el examen Cambridge C1 Advanced (CAE): Reading & Use of English, Writing, Listening y Speaking con corrección y explicaciones.",
+    "Englora: prepara el Cambridge C1 Advanced (CAE) con práctica por partes, simulacros, corrección con IA y explicaciones. Practice, improve, succeed.",
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f6f7fb" },
-    { media: "(prefers-color-scheme: dark)", color: "#0d0f1a" },
+    { color: "#f6f4ef" },
   ],
 };
 

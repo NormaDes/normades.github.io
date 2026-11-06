@@ -1,67 +1,67 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ChevronIcon, ClockIcon, PAPER_ICONS } from "@/components/icons";
 import { PAPERS, partsOfPaper } from "@/config/exam";
 import { isImplemented } from "@/lib/schemas";
 
-export const metadata: Metadata = { title: "Modo práctica" };
-
-const PHASE: Record<string, number> = { reading: 2, writing: 2, listening: 3, speaking: 3 };
+export const metadata: Metadata = { title: "Practicar" };
 
 export default function PracticePage() {
   return (
     <div className="mx-auto max-w-3xl">
-      <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Modo práctica</h1>
-      <p className="mt-2 text-muted">Elige una parte concreta y practica con el formato oficial.</p>
+      <p className="eyebrow text-accent">Modo práctica</p>
+      <h1 className="mt-1 font-serif text-3xl font-bold md:text-4xl">Elige una parte del examen</h1>
+      <p className="mt-2 max-w-xl text-muted">Cada parte con el formato oficial, temporizador opcional y corrección explicada.</p>
 
-      {PAPERS.map((paper) => (
-        <section key={paper.id} className="mt-8">
-          <div className="mb-3 flex items-baseline justify-between">
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">{paper.name}</h2>
-            <span className="text-xs text-muted">{paper.durationMinutes} min</span>
-          </div>
-          <ul className="grid gap-2.5 sm:grid-cols-2">
-            {partsOfPaper(paper.id).map((p) => {
-              const ready = isImplemented(p.id);
-              const body = (
-                <>
-                  <div className="flex items-start justify-between gap-3">
-                    <p className="font-semibold">
-                      <span className="mr-1.5 text-muted">{p.number}.</span>
-                      {p.name}
-                    </p>
-                    {ready ? (
-                      <span className="shrink-0 rounded-full bg-ok-soft px-2 py-0.5 text-[11px] font-semibold text-ok">Listo</span>
-                    ) : (
-                      <span className="shrink-0 rounded-full bg-warn-soft px-2 py-0.5 text-[11px] font-semibold">
-                        Fase {PHASE[paper.id]}
+      {PAPERS.map((paper) => {
+        const Icon = PAPER_ICONS[paper.id];
+        return (
+          <section key={paper.id} id={paper.id} className="mt-10 scroll-mt-20">
+            <div className="flex items-center gap-3 border-b-2 border-ink pb-2">
+              <Icon width={22} height={22} className="text-brand" />
+              <h2 className="font-serif text-xl font-bold">{paper.name}</h2>
+              <span className="ml-auto flex items-center gap-1.5 text-xs font-medium text-muted">
+                <ClockIcon width={15} height={15} />
+                {paper.durationMinutes} min
+              </span>
+            </div>
+
+            <ul className="divide-y divide-line border-b border-line bg-surface">
+              {partsOfPaper(paper.id).map((p) => {
+                const ready = isImplemented(p.id);
+                const inner = (
+                  <>
+                    <span className="w-9 shrink-0 text-center font-serif text-3xl font-bold leading-none text-brand/80">{p.number}</span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block font-semibold leading-snug">{p.name}</span>
+                      <span className="mt-0.5 block text-sm leading-snug text-muted">{p.description}</span>
+                      <span className="eyebrow mt-1.5 block text-muted/80">
+                        {p.marksPerQuestion > 0 && p.questionCount > 1 ? `${p.questionCount} preguntas · ` : ""}~{p.suggestedMinutes} min
                       </span>
+                    </span>
+                    {ready ? (
+                      <ChevronIcon width={20} height={20} className="shrink-0 text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-accent" />
+                    ) : (
+                      <span className="eyebrow shrink-0 text-muted">Pronto</span>
                     )}
-                  </div>
-                  <p className="mt-1.5 text-sm text-muted">{p.description}</p>
-                  <p className="mt-2 text-xs text-muted">
-                    {p.questionCount > 1 || paper.id === "reading" || paper.id === "listening" ? `${p.questionCount} preguntas · ` : ""}
-                    ~{p.suggestedMinutes} min
-                  </p>
-                </>
-              );
-              return (
-                <li key={p.id}>
-                  {ready ? (
-                    <Link
-                      href={`/practica/${p.id}`}
-                      className="block h-full rounded-2xl border border-line bg-surface p-4 transition-colors hover:border-brand active:scale-[0.995]"
-                    >
-                      {body}
-                    </Link>
-                  ) : (
-                    <div className="h-full rounded-2xl border border-dashed border-line bg-surface/50 p-4 opacity-70">{body}</div>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-      ))}
+                  </>
+                );
+                return (
+                  <li key={p.id}>
+                    {ready ? (
+                      <Link href={`/practica/${p.id}`} className="group flex items-center gap-4 px-3 py-4 transition-colors hover:bg-brand-soft/60 md:px-4">
+                        {inner}
+                      </Link>
+                    ) : (
+                      <div className="flex items-center gap-4 px-3 py-4 opacity-60 md:px-4">{inner}</div>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        );
+      })}
     </div>
   );
 }
