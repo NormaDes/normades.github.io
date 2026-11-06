@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { ComingSoon } from "@/components/coming-soon";
+import { ProgressDashboard } from "@/components/progress-dashboard";
 
 export const metadata: Metadata = { title: "Progreso" };
 
-export default function Page() {
+export default function ProgressPage() {
   return (
-    <ComingSoon
-      title="Dashboard de progreso"
-      phase={4}
-      description="Precisión por parte, evolución en el tiempo, puntos débiles y recomendación diaria."
-      bullets={["Racha de días de estudio", "Tipos de error más frecuentes", "Qué practicar hoy según tus resultados"]}
-    />
+    <div className="mx-auto max-w-4xl">
+      <p className="eyebrow text-accent">Tu progreso</p>
+      <h1 className="mt-1 font-serif text-3xl font-bold md:text-4xl">Cómo vas hacia el examen</h1>
+      <p className="mb-6 mt-2 max-w-xl text-muted">Acierto por parte, evolución, tipos de error y constancia, con una recomendación para hoy.</p>
+      <ProgressDashboard />
+    </div>
   );
 }

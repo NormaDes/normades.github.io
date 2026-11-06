@@ -7,7 +7,7 @@ import { ListeningView } from "@/components/practice/listening-view";
 import { getPart, partLabel, type PartId } from "@/config/exam";
 import { checkExercise, type ExerciseResult, type UserAnswers } from "@/lib/checking";
 import { ApiError, fetchAiStatus, requestExercise, type AiStatus } from "@/lib/client/api";
-import { countUnseen, pickFromBank } from "@/lib/exercises/bank";
+import { bankFor, countUnseen, pickFromBank } from "@/lib/exercises/bank";
 import { SOURCE_LABEL, isListeningExercise, type AutoGradedExercise, type ReadingExercise } from "@/lib/schemas";
 import { clientPrefs, repo, type Mistake } from "@/lib/storage";
 
@@ -76,6 +76,20 @@ export function PartRunner({ partId }: { partId: PartId }) {
     window.scrollTo({ top: 0 });
   };
 
+  // Enlace «Repetir ejercicio» desde el cuaderno de errores: /practica/r1?ex=<id>
+  useEffect(() => {
+    const wanted = new URLSearchParams(window.location.search).get("ex");
+    if (!wanted) return;
+    let cancelled = false;
+    bankFor(repo, partId).then((all) => {
+      const ex = all.find((e) => e.id === wanted);
+      if (ex && !cancelled) begin(ex as AutoGradedExercise);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [partId]);
+
   const fromBank = async () => {
     setError(null);
     setNotice(null);
@@ -130,8 +144,11 @@ export function PartRunner({ partId }: { partId: PartId }) {
       timed: timerOn,
       details: res.results.map((r) => ({ n: r.n, correct: r.correct, skill: r.skill })),
     });
+    // Las preguntas acertadas ahora cierran sus fallos anteriores; los fallos que ya estaban pendientes no se duplican
+    await repo.resolveMistakes(exercise.id, res.results.filter((r) => r.correct).map((r) => r.n));
+    const pending = new Set((await repo.listMistakes()).filter((m) => !m.resolved && m.exerciseId === exercise.id).map((m) => m.n));
     const mistakes: Mistake[] = res.results
-      .filter((r) => !r.correct)
+      .filter((r) => !r.correct && !pending.has(r.n))
       .map((r) => ({
         id: uid(),
         exerciseId: exercise.id,

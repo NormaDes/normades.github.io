@@ -2,7 +2,7 @@
 
 **Englora** es una web app para preparar el examen **Cambridge C1 Advanced (CAE)** (_Practice · Improve · Succeed_). Interfaz en español de España; todo el contenido de práctica en inglés. Pensada para usarse mucho desde el móvil.
 
-> Estado: **Fase 4a** — Reading 1-8, Writing 1-2, Listening 1-4, Speaking 1-4 y **cuentas de usuario** (registro, inicio de sesión, datos por usuario). Ver [`docs/PLAN.md`](docs/PLAN.md).
+> Estado: **Fase 4a + panel de progreso y cuaderno de errores** — Reading 1-8, Writing 1-2, Listening 1-4, Speaking 1-4 y **cuentas de usuario** (registro, inicio de sesión, datos por usuario). Ver [`docs/PLAN.md`](docs/PLAN.md).
 
 ## Qué funciona ahora
 
@@ -15,7 +15,11 @@
 - Temporizador opcional (tiempo sugerido por parte, se corrige solo al terminar).
 - Banco inicial de ejercicios + generación nueva con Claude, **cacheada** en tu navegador.
 - Todos los intentos y fallos se guardan (localStorage), con racha de días en la portada.
-- Resto de secciones (simulacro, biblioteca, vocabulario, errores, progreso y cuentas de usuario, en la Fase 4) con página «próximamente».
+- **Panel de progreso**: acierto por parte (con objetivo del 80 %), evolución diaria con tooltip y vista en tabla, puntos débiles por tipo de error, calendario de constancia de 12 semanas, racha y recomendación diaria.
+- **Cuaderno de errores**: filtros por estado, parte y tipo de error; «Repetir ejercicio» abre ese ejercicio concreto y, al acertar de nuevo, el error se marca como resuelto solo.
+- **Cuenta atrás** hasta el examen en la portada (se guarda en el dispositivo).
+- Páginas de **Privacidad** y **Aviso legal** (borradores con campos por completar), casilla de aceptación en el registro, 404 y pantalla de error con marca, enlace «Saltar al contenido» y respeto de `prefers-reduced-motion`.
+- Resto de secciones (simulacro, biblioteca y vocabulario) con página «próximamente».
 
 ## Arrancar en local
 
@@ -109,6 +113,19 @@ Hoy se guardan en `localStorage` (por dispositivo) a través de la interfaz `Rep
 - Un ejercicio generado con IA se guarda solo en tu navegador hasta la migración a Supabase.
 - Las cuentas se han probado contra un servidor de Supabase **simulado** (registro, login, cookies, rutas protegidas, guardado por usuario y RLS en un Postgres real), no contra tu proyecto de Supabase. Los enlaces de los emails (confirmar, recuperar contraseña) dependen de la configuración del paso 2.
 - No se ha probado la generación ni la evaluación contra la API real de Anthropic (no había clave en el entorno de desarrollo). Sí están probados: errores de los endpoints, validadores, corrección de Reading y Listening, y las pantallas de Writing y Speaking con respuestas de IA, voz y micrófono simulados. Falta probarlo con una voz y un micrófono reales en el móvil.
+
+## Calidad
+
+```bash
+npm run check   # lint + tipos + validación del banco + tests
+npm test        # tests unitarios (corrección, validación, progreso)
+```
+
+`.github/workflows/ci.yml` ejecuta lint, tipos, validación del banco, tests y build en cada push.
+
+## Antes de abrirla a más gente
+
+Las páginas `/privacidad` y `/aviso-legal` son **borradores**: rellena los campos resaltados (responsable, NIF, domicilio, email de contacto, regiones de los proveedores) y haz que las revise un profesional. Es obligatorio al guardar datos personales de otras personas.
 
 ## Identidad visual
 

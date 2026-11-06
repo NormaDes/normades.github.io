@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ExamCountdown } from "@/components/exam-countdown";
 import { HomeStats } from "@/components/home-stats";
 import { ArrowIcon, PAPER_ICONS } from "@/components/icons";
 import { PAPERS, partsOfPaper } from "@/config/exam";
@@ -27,7 +28,8 @@ export default function Home() {
         <p className="relative mt-4 max-w-sm text-[15px] leading-relaxed text-white/80">
           Ejercicios con el formato oficial, corrección inmediata y explicaciones de por qué cada respuesta es correcta o falla.
         </p>
-        <div className="relative mt-7 flex flex-wrap gap-3">
+        <ExamCountdown />
+        <div className="relative mt-6 flex flex-wrap gap-3">
           <Link href="/practica" className="inline-flex min-h-12 items-center gap-2 rounded-lg bg-white px-5 text-sm font-bold text-ink transition-transform hover:-translate-y-px">
             Empezar a practicar
             <ArrowIcon width={18} height={18} />

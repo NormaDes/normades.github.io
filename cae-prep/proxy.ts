@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { SUPABASE_ANON_KEY, SUPABASE_URL, isSupabaseConfigured } from "@/lib/supabase/config";
 
-const PUBLIC_PREFIXES = ["/login", "/registro", "/recuperar", "/auth"];
+const PUBLIC_PREFIXES = ["/login", "/registro", "/recuperar", "/auth", "/privacidad", "/aviso-legal"];
 
 /**
  * Si Supabase está configurado: refresca la sesión y obliga a iniciar sesión

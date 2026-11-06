@@ -23,6 +23,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [accepted, setAccepted] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
@@ -42,6 +43,10 @@ export function AuthForm({ mode }: { mode: Mode }) {
     setInfo(null);
     if (mode !== "recover" && password.length < 8) {
       setError("La contraseña debe tener al menos 8 caracteres.");
+      return;
+    }
+    if (mode === "register" && !accepted) {
+      setError("Para crear la cuenta debes aceptar la política de privacidad.");
       return;
     }
     setBusy(true);
@@ -109,6 +114,17 @@ export function AuthForm({ mode }: { mode: Mode }) {
               className={inputCls}
             />
             {mode === "register" && <span className="mt-1 block text-xs font-normal text-muted">Mínimo 8 caracteres.</span>}
+          </label>
+        )}
+
+        {mode === "register" && (
+          <label className="flex cursor-pointer items-start gap-3 text-sm leading-snug">
+            <input type="checkbox" checked={accepted} onChange={(e) => setAccepted(e.target.checked)} className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--brand)]" />
+            <span>
+              He leído y acepto la{" "}
+              <Link href="/privacidad" target="_blank" className="font-semibold text-brand underline">política de privacidad</Link> y el{" "}
+              <Link href="/aviso-legal" target="_blank" className="font-semibold text-brand underline">aviso legal</Link>.
+            </span>
           </label>
         )}
 

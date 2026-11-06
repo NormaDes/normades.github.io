@@ -48,6 +48,10 @@ export interface Repository {
 
   addMistakes(m: Mistake[]): Promise<void>;
   listMistakes(): Promise<Mistake[]>;
+  /** Marca como resuelto (o no) un fallo concreto */
+  setMistakeResolved(id: string, resolved: boolean): Promise<void>;
+  /** Marca como resueltos los fallos pendientes de esas preguntas de un ejercicio (al acertarlas de nuevo) */
+  resolveMistakes(exerciseId: string, ns: number[]): Promise<void>;
 
   saveSpeaking(s: SpeakingSubmission): Promise<void>;
   listSpeakings(): Promise<SpeakingSubmission[]>;

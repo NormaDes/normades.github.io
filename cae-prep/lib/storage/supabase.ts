@@ -144,6 +144,23 @@ export class SupabaseRepository implements Repository {
     }));
   }
 
+  async setMistakeResolved(id: string, resolved: boolean) {
+    await this.attempt<unknown>(
+      "setMistakeResolved",
+      () => this.db.from("mistakes").update({ resolved }).eq("id", id),
+      () => this.fallback.setMistakeResolved(id, resolved),
+    );
+  }
+
+  async resolveMistakes(exerciseId: string, ns: number[]) {
+    if (!ns.length) return;
+    await this.attempt<unknown>(
+      "resolveMistakes",
+      () => this.db.from("mistakes").update({ resolved: true }).eq("exercise_id", exerciseId).in("n", ns).eq("resolved", false),
+      () => this.fallback.resolveMistakes(exerciseId, ns),
+    );
+  }
+
   private saveSubmission(kind: "writing" | "speaking", s: WritingSubmission | SpeakingSubmission, local: () => Promise<void>) {
     return this.attempt<unknown>(
       `save-${kind}`,

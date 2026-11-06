@@ -53,6 +53,18 @@ export class LocalRepository implements Repository {
     return read<SpeakingSubmission[]>("speakings", []);
   }
 
+  async setMistakeResolved(id: string, resolved: boolean) {
+    write("mistakes", read<Mistake[]>("mistakes", []).map((m) => (m.id === id ? { ...m, resolved } : m)));
+  }
+
+  async resolveMistakes(exerciseId: string, ns: number[]) {
+    if (!ns.length) return;
+    write(
+      "mistakes",
+      read<Mistake[]>("mistakes", []).map((m) => (m.exerciseId === exerciseId && ns.includes(m.n) && !m.resolved ? { ...m, resolved: true } : m)),
+    );
+  }
+
   async saveWriting(w: WritingSubmission) {
     write("writings", [...read<WritingSubmission[]>("writings", []), w].slice(-100));
   }
