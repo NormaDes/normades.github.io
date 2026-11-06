@@ -1,0 +1,236 @@
+import type { ClozeMcContent } from "@/lib/schemas";
+
+export const r1Seeds: Array<{ id: string; data: ClozeMcContent }> = [
+  {
+    id: "seed-r1-green-cities",
+    data: {
+      title: "Cities and green space",
+      topic: "Urban planning",
+      text: `Cities have long been seen as places where nature has been {{1}} out by concrete and glass. Yet a growing body of research suggests that even small patches of greenery can have a {{2}} effect on residents' wellbeing. In one study, people who lived within a short walk of a park reported markedly lower levels of stress, and the benefits {{3}} regardless of income.
+
+Urban planners, once {{4}} on maximising housing density, are now being urged to {{5}} room for trees, community gardens and even green roofs. Critics, however, {{6}} that such schemes are costly and that the land would be better used for affordable homes. Supporters counter that the long-term savings in healthcare more than {{7}} the initial outlay. Whatever the outcome of the debate, it is clear that the idea of the green city is {{8}} to stay.`,
+      questions: [
+        {
+          n: 1,
+          options: ["crowded", "jammed", "packed", "stuffed"],
+          correct: 0,
+          explanations: [
+            "Correcta: 'crowded out' = desplazar algo porque hay demasiado de otra cosa.",
+            "'Jammed' se combina con 'up' o 'in', no forma 'jammed out' con este sentido.",
+            "'Packed out' se dice de lugares llenos de gente, no de algo desplazado.",
+            "'Stuffed out' no existe con este significado.",
+          ],
+          evidence: "nature has been crowded out by concrete and glass",
+          skill: "phrasal verb",
+        },
+        {
+          n: 2,
+          options: ["narrow", "shallow", "profound", "hollow"],
+          correct: 2,
+          explanations: [
+            "'Narrow' describe límites estrechos; no colabora con 'effect'.",
+            "'Shallow' implica poca profundidad y daría un sentido opuesto al contexto.",
+            "Correcta: 'a profound effect' (un efecto profundo) es una colocación fija.",
+            "'Hollow' significa vacío, sin contenido; no se usa con 'effect'.",
+          ],
+          evidence: "can have a profound effect on residents' wellbeing",
+          skill: "collocation",
+        },
+        {
+          n: 3,
+          options: ["applied", "affected", "appealed", "allied"],
+          correct: 0,
+          explanations: [
+            "Correcta: 'apply regardless of income' = ser válido para todos, sin importar los ingresos.",
+            "'Affected' es transitivo (afectar a algo): 'the benefits affected regardless' no tiene sentido.",
+            "'Appeal' se usa con 'to' y significa atraer, no encaja aquí.",
+            "'Allied' = aliado/unido; no puede funcionar como verbo principal en este contexto.",
+          ],
+          evidence: "the benefits applied regardless of income",
+          skill: "meaning/register",
+        },
+        {
+          n: 4,
+          options: ["inclined", "bent", "prone", "liable"],
+          correct: 1,
+          explanations: [
+            "'Inclined' va con 'to' (inclined to + infinitivo), no con 'on'.",
+            "Correcta: 'bent on + -ing' = empeñado en hacer algo.",
+            "'Prone' va con 'to' (prone to something), no con 'on'.",
+            "'Liable' va con 'to' (liable to + infinitivo), no con 'on'.",
+          ],
+          evidence: "once bent on maximising housing density",
+          skill: "dependent preposition",
+        },
+        {
+          n: 5,
+          options: ["do", "take", "make", "put"],
+          correct: 2,
+          explanations: [
+            "'Do room' no es una expresión válida.",
+            "'Take room' no se usa así; 'take up room' tiene otro sentido (ocupar espacio).",
+            "Correcta: 'make room for' = hacer sitio para algo.",
+            "'Put room' no forma una expresión válida.",
+          ],
+          evidence: "urged to make room for trees, community gardens",
+          skill: "fixed phrase",
+        },
+        {
+          n: 6,
+          options: ["dispute", "oppose", "resist", "contend"],
+          correct: 3,
+          explanations: [
+            "'Dispute that' significa negar que algo sea cierto: aquí diría que los esquemas NO son caros, lo contrario del argumento.",
+            "'Oppose' va seguido de un complemento directo, no de una oración con 'that'.",
+            "'Resist' va seguido de un complemento directo, no de 'that'.",
+            "Correcta: 'contend that' = sostener/afirmar que (verbo de opinión con that-clause).",
+          ],
+          evidence: "Critics, however, contend that such schemes are costly",
+          skill: "verb pattern",
+        },
+        {
+          n: 7,
+          options: ["compensate", "offset", "redeem", "rectify"],
+          correct: 1,
+          explanations: [
+            "'Compensate' necesita 'for' (compensate for), y aquí va directamente seguido del complemento.",
+            "Correcta: 'more than offset the outlay' = compensar con creces el gasto inicial.",
+            "'Redeem' significa canjear o redimir; no se usa con gastos.",
+            "'Rectify' significa corregir un error, no encaja con un gasto.",
+          ],
+          evidence: "savings in healthcare more than offset the initial outlay",
+          skill: "collocation",
+        },
+        {
+          n: 8,
+          options: ["bound", "certain", "here", "keen"],
+          correct: 2,
+          explanations: [
+            "'Bound to stay' sugiere obligación o certeza, pero no es la expresión fija.",
+            "'Certain to stay' es gramatical pero no es la expresión idiomática.",
+            "Correcta: 'is here to stay' es una expresión fija (haber llegado para quedarse).",
+            "'Keen to stay' = con ganas de quedarse; una idea no puede estar 'keen'.",
+          ],
+          evidence: "the idea of the green city is here to stay",
+          skill: "fixed phrase",
+        },
+      ],
+    },
+  },
+  {
+    id: "seed-r1-teen-sleep",
+    data: {
+      title: "Teenagers and sleep",
+      topic: "Education and health",
+      text: `For decades, parents and teachers have {{1}} suspected that teenagers need more sleep than they get. Now there is hard evidence to {{2}} up the claim. A large-scale trial in which schools delayed their start time by an hour found that pupils were less {{3}} to fall ill and more likely to {{4}} attention in class. Teachers also noted a marked {{5}} in lateness and absenteeism.
+
+Not everyone is convinced, though. Some head teachers have {{6}} concerns that later starts disrupt sporting and after-school activities, and working parents may struggle to {{7}} with the new arrangements. Even so, the findings are likely to put pressure on education authorities to {{8}} the issue seriously.`,
+      questions: [
+        {
+          n: 1,
+          options: ["far", "long", "well", "deep"],
+          correct: 1,
+          explanations: [
+            "'Far' no se usa con 'suspected' en este sentido.",
+            "Correcta: 'have long suspected' = sospechar desde hace mucho tiempo.",
+            "'Well suspected' no es una combinación natural (sí 'well known').",
+            "'Deep' no funciona como adverbio de tiempo con 'suspect'.",
+          ],
+          evidence: "parents and teachers have long suspected",
+          skill: "collocation",
+        },
+        {
+          n: 2,
+          options: ["back", "set", "pull", "lift"],
+          correct: 0,
+          explanations: [
+            "Correcta: 'back up a claim' = respaldar una afirmación con pruebas.",
+            "'Set up' significa establecer o montar, no respaldar.",
+            "'Pull up' significa detener un vehículo o arrancar, no encaja.",
+            "'Lift up' es levantar físicamente, no respaldar un argumento.",
+          ],
+          evidence: "hard evidence to back up the claim",
+          skill: "phrasal verb",
+        },
+        {
+          n: 3,
+          options: ["subject", "exposed", "susceptible", "likely"],
+          correct: 3,
+          explanations: [
+            "'Subject to' se construye con sustantivo/gerundio, no con infinitivo ('subject to fall' es incorrecto).",
+            "'Exposed to' se construye con sustantivo/gerundio, no con infinitivo.",
+            "'Susceptible to' se construye con sustantivo; con infinitivo no es correcto.",
+            "Correcta: 'less likely to + infinitivo' (menos probable que).",
+          ],
+          evidence: "pupils were less likely to fall ill",
+          skill: "adjective pattern",
+        },
+        {
+          n: 4,
+          options: ["pay", "take", "hold", "draw"],
+          correct: 0,
+          explanations: [
+            "Correcta: 'pay attention' = prestar atención.",
+            "'Take attention' no es una colocación (sí 'take notice').",
+            "'Hold attention' se usa para captar el interés de alguien, no para 'prestar' atención.",
+            "'Draw attention' = llamar la atención sobre algo; no encaja con 'in class' como sujeto que atiende.",
+          ],
+          evidence: "more likely to pay attention in class",
+          skill: "collocation",
+        },
+        {
+          n: 5,
+          options: ["decline", "descent", "deflation", "erosion"],
+          correct: 0,
+          explanations: [
+            "Correcta: 'a marked decline in' = un descenso notable en.",
+            "'Descent' se usa para bajadas físicas o linajes, no para estadísticas.",
+            "'Deflation' pertenece al lenguaje económico (precios).",
+            "'Erosion' se aplica a derechos, confianza o terreno, no a retrasos.",
+          ],
+          evidence: "a marked decline in lateness and absenteeism",
+          skill: "collocation",
+        },
+        {
+          n: 6,
+          options: ["lifted", "raised", "risen", "arisen"],
+          correct: 1,
+          explanations: [
+            "'Lifted' significa levantar físicamente o suprimir una restricción, no 'plantear' preocupaciones.",
+            "Correcta: 'raise concerns' = plantear inquietudes; 'raised' es transitivo y va tras 'have'.",
+            "'Risen' es intransitivo (rise): no puede llevar complemento directo.",
+            "'Arisen' es intransitivo (arise): 'concerns have arisen', pero no 'have arisen concerns'.",
+          ],
+          evidence: "Some head teachers have raised concerns that later starts disrupt",
+          skill: "collocation",
+        },
+        {
+          n: 7,
+          options: ["cope", "tolerate", "endure", "withstand"],
+          correct: 0,
+          explanations: [
+            "Correcta: 'cope with' = hacer frente a / arreglárselas con.",
+            "'Tolerate' es transitivo y no se usa con 'with'.",
+            "'Endure' es transitivo y no se usa con 'with'.",
+            "'Withstand' es transitivo y no se usa con 'with'.",
+          ],
+          evidence: "struggle to cope with the new arrangements",
+          skill: "dependent preposition",
+        },
+        {
+          n: 8,
+          options: ["take", "hold", "pay", "set"],
+          correct: 0,
+          explanations: [
+            "Correcta: 'take something seriously' = tomarse algo en serio.",
+            "'Hold something seriously' no es una expresión válida.",
+            "'Pay seriously' no es válida (sí 'pay attention').",
+            "'Set seriously' no es válida.",
+          ],
+          evidence: "pressure on education authorities to take the issue seriously",
+          skill: "fixed phrase",
+        },
+      ],
+    },
+  },
+];
