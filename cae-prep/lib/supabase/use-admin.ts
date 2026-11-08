@@ -10,12 +10,20 @@ export function useIsAdmin(): boolean | null {
   useEffect(() => {
     if (!isSupabaseConfigured()) return;
     let cancelled = false;
-    getBrowserClient()
-      .from("profiles")
-      .select("role")
-      .maybeSingle()
-      .then(({ data }: { data: { role?: string } | null }) => {
-        if (!cancelled) setAdmin(data?.role === "admin");
+    const supabase = getBrowserClient();
+    supabase.auth
+      .getUser()
+      .then(async ({ data }: { data: { user: { id: string } | null } }) => {
+        if (!data.user) return false;
+        // Un admin puede leer todos los perfiles: hay que pedir solo el suyo.
+        const { data: row } = await supabase.from("profiles").select("role").eq("id", data.user.id).maybeSingle();
+        return (row as { role?: string } | null)?.role === "admin";
+      })
+      .then((isAdmin: boolean) => {
+        if (!cancelled) setAdmin(isAdmin);
+      })
+      .catch(() => {
+        if (!cancelled) setAdmin(false);
       });
     return () => {
       cancelled = true;
