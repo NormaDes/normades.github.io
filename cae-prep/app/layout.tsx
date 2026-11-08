@@ -1,11 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Caveat, Geist, Source_Serif_4 } from "next/font/google";
+import { Fredoka, Nunito } from "next/font/google";
 import "./globals.css";
 
-const body = Geist({ subsets: ["latin"], variable: "--nf-body", display: "swap" });
-const display = Bricolage_Grotesque({ subsets: ["latin"], variable: "--nf-display", display: "swap", axes: ["opsz"] });
-const read = Source_Serif_4({ subsets: ["latin"], variable: "--nf-read", display: "swap", style: ["normal", "italic"] });
-const hand = Caveat({ subsets: ["latin"], variable: "--nf-hand", display: "swap", weight: ["500", "700"] });
+const body = Nunito({ subsets: ["latin"], variable: "--nf-body", display: "swap", style: ["normal", "italic"] });
+const display = Fredoka({ subsets: ["latin"], variable: "--nf-display", display: "swap" });
 
 export const metadata: Metadata = {
   title: { default: "Englora · Preparación de exámenes de inglés", template: "%s · Englora" },
@@ -16,14 +14,12 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: [
-    { color: "#f6f4ef" },
-  ],
+  themeColor: [{ color: "#f4f6ff" }],
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="es-ES" className={`${body.variable} ${display.variable} ${read.variable} ${hand.variable}`}>
+    <html lang="es-ES" className={`${body.variable} ${display.variable}`}>
       <body>
         <a href="#contenido" className="sr-only rounded-lg bg-ink px-4 py-2 text-sm font-semibold text-white focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50">
           Saltar al contenido

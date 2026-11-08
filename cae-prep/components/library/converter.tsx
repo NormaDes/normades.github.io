@@ -82,7 +82,7 @@ export function Converter({ source, sourceKey, words }: { source: Omit<MaterialR
 
   return (
     <div className="space-y-5">
-      <section className="rounded-xl border border-line border-t-[3px] border-t-accent bg-surface p-5">
+      <section className="rounded-3xl border border-line shadow-card bg-surface p-5">
         <h2 className="font-display text-xl font-bold">Convertir en ejercicio</h2>
         <p className="mt-1 text-sm text-muted">La IA prepara el ejercicio con frases literales del texto (nunca se inventa contenido). Cada uno gasta 1 uso de IA.</p>
         <div className="mt-4 grid gap-2 sm:grid-cols-2">

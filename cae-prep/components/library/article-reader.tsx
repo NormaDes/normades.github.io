@@ -74,7 +74,7 @@ export function ArticleReader() {
       <Link href="/biblioteca" className="text-sm text-muted hover:text-ink">← Biblioteca</Link>
 
       <header className="mt-4 border-b-2 border-ink pb-5">
-        <p className="eyebrow text-accent">{info.name}</p>
+        <p className="eyebrow text-accent-dark">{info.name}</p>
         <h1 className="mt-1 font-display text-3xl font-bold leading-tight md:text-4xl">{article.title}</h1>
         <p className="mt-3 text-sm text-muted">
           <strong className="text-ink">{article.author}</strong>

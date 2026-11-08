@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Chalkboard, RedPenGrade } from "@/components/classroom";
+import { HeroCard, ScoreBadge } from "@/components/brand-ui";
 import { ArrowIcon, ClockIcon } from "@/components/icons";
 import { ExerciseView } from "@/components/practice/exercise-view";
 import { ListeningView } from "@/components/practice/listening-view";
@@ -172,10 +172,10 @@ export function MockRunner({ paper }: { paper: PaperId }) {
     return (
       <div className="mx-auto max-w-3xl">
         <Link href="/simulacro" className="text-sm text-muted hover:text-ink">← Simulacros</Link>
-        <p className="eyebrow mt-4 text-accent">Simulacro</p>
+        <p className="eyebrow mt-4 text-accent-dark">Simulacro</p>
         <h1 className="mt-1 font-display text-3xl font-bold md:text-4xl">{info.name}</h1>
 
-        <Chalkboard className="mt-5 px-6 pb-10 pt-6">
+        <HeroCard className="mt-5 px-6 pb-10 pt-6">
           <p className="hand text-3xl leading-none">Reglas del examen</p>
           <ul className="mt-4 space-y-2 text-[15px] text-white/90">
             <li>⏱ <strong>{info.durationMinutes} minutos</strong> en total, con una sola cuenta atrás. Al llegar a 0, se entrega solo.</li>
@@ -184,7 +184,7 @@ export function MockRunner({ paper }: { paper: PaperId }) {
             {paper === "writing" && <li>✍️ Escribe un essay y una segunda tarea a elegir (220–260 palabras). La corrección la hace la IA al entregar.</li>}
             <li>🔒 No ves ninguna corrección hasta entregar.</li>
           </ul>
-        </Chalkboard>
+        </HeroCard>
 
         <ul className="mt-5 divide-y divide-line overflow-hidden rounded-xl border border-line bg-surface">
           {parts.map((id) => {
@@ -213,7 +213,7 @@ export function MockRunner({ paper }: { paper: PaperId }) {
   if (phase === "grading") {
     return (
       <div className="mx-auto flex min-h-[50vh] max-w-md flex-col items-center justify-center text-center" role="status" aria-live="polite">
-        <p className="hand text-4xl text-accent">Pens down!</p>
+        <p className="hand text-4xl text-accent-dark">Pens down!</p>
         <p className="mt-3 font-display text-xl font-bold">Corrigiendo tu simulacro…</p>
         <p className="mt-1 text-sm text-muted">{progress}</p>
         <p className="mt-6 text-xs text-muted">La corrección de Writing puede tardar hasta un minuto por redacción.</p>
@@ -227,10 +227,10 @@ export function MockRunner({ paper }: { paper: PaperId }) {
     return (
       <div className="mx-auto max-w-3xl">
         <Link href="/simulacro" className="text-sm text-muted hover:text-ink">← Simulacros</Link>
-        <Chalkboard className="mt-4 px-6 pb-12 pt-7">
+        <HeroCard className="mt-4 px-6 pb-12 pt-7">
           <p className="eyebrow text-white/60">Resultado · {info.name}</p>
           <div className="mt-3 flex flex-wrap items-center gap-6">
-            <RedPenGrade value={summary.scale} caption={summary.level} />
+            <ScoreBadge value={summary.scale} caption={summary.level} />
             <div className="min-w-0 flex-1">
               <p className="hand text-3xl leading-none">{summary.pct >= 0.6 ? "Well done!" : "Keep going!"}</p>
               <p className="mt-2 text-[15px] text-white/85">
@@ -239,7 +239,7 @@ export function MockRunner({ paper }: { paper: PaperId }) {
             </div>
           </div>
           <p className="mt-4 text-xs text-white/60">Estimación orientativa: ~60 % de las marcas equivale a 180 (aprobado C1). No es la conversión oficial de Cambridge.{!summary.assessedAll && " Alguna parte no se pudo evaluar y no cuenta en la nota."}</p>
-        </Chalkboard>
+        </HeroCard>
 
         <ul className="mt-5 divide-y divide-line overflow-hidden rounded-xl border border-line bg-surface">
           {parts.map((id) => {

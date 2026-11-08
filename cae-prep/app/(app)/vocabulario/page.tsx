@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
+import { PageHeader } from "@/components/page-header";
+import { VocabIcon } from "@/components/icons";
 import { VocabApp } from "@/components/vocab/vocab-app";
 
 export const metadata: Metadata = { title: "Vocabulario" };
 
 export default function VocabularyPage() {
   return (
-    <div className="mx-auto max-w-3xl">
-      <p className="eyebrow text-accent">Tarjetas de estudio</p>
-      <h1 className="mt-1 font-display text-3xl font-bold md:text-4xl">Tu vocabulario</h1>
-      <p className="mb-6 mt-2 max-w-xl text-muted">Guarda palabras y expresiones y repásalas justo cuando estás a punto de olvidarlas (repetición espaciada SM-2).</p>
+    <div>
+      <PageHeader icon={<VocabIcon width={32} height={32} weight="fill" />} tone="grape" eyebrow="Tarjetas de estudio" title="Tu vocabulario">Guarda palabras y expresiones y repásalas justo cuando estás a punto de olvidarlas (repetición espaciada SM-2).</PageHeader>
       <VocabApp />
     </div>
   );

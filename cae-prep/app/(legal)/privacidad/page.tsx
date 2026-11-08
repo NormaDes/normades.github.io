@@ -7,7 +7,7 @@ const Pending = ({ children }: { children: React.ReactNode }) => <span className
 export default function PrivacyPage() {
   return (
     <>
-      <p className="eyebrow text-accent">Legal</p>
+      <p className="eyebrow text-accent-dark">Legal</p>
       <h1 className="mt-1 font-display text-3xl font-bold">Política de privacidad</h1>
       <p className="mt-3 rounded-lg bg-warn-soft p-3 text-sm">
         <strong>Borrador pendiente de completar y revisar.</strong> Los datos resaltados deben rellenarse antes de abrir la plataforma a otras personas, y conviene que un profesional revise el texto.

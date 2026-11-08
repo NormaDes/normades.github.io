@@ -200,21 +200,21 @@ export function ProgressDashboard() {
 
   return (
     <div className="space-y-5">
-      <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-4">
-        {kpis.map((k) => (
-          <div key={k.label} className="bg-surface px-4 py-4">
+      <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {kpis.map((k, i) => (
+          <div key={k.label} className={`rounded-3xl px-4 py-4 ${["bg-tangerine-soft", "bg-brand-soft", "bg-grape-soft", "bg-ok-soft"][i % 4]}`}>
             <dt className="eyebrow text-muted">{k.label}</dt>
             <dd className="mt-1.5 flex items-baseline gap-1.5">
-              <span className="font-display text-3xl font-bold leading-none tabular-nums">{k.value}</span>
-              <span className="text-xs text-muted">{k.unit}</span>
+              <span className="font-display text-4xl font-semibold leading-none tabular-nums">{k.value}</span>
+              <span className="text-xs font-bold text-muted">{k.unit}</span>
             </dd>
           </div>
         ))}
       </dl>
 
-      <Link href={`/practica/${p.suggestion.partId}`} className="group flex items-center gap-4 rounded-xl border border-line border-l-[3px] border-l-accent bg-surface p-4 transition-shadow hover:shadow-[0_10px_28px_-16px_rgba(1,26,59,0.45)]">
+      <Link href={`/practica/${p.suggestion.partId}`} className="group flex items-center gap-4 rounded-xl border border-line bg-surface p-4 transition-shadow hover:shadow-[0_10px_28px_-16px_rgba(1,26,59,0.45)]">
         <div className="min-w-0 flex-1">
-          <p className="eyebrow text-accent">Recomendación de hoy</p>
+          <p className="eyebrow text-accent-dark">Recomendación de hoy</p>
           <p className="mt-1 font-display text-lg font-bold leading-snug">{sug.name}</p>
           <p className="mt-0.5 text-sm text-muted">{p.suggestion.reason}</p>
         </div>
@@ -249,7 +249,7 @@ export function ProgressDashboard() {
           ) : (
             <p className="text-sm text-muted">Necesitamos algunos ejercicios más para detectar patrones de error con fiabilidad.</p>
           )}
-          <Link href="/errores" className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:text-accent">
+          <Link href="/errores" className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:text-accent-dark">
             Repasar mi cuaderno de errores <ArrowIcon width={16} height={16} />
           </Link>
         </Panel>

@@ -69,7 +69,7 @@ export function LessonPack({ pack, origin, sourceKey }: { pack: Pack; origin: Ex
 
   return (
     <div className="space-y-6" data-pack={sourceKey}>
-      <section className="sticky-note rounded-sm px-5 pb-5 pt-6">
+      <section className="rounded-3xl border-2 border-sun-dark/30 bg-sun-soft px-5 pb-5 pt-5 text-[#4d3700] shadow-[0_4px_0_rgba(217,159,0,0.35)]">
         <p className="hand text-2xl leading-none">Summary</p>
         <p className="mt-2 font-serif text-[1.02rem] leading-relaxed">{pack.summary}</p>
       </section>
@@ -114,7 +114,7 @@ export function LessonPack({ pack, origin, sourceKey }: { pack: Pack; origin: Ex
                   {v.collocations.map((c) => (
                     <span key={c} className="rounded-md bg-brand-soft px-2 py-0.5 text-xs font-semibold text-brand">{c}</span>
                   ))}
-                  <span className="text-xs text-muted"><span className="hand text-base text-accent">ES </span>{v.translation}</span>
+                  <span className="text-xs text-muted"><span className="hand text-base text-accent-dark">ES </span>{v.translation}</span>
                 </p>
               </div>
               <button type="button" onClick={() => saveWords([v.term])} disabled={saved.has(v.term)} aria-label={`Guardar ${v.term}`} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-line hover:border-brand disabled:border-ok disabled:text-ok">
@@ -138,7 +138,7 @@ export function LessonPack({ pack, origin, sourceKey }: { pack: Pack; origin: Ex
         </div>
       </section>
 
-      <section className="chalkboard rounded-xl px-6 py-7">
+      <section className="hero-card px-6 py-7">
         <p className="hand text-3xl leading-none">Homework</p>
         <p className="mt-3 font-serif text-[1.05rem] leading-relaxed text-white/90">{pack.essay.question}</p>
         <ol className="mt-3 list-decimal space-y-1 pl-5 text-[15px] text-white/90">

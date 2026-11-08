@@ -49,7 +49,7 @@ export function LibraryApp() {
             {tab === id && <span aria-hidden className="absolute inset-x-3 bottom-[-1px] h-[3px] rounded-t bg-accent" />}
           </button>
         ))}
-        <Link href="/biblioteca/pegar" className="ml-auto flex min-h-11 shrink-0 items-center px-4 text-sm font-semibold text-brand hover:text-accent">Pegar un texto →</Link>
+        <Link href="/biblioteca/pegar" className="ml-auto flex min-h-11 shrink-0 items-center px-4 text-sm font-semibold text-brand hover:text-accent-dark">Pegar un texto →</Link>
       </div>
 
       {tab === "articulos" && <ArticlesTab />}
@@ -137,7 +137,7 @@ function ArticlesTab() {
                   <span className="text-muted">{fmt(a.publishedAt)}</span>
                   <span className="ml-auto flex gap-2 font-semibold">
                     <span className="text-muted">{a.wordCount} palabras</span>
-                    <span className="text-accent">{a.level}</span>
+                    <span className="text-accent-dark">{a.level}</span>
                   </span>
                 </div>
                 <h3 className="mt-2 font-display text-xl font-bold leading-snug group-hover:text-brand">{a.title}</h3>
@@ -217,7 +217,7 @@ function VideosTab({ materials, onChange }: { materials: Material[] | null; onCh
                   <span className="absolute inset-0 flex items-center justify-center"><span className="flex h-12 w-12 items-center justify-center rounded-full bg-white/95 text-ink shadow"><PlayIcon width={22} height={22} /></span></span>
                 </div>
                 <div className="p-4">
-                  <p className="eyebrow text-accent">{v.channel}</p>
+                  <p className="eyebrow text-accent-dark">{v.channel}</p>
                   <p className="mt-1 font-display text-lg font-bold leading-snug">{meta[v.id]?.title ?? v.title}</p>
                   <p className="mt-0.5 text-sm text-muted">{v.speaker}</p>
                 </div>

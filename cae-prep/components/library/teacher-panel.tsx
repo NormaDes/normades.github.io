@@ -97,7 +97,7 @@ export function TeacherPanel() {
 
   return (
     <div className="space-y-8">
-      <form onSubmit={submit} className="space-y-4 rounded-xl border border-line border-t-[3px] border-t-brand bg-surface p-5">
+      <form onSubmit={submit} className="space-y-4 rounded-xl border border-line bg-surface p-5">
         <h2 className="font-display text-xl font-bold">Subir material</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="block text-sm font-medium">Tipo

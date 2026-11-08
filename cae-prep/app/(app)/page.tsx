@@ -1,16 +1,17 @@
 import Link from "next/link";
-import { Chalkboard, TeacherNote } from "@/components/classroom";
-import { HeroPanel } from "@/components/hero-panel";
-import { Greeting } from "@/components/greeting";
-import { HomeStats } from "@/components/home-stats";
+import { HeroCard, TipBubble } from "@/components/brand-ui";
 import { ExamPicker } from "@/components/exam-picker";
+import { Greeting } from "@/components/greeting";
 import { GuestBanner } from "@/components/guest-banner";
+import { HeroPanel } from "@/components/hero-panel";
+import { HomeStats } from "@/components/home-stats";
 import { ArrowIcon, PAPER_ICONS } from "@/components/icons";
 import { PAPERS, partsOfPaper } from "@/config/exam";
+import { PAPER_THEME } from "@/lib/paper-theme";
 import { tipOfTheDay } from "@/lib/tips";
 
 const PAPER_BLURB: Record<string, string> = {
-  reading: "Textos, huecos y transformaciones. Corrección con la explicación de cada opción.",
+  reading: "Textos, huecos y transformaciones, con la explicación de cada opción.",
   writing: "Essay, carta, informe o reseña, corregidos con los 4 criterios oficiales.",
   listening: "Audios con solo 2 reproducciones, como en el examen.",
   speaking: "Graba tu voz y recibe feedback de gramática, vocabulario y fluidez.",
@@ -19,72 +20,66 @@ const PAPER_BLURB: Record<string, string> = {
 export default function Home() {
   const tip = tipOfTheDay();
   return (
-    <div className="mx-auto max-w-4xl">
-      {/* La pizarra de hoy */}
-      <Chalkboard className="px-6 pb-12 pt-8 md:px-10 md:pb-14 md:pt-10">
-        <div aria-hidden className="stripes pointer-events-none absolute inset-y-0 right-0 w-2/5 opacity-50" />
-        <div className="relative grid gap-8 md:grid-cols-[1.15fr_0.85fr] md:items-center">
+    <div>
+      <HeroCard className="px-6 py-8 md:px-10 md:py-10">
+        <div className="grid gap-8 md:grid-cols-[1.15fr_0.85fr] md:items-center">
           <div>
             <Greeting />
-            <h1 className="hand relative mt-5 text-[2.7rem] leading-[0.98] sm:text-[3.1rem] md:text-[4.4rem]">
+            <h1 className="mt-4 text-[2.5rem] font-semibold leading-[1.02] sm:text-5xl md:text-[3.6rem] md:leading-[1.08]">
               Practice.
               <br />
               Improve.
               <br />
-              <span className="chalk-underline inline-block">
-                Succeed<span className="text-[#ff8a8f]">!</span>
-              </span>
+              <span className="mt-1 inline-block rounded-2xl bg-sun px-3 pb-0.5 text-[#4d3700]">Succeed!</span>
             </h1>
-            <p className="relative mt-5 max-w-sm font-sans text-[15px] leading-relaxed text-white/80">
-              Ejercicios con el formato oficial, corrección inmediata y la explicación de por qué cada respuesta es correcta o falla.
+            <p className="mt-5 max-w-sm text-base font-semibold leading-relaxed text-white/85">
+              Ejercicios con el formato oficial, corrección al momento y la explicación de por qué cada respuesta acierta o falla.
             </p>
-            <div className="relative mt-6 flex flex-wrap gap-3">
-              <Link href="/practica" className="inline-flex min-h-12 items-center gap-2 rounded-lg bg-white px-5 text-sm font-bold text-ink transition-transform hover:-translate-y-px active:scale-[0.98]">
-                Entrar a clase
-                <ArrowIcon width={18} height={18} />
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link href="/practica" className="inline-flex min-h-[3.25rem] items-center gap-2 rounded-2xl bg-white px-6 text-base font-extrabold text-brand">
+                Empezar a practicar
+                <ArrowIcon width={20} height={20} />
               </Link>
-              <Link href="/simulacro" className="inline-flex min-h-12 items-center rounded-lg border border-white/35 px-5 text-sm font-semibold text-white hover:bg-white/10">
+              <Link href="/simulacro" className="inline-flex min-h-[3.25rem] items-center rounded-2xl border-2 border-white/50 px-6 text-base font-bold text-white hover:bg-white/10">
                 Hacer un simulacro
               </Link>
             </div>
           </div>
           <HeroPanel />
         </div>
-      </Chalkboard>
-
-      <div className="mt-8 grid gap-6 md:grid-cols-[1fr_17rem] md:items-start">
-        <HomeStats />
-        <TeacherNote className="mt-2 md:mt-0">{tip}</TeacherNote>
-      </div>
+      </HeroCard>
 
       <GuestBanner />
-      <ExamPicker />
 
-      <h2 className="mb-3 mt-10 font-display text-2xl font-bold">C1 Advanced · las pruebas del examen</h2>
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_20rem] lg:items-start">
+        <HomeStats />
+        <TipBubble>{tip}</TipBubble>
+      </div>
+
+      <h2 className="mb-4 mt-12 text-2xl md:text-3xl">Las pruebas del examen</h2>
+      <div className="grid gap-4 sm:grid-cols-2">
         {PAPERS.map((paper) => {
           const Icon = PAPER_ICONS[paper.id];
+          const t = PAPER_THEME[paper.id];
           const parts = partsOfPaper(paper.id).length;
           return (
-            <Link
-              key={paper.id}
-              href={`/practica#${paper.id}`}
-              className="group flex gap-4 rounded-xl border border-line bg-surface p-5 transition-all hover:-translate-y-0.5 hover:border-brand hover:shadow-[0_14px_30px_-18px_rgba(1,26,59,0.5)]"
-            >
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-soft text-brand">
-                <Icon width={22} height={22} />
+            <Link key={paper.id} href={`/practica#${paper.id}`} className={`group flex gap-4 rounded-3xl border-2 ${t.border} ${t.soft} p-5 transition-transform hover:-translate-y-1`}>
+              <span className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${t.solid} ${t.lift}`}>
+                <Icon width={30} height={30} weight="fill" />
               </span>
               <div className="min-w-0">
-                <p className="font-display text-lg font-bold leading-tight">{paper.name}</p>
-                <p className="eyebrow mt-1 text-accent">
+                <p className="font-display text-xl font-semibold leading-tight">{paper.name}</p>
+                <p className={`eyebrow mt-1 ${t.text}`}>
                   {parts} partes · {paper.durationMinutes} min
                 </p>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{PAPER_BLURB[paper.id]}</p>
+                <p className="mt-2 text-sm font-semibold leading-relaxed text-muted">{PAPER_BLURB[paper.id]}</p>
               </div>
             </Link>
           );
         })}
       </div>
+
+      <ExamPicker />
     </div>
   );
 }

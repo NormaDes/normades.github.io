@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSyncExternalStore } from "react";
 import { ArrowIcon, PAPER_ICONS } from "@/components/icons";
 import { PAPERS, getPart } from "@/config/exam";
+import { PAPER_THEME } from "@/lib/paper-theme";
 import { MOCK_PAPERS, mockParts, type MockRecord } from "@/lib/mock";
 import { clientPrefs } from "@/lib/storage";
 
@@ -22,18 +23,19 @@ export function MockHub() {
         {MOCK_PAPERS.map((id) => {
           const paper = PAPERS.find((p) => p.id === id)!;
           const Icon = PAPER_ICONS[id];
+          const t = PAPER_THEME[id];
           const parts = mockParts(id);
           const marks = parts.reduce((a, p) => a + getPart(p).questionCount * getPart(p).marksPerQuestion, 0);
           const last = history.find((h) => h.paper === id);
           return (
-            <Link key={id} href={`/simulacro/${id}`} className="group flex flex-col rounded-xl border border-line bg-surface p-5 transition-all hover:-translate-y-0.5 hover:border-brand hover:shadow-[0_14px_30px_-18px_rgba(1,26,59,0.5)]">
-              <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-brand-soft text-brand"><Icon width={22} height={22} /></span>
-              <p className="mt-4 font-display text-xl font-bold leading-tight">{paper.name}</p>
-              <p className="eyebrow mt-1 text-accent">{paper.durationMinutes} min · {parts.length} partes · {marks} marcas</p>
-              <p className="mt-3 flex-1 text-sm text-muted">
+            <Link key={id} href={`/simulacro/${id}`} className={`group flex flex-col rounded-3xl border-2 ${t.border} ${t.soft} p-5 transition-transform hover:-translate-y-1`}>
+              <span className={`flex h-14 w-14 items-center justify-center rounded-2xl ${t.solid} ${t.lift}`}><Icon width={30} height={30} weight="fill" /></span>
+              <p className="mt-4 font-display text-2xl font-semibold leading-tight">{paper.name}</p>
+              <p className={`eyebrow mt-1 ${t.text}`}>{paper.durationMinutes} min · {parts.length} partes · {marks} marcas</p>
+              <p className="mt-3 flex-1 text-sm font-semibold text-muted">
                 {last ? <>Último: <strong className="text-ink">{last.scale}</strong> (≈ {last.level}) el {new Date(last.at).toLocaleDateString("es-ES", { day: "numeric", month: "short" })}</> : "Aún no has hecho este simulacro."}
               </p>
-              <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand group-hover:text-accent">Empezar <ArrowIcon width={16} height={16} /></span>
+              <span className={`mt-4 inline-flex items-center gap-1.5 text-sm font-extrabold ${t.text}`}>Empezar <ArrowIcon width={16} height={16} /></span>
             </Link>
           );
         })}

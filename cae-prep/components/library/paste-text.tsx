@@ -41,7 +41,7 @@ export function PasteText() {
   return (
     <div className="mx-auto max-w-3xl">
       <Link href="/biblioteca" className="text-sm text-muted hover:text-ink">← Biblioteca</Link>
-      <p className="eyebrow mt-4 text-accent">{kind === "video" ? "Transcripción" : "Tu propio texto"}</p>
+      <p className="eyebrow mt-4 text-accent-dark">{kind === "video" ? "Transcripción" : "Tu propio texto"}</p>
       <h1 className="mt-1 font-display text-3xl font-bold md:text-4xl">{kind === "video" ? "Ejercicios desde una transcripción" : "Pega un texto"}</h1>
       <p className="mt-2 max-w-xl text-muted">
         Pega el texto de cualquier web (The Economist, BBC…) y genera ejercicios <strong>solo para tu uso personal</strong>.

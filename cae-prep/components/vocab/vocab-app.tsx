@@ -203,15 +203,15 @@ function ReviewTab({ items, due, learned, onSave, onGoAdd }: { items: VocabItem[
     const next = items.filter((v) => !isDue(v)).sort((a, b) => a.dueAt.localeCompare(b.dueAt))[0];
     return (
       <div>
-        <dl className="grid grid-cols-3 gap-px overflow-hidden rounded-xl border border-line bg-line">
+        <dl className="grid grid-cols-3 gap-3">
           {[
-            ["Pendientes", due.length],
-            ["En tu banco", items.length],
-            ["Aprendidas", learned],
-          ].map(([l, v]) => (
-            <div key={l as string} className="bg-surface px-4 py-4">
-              <dt className="eyebrow text-muted">{l}</dt>
-              <dd className="mt-1.5 font-display text-3xl font-bold leading-none tabular-nums">{v}</dd>
+            ["Pendientes", due.length, "bg-tangerine-soft text-tangerine-dark"],
+            ["En tu banco", items.length, "bg-grape-soft text-grape-dark"],
+            ["Aprendidas", learned, "bg-ok-soft text-ok"],
+          ].map(([l, v, tone]) => (
+            <div key={l as string} className={`rounded-3xl px-4 py-4 ${tone}`}>
+              <dt className="eyebrow">{l}</dt>
+              <dd className="mt-1.5 font-display text-4xl font-semibold leading-none tabular-nums text-ink">{v}</dd>
             </div>
           ))}
         </dl>
@@ -225,9 +225,9 @@ function ReviewTab({ items, due, learned, onSave, onGoAdd }: { items: VocabItem[
             </button>
           </div>
         ) : due.length ? (
-          <div className="mt-6 flex flex-wrap items-center gap-4 rounded-xl border border-line border-l-[3px] border-l-accent bg-surface p-5">
+          <div className="mt-6 flex flex-wrap items-center gap-4 rounded-3xl border-2 border-accent/30 bg-coral-soft p-5">
             <div className="min-w-0 flex-1">
-              <p className="eyebrow text-accent">Toca repasar</p>
+              <p className="eyebrow text-accent-dark">Toca repasar</p>
               <p className="mt-1 font-display text-xl font-bold">
                 {due.length} {due.length === 1 ? "tarjeta" : "tarjetas"} para hoy
               </p>
@@ -252,7 +252,7 @@ function ReviewTab({ items, due, learned, onSave, onGoAdd }: { items: VocabItem[
     const ok = stats.good + stats.easy;
     return (
       <div className="rounded-xl border border-line bg-surface p-8 text-center">
-        <p className="hand text-4xl text-accent">Class dismissed!</p>
+        <p className="hand text-4xl text-accent-dark">Class dismissed!</p>
         <p className="mt-2 font-display text-xl font-bold">Has repasado {total} {total === 1 ? "tarjeta" : "tarjetas"}</p>
         <p className="mt-1 text-sm text-muted">
           {ok} bien o fácil · {stats.hard} difíciles · {stats.again} para repetir. Vuelve mañana: la constancia es lo que fija el vocabulario.
@@ -299,7 +299,7 @@ function ReviewTab({ items, due, learned, onSave, onGoAdd }: { items: VocabItem[
             )}
             {current.translation && (
               <p className="text-sm text-muted">
-                <span className="hand text-lg text-accent">ES </span>
+                <span className="hand text-lg text-accent-dark">ES </span>
                 {current.translation}
               </p>
             )}
@@ -369,7 +369,7 @@ function BankTab({ items, now, missing, ai, busy, onEnrich, onSave, onRemove }: 
             <button type="button" onClick={() => setOpen(open === v.id ? null : v.id)} aria-expanded={open === v.id} className="flex w-full items-baseline gap-3 text-left">
               <span className="font-display text-lg font-bold">{v.term}</span>
               <span className="min-w-0 flex-1 truncate text-sm text-muted">{v.definition ?? "sin definición"}</span>
-              <span className={`shrink-0 text-xs font-semibold ${isDue(v, now) ? "text-accent" : "text-muted"}`}>{dueLabel(v, now)}</span>
+              <span className={`shrink-0 text-xs font-semibold ${isDue(v, now) ? "text-accent-dark" : "text-muted"}`}>{dueLabel(v, now)}</span>
             </button>
             {open === v.id && <BankEdit v={v} ai={aiOk ?? false} busy={busy} onSave={onSave} onRemove={() => onRemove(v.id)} onEnrich={() => onEnrich([v])} />}
           </li>

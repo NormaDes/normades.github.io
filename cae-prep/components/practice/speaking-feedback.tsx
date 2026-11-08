@@ -1,6 +1,6 @@
 "use client";
 
-import { RedPenGrade } from "@/components/classroom";
+import { ScoreBadge } from "@/components/brand-ui";
 import { SPEAKING_CRITERIA, speakingTotal, type SpeakingEvaluation } from "@/lib/speaking";
 
 export function SpeakingFeedback({ evaluation }: { evaluation: SpeakingEvaluation }) {
@@ -10,7 +10,7 @@ export function SpeakingFeedback({ evaluation }: { evaluation: SpeakingEvaluatio
       <section className="rounded-2xl border border-line bg-surface p-5">
         <div className="flex items-center justify-between gap-4">
           <p className="eyebrow text-muted">Valoración del profe (IA)</p>
-          <RedPenGrade value={total} max={20} />
+          <ScoreBadge value={total} max={20} />
         </div>
         <div className="mt-5 space-y-4">
           {SPEAKING_CRITERIA.map((c) => {

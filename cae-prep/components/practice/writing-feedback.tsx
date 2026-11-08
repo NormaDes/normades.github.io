@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { RedPenGrade } from "@/components/classroom";
+import { ScoreBadge } from "@/components/brand-ui";
 import { CRITERIA, bandHint, totalScore, type WritingEvaluation } from "@/lib/writing";
 
 const TYPE_ES: Record<string, string> = {
@@ -55,7 +55,7 @@ export function WritingFeedback({ evaluation, text, wordCount }: { evaluation: W
             <span className={`mt-2 inline-block rounded-full px-3 py-1 text-xs font-semibold ${toneCls}`}>{band.label}</span>
             <p className="mt-2 text-xs text-muted">{wordCount} palabras</p>
           </div>
-          <RedPenGrade value={total} max={20} />
+          <ScoreBadge value={total} max={20} />
         </div>
 
         <div className="mt-5 space-y-4">

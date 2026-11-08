@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Chalkboard } from "@/components/classroom";
+import { CalendarIcon } from "@/components/icons";
+import { PageHeader } from "@/components/page-header";
+import { HeroCard } from "@/components/brand-ui";
 import { usePlan } from "@/components/plan/use-plan";
 import { PHASE_LABEL, daysBetween, type PlanTask } from "@/lib/plan";
 import { clientPrefs } from "@/lib/storage";
@@ -17,10 +19,8 @@ export function PlanApp() {
   const first = plan?.[0];
 
   return (
-    <div className="mx-auto max-w-3xl">
-      <p className="eyebrow text-accent">Horario</p>
-      <h1 className="mt-1 font-display text-3xl font-bold md:text-4xl">Tu plan de estudio</h1>
-      <p className="mb-6 mt-2 max-w-xl text-muted">Se adapta a la fecha de tu examen, al tiempo que tienes y a tus puntos débiles. Cada vez que practicas, se reajusta solo.</p>
+    <div>
+      <PageHeader icon={<CalendarIcon width={32} height={32} weight="fill" />} tone="grape" eyebrow="Horario" title="Tu plan de estudio">Se adapta a la fecha de tu examen, al tiempo que tienes y a tus puntos débiles. Cada vez que practicas, se reajusta solo.</PageHeader>
 
       <section className="rounded-xl border border-line bg-surface p-5">
         <div className="grid gap-4 sm:grid-cols-3">
@@ -52,11 +52,11 @@ export function PlanApp() {
         {plan?.map((d, i) => (
           <li key={d.day} className={i === 0 ? "" : ""}>
             {i === 0 ? (
-              <Chalkboard className="px-5 pb-8 pt-5">
+              <HeroCard className="px-5 pb-8 pt-5">
                 <p className="eyebrow text-white/60">Hoy en clase</p>
                 <p className="hand mt-1 text-3xl capitalize">{fmtDay(d.day)}</p>
                 <TaskList day={d.day} tasks={d.tasks} study={d.study} isDone={isDone} toggle={toggle} dark />
-              </Chalkboard>
+              </HeroCard>
             ) : (
               <div className="rounded-xl border border-line bg-surface p-4">
                 <p className="font-display text-lg font-bold capitalize">{fmtDay(d.day)}</p>

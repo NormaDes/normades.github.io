@@ -8,18 +8,18 @@ import { Logo } from "@/components/logo";
 import { UserChip } from "@/components/user-chip";
 import { useIsAdmin } from "@/lib/supabase/use-admin";
 
-type Item = { href: string; label: string; Icon: typeof HomeIcon; mobile?: boolean; admin?: boolean };
+type Item = { href: string; label: string; Icon: typeof HomeIcon; mobile?: boolean; admin?: boolean; tone: string };
 
 const ITEMS: Item[] = [
-  { href: "/", label: "Inicio", Icon: HomeIcon, mobile: true },
-  { href: "/practica", label: "Practicar", Icon: PracticeIcon, mobile: true },
-  { href: "/simulacro", label: "Simulacro", Icon: MockIcon },
-  { href: "/plan", label: "Plan", Icon: CalendarIcon },
-  { href: "/biblioteca", label: "Biblioteca", Icon: LibraryIcon, mobile: true },
-  { href: "/vocabulario", label: "Vocabulario", Icon: VocabIcon, mobile: true },
-  { href: "/errores", label: "Errores", Icon: MistakesIcon },
-  { href: "/progreso", label: "Progreso", Icon: ProgressIcon },
-  { href: "/profesor", label: "Profesor", Icon: TeacherIcon, admin: true },
+  { href: "/", label: "Inicio", Icon: HomeIcon, mobile: true, tone: "text-brand" },
+  { href: "/practica", label: "Practicar", Icon: PracticeIcon, mobile: true, tone: "text-accent-dark" },
+  { href: "/simulacro", label: "Simulacro", Icon: MockIcon, tone: "text-tangerine-dark" },
+  { href: "/plan", label: "Plan", Icon: CalendarIcon, tone: "text-grape" },
+  { href: "/biblioteca", label: "Biblioteca", Icon: LibraryIcon, mobile: true, tone: "text-ok" },
+  { href: "/vocabulario", label: "Vocabulario", Icon: VocabIcon, mobile: true, tone: "text-grape" },
+  { href: "/errores", label: "Errores", Icon: MistakesIcon, tone: "text-accent-dark" },
+  { href: "/progreso", label: "Progreso", Icon: ProgressIcon, tone: "text-brand" },
+  { href: "/profesor", label: "Profesor", Icon: TeacherIcon, admin: true, tone: "text-tangerine-dark" },
 ];
 
 function isActive(pathname: string, href: string) {
@@ -37,52 +37,45 @@ export function Nav() {
 
   return (
     <>
-      {/* Escritorio: barra lateral */}
-      <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col overflow-y-auto border-r border-line bg-bg px-5 py-7 md:flex">
-        <Logo variant="header" width={200} href="/" priority />
-        <p className="eyebrow mt-3 text-muted">Exámenes de inglés</p>
-
-        <nav aria-label="Navegación principal" className="mt-7 flex flex-1 flex-col gap-0.5">
-          {items.map(({ href, label, Icon }) => {
-            const active = isActive(pathname, href);
-            return (
-              <Link
-                key={href}
-                href={href}
-                aria-current={active ? "page" : undefined}
-                className={`relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-[15px] transition-colors ${
-                  active ? "bg-surface font-semibold text-ink shadow-[0_0_0_1px_var(--line)]" : "text-muted hover:bg-surface/70 hover:text-ink"
-                }`}
-              >
-                {active && <span aria-hidden className="absolute inset-y-2 left-0 w-[3px] rounded-r bg-accent" />}
-                <Icon width={20} height={20} className={active ? "text-brand" : ""} />
-                {label}
-              </Link>
-            );
-          })}
-        </nav>
-
-        <UserChip variant="sidebar" />
-        <p className="hand mt-4 text-lg leading-none text-muted">Practice · Improve · Succeed</p>
-      </aside>
-
-      {/* Móvil: barra superior con el logo */}
-      <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-line bg-bg/90 px-4 backdrop-blur md:hidden">
-        <Logo variant="header" width={128} href="/" />
-        <UserChip variant="topbar" />
+      {/* Barra superior */}
+      <header className="sticky top-0 z-30 border-b-2 border-line bg-white/90 backdrop-blur">
+        <div className="mx-auto flex h-16 max-w-[1280px] items-center gap-3 px-4 md:px-8">
+          <Logo variant="header" width={132} href="/" priority />
+          <nav aria-label="Navegación principal" className="ml-2 hidden flex-1 items-center gap-0.5 lg:flex">
+            {items.map(({ href, label, Icon, tone }) => {
+              const active = isActive(pathname, href);
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  title={label}
+                  aria-current={active ? "page" : undefined}
+                  className={`flex h-11 items-center gap-1.5 rounded-xl px-2.5 text-sm font-bold transition-colors ${active ? "bg-brand-soft text-brand" : "text-muted hover:bg-bg hover:text-ink"}`}
+                >
+                  <Icon width={22} height={22} weight={active ? "fill" : "duotone"} className={active ? "" : tone} />
+                  <span className="hidden xl:inline">{label}</span>
+                  <span className="sr-only xl:hidden">{label}</span>
+                </Link>
+              );
+            })}
+          </nav>
+          <div className="ml-auto lg:ml-0">
+            <UserChip variant="bar" />
+          </div>
+        </div>
       </header>
 
       {/* Móvil: hoja «Más» */}
       {more && (
-        <div className="fixed inset-0 z-40 md:hidden" role="dialog" aria-modal="true" aria-label="Más secciones">
+        <div className="fixed inset-0 z-40 lg:hidden" role="dialog" aria-modal="true" aria-label="Más secciones">
           <button type="button" aria-label="Cerrar" onClick={() => setMore(false)} className="absolute inset-0 bg-ink/40" />
-          <div className="absolute inset-x-0 bottom-0 rounded-t-2xl border-t border-line bg-surface px-4 pb-[calc(env(safe-area-inset-bottom)+4.5rem)] pt-4">
-            <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-line" />
-            <ul className="grid grid-cols-2 gap-2">
-              {rest.map(({ href, label, Icon }) => (
+          <div className="absolute inset-x-0 bottom-0 rounded-t-[2rem] border-t-2 border-line bg-surface px-4 pb-[calc(env(safe-area-inset-bottom)+5rem)] pt-4">
+            <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-line" />
+            <ul className="grid grid-cols-2 gap-3">
+              {rest.map(({ href, label, Icon, tone }) => (
                 <li key={href}>
-                  <Link href={href} onClick={() => setMore(false)} className={`flex min-h-14 items-center gap-3 rounded-xl border px-4 text-[15px] font-medium ${isActive(pathname, href) ? "border-brand bg-brand-soft text-brand" : "border-line"}`}>
-                    <Icon width={22} height={22} />
+                  <Link href={href} onClick={() => setMore(false)} className={`flex min-h-16 items-center gap-3 rounded-2xl border-2 px-4 text-[15px] font-bold ${isActive(pathname, href) ? "border-brand bg-brand-soft text-brand" : "border-line"}`}>
+                    <Icon width={26} height={26} className={tone} />
                     {label}
                   </Link>
                 </li>
@@ -92,21 +85,23 @@ export function Nav() {
         </div>
       )}
 
-      {/* Móvil: barra inferior */}
-      <nav aria-label="Navegación principal" className="fixed inset-x-0 bottom-0 z-50 flex border-t border-line bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden">
-        {main.map(({ href, label, Icon }) => {
+      {/* Móvil y tablet: barra inferior */}
+      <nav aria-label="Navegación principal" className="fixed inset-x-0 bottom-0 z-50 flex border-t-2 border-line bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden">
+        {main.map(({ href, label, Icon, tone }) => {
           const active = isActive(pathname, href);
           return (
-            <Link key={href} href={href} onClick={() => setMore(false)} aria-current={active ? "page" : undefined} className={`relative flex min-h-14 flex-1 flex-col items-center justify-center gap-0.5 text-[10.5px] font-medium ${active ? "text-brand" : "text-muted"}`}>
-              {active && <span aria-hidden className="absolute inset-x-4 top-0 h-[3px] rounded-b bg-accent" />}
-              <Icon width={22} height={22} />
+            <Link key={href} href={href} onClick={() => setMore(false)} aria-current={active ? "page" : undefined} className={`flex min-h-16 flex-1 flex-col items-center justify-center gap-0.5 text-[11px] font-bold ${active ? "text-brand" : "text-muted"}`}>
+              <span className={`flex h-8 w-12 items-center justify-center rounded-full ${active ? "bg-brand-soft" : ""}`}>
+                <Icon width={25} height={25} weight={active ? "fill" : "duotone"} className={active ? "" : tone} />
+              </span>
               {label}
             </Link>
           );
         })}
-        <button type="button" onClick={() => setMore((v) => !v)} aria-expanded={more} className={`relative flex min-h-14 flex-1 flex-col items-center justify-center gap-0.5 text-[10.5px] font-medium ${moreActive || more ? "text-brand" : "text-muted"}`}>
-          {moreActive && <span aria-hidden className="absolute inset-x-4 top-0 h-[3px] rounded-b bg-accent" />}
-          <MoreIcon width={22} height={22} />
+        <button type="button" onClick={() => setMore((v) => !v)} aria-expanded={more} className={`flex min-h-16 flex-1 flex-col items-center justify-center gap-0.5 text-[11px] font-bold ${moreActive || more ? "text-brand" : "text-muted"}`}>
+          <span className={`flex h-8 w-12 items-center justify-center rounded-full ${moreActive || more ? "bg-brand-soft" : ""}`}>
+            <MoreIcon width={25} height={25} />
+          </span>
           Más
         </button>
       </nav>

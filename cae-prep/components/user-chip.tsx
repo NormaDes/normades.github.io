@@ -7,13 +7,21 @@ import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { displayName, useUser } from "@/lib/supabase/use-user";
 
 /** Usuario con sesión y «Salir»; para invitados, invitación a entrar. Nada si no hay Supabase (modo local). */
-export function UserChip({ variant }: { variant: "sidebar" | "topbar" }) {
+export function UserChip({ variant }: { variant: "sidebar" | "topbar" | "bar" }) {
   const router = useRouter();
   const user = useUser();
 
   if (!isSupabaseConfigured() || user === undefined) return null;
 
   if (user === null) {
+    if (variant === "bar") {
+      return (
+        <div className="flex items-center gap-2">
+          <Link href="/login" className="hidden h-10 items-center whitespace-nowrap rounded-xl border-2 border-line px-4 text-sm font-bold text-ink hover:bg-bg sm:flex">Entrar</Link>
+          <Link href="/registro" className="flex h-10 items-center whitespace-nowrap rounded-xl bg-brand px-4 text-sm font-bold text-brand-ink">Crear cuenta</Link>
+        </div>
+      );
+    }
     if (variant === "topbar") {
       return (
         <Link href="/login" className="rounded-lg bg-brand px-3 py-1.5 text-xs font-bold text-brand-ink">
@@ -40,6 +48,16 @@ export function UserChip({ variant }: { variant: "sidebar" | "topbar" }) {
     router.refresh();
   };
   const initial = name.charAt(0).toUpperCase();
+
+  if (variant === "bar") {
+    return (
+      <div className="flex items-center gap-2">
+        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-grape text-sm font-extrabold text-white" title={name}>{initial}</span>
+        <button type="button" onClick={logout} className="hidden h-10 rounded-xl border-2 border-line px-3 text-sm font-bold text-muted hover:bg-bg hover:text-ink sm:block">Salir</button>
+        <button type="button" onClick={logout} aria-label={`Salir (${name})`} className="rounded-xl border-2 border-line px-3 py-2 text-xs font-bold sm:hidden">Salir</button>
+      </div>
+    );
+  }
 
   if (variant === "topbar") {
     return (

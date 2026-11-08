@@ -133,7 +133,11 @@ npm test        # tests unitarios (corrección, validación, progreso)
 
 Las páginas `/privacidad` y `/aviso-legal` son **borradores**: rellena los campos resaltados (responsable, NIF, domicilio, email de contacto, regiones de los proveedores) y haz que las revise un profesional. Es obligatorio al guardar datos personales de otras personas.
 
-## Identidad visual
+## Identidad visual (actualizada)
+
+Estilo colorido y juguetón: azul del logo como color de marca, coral de acento y un color por prueba (Reading azul, Writing coral, Listening verde, Speaking naranja). Tipografías Fredoka (titulares) y Nunito (texto), iconos Phosphor, barra superior en escritorio y barra inferior en móvil, botones con relieve. Las clases antiguas de pizarra y notas adhesivas ya no existen (`components/brand-ui.tsx`).
+
+## Identidad visual (histórico)
 
 - Logo y marca en `public/brand/` (PNG con fondo transparente) e iconos de la app en `public/icon-*.png`, `app/icon.png` y `app/apple-icon.png`. `app/manifest.ts` permite instalarla en el móvil («Añadir a pantalla de inicio»).
 - Paleta tomada del logo, definida en `app/globals.css`: azul tinta `#011A3B`, azul real `#012B6F`, rojo acento `#C6131C` (solo como detalle) sobre papel cálido `#F6F4EF`. Titulares con serif y esquinas sobrias.
