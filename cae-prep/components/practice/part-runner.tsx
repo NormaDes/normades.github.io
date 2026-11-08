@@ -199,7 +199,7 @@ export function PartRunner({ partId }: { partId: PartId }) {
           {ai === null ? (
             "Comprobando IA…"
           ) : !ai.configured ? (
-            <>La generación con IA no está configurada (falta <code>ANTHROPIC_API_KEY</code>). Puedes practicar con el banco inicial.</>
+            <>La generación con IA no está configurada (falta una clave de IA: <code>GEMINI_API_KEY</code> o <code>ANTHROPIC_API_KEY</code>). Puedes practicar con el banco inicial.</>
           ) : (
             <>Generaciones con IA restantes hoy: <strong>{ai.remainingToday}</strong></>
           )}

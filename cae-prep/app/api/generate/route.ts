@@ -1,3 +1,4 @@
+import { aiConfigured } from "@/lib/ai/provider";
 import { z } from "zod";
 import { PARTS, type PartId } from "@/config/exam";
 import { AiConfigError, AiOutputError } from "@/lib/ai/client";
@@ -55,7 +56,7 @@ export async function POST(request: Request) {
 export async function GET() {
   const userId = await currentUserId();
   return json({
-    configured: Boolean(process.env.ANTHROPIC_API_KEY),
+    configured: aiConfigured(),
     accessCodeRequired: !isSupabaseConfigured() && Boolean(process.env.APP_ACCESS_CODE),
     remainingToday: await remainingToday(userId),
   });

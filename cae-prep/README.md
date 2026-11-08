@@ -70,6 +70,7 @@ Si Supabase falla en algún momento, el resultado de cada ejercicio también se 
 | Variable | Fase | Cómo conseguirla |
 |---|---|---|
 | `ANTHROPIC_API_KEY` | 1 | [console.anthropic.com](https://console.anthropic.com) → *API keys* → *Create key*. Necesita saldo. Solo se usa en el servidor (`/api/generate`). |
+| `GEMINI_API_KEY` (alternativa gratuita) | 1 | [aistudio.google.com](https://aistudio.google.com) → *Get API key* (nivel gratuito, sin tarjeta). Si no hay `ANTHROPIC_API_KEY`, la IA usa Gemini (`GEMINI_MODEL` opcional, por defecto `gemini-2.5-flash`; `AI_PROVIDER` fuerza uno). Los límites gratuitos son bajos y la calidad de corrección puede ser algo menor. |
 | `ANTHROPIC_MODEL` (opc.) | 1 | Por defecto `claude-opus-5-5`. Pon `claude-sonnet-5-5` para gastar menos. |
 | `DAILY_GENERATION_LIMIT` (opc.) | 1 | Máx. de ejercicios generados por día (por defecto 15). |
 | `APP_ACCESS_CODE` (opc.) | 1 | Cualquier texto. Solo se usa **sin Supabase**: la app pide ese código la primera vez que generas. Con cuentas de usuario no hace falta (la IA solo la usa quien ha iniciado sesión). |

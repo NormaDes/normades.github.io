@@ -1,6 +1,7 @@
 import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
 import { APP_SETTINGS, getModel } from "@/config/app";
+import { aiConfigured, aiProvider } from "@/lib/ai/provider";
 
 let _client: Anthropic | null = null;
 
@@ -26,8 +27,50 @@ export function extractJson(raw: string): unknown {
   return JSON.parse(candidate.slice(start, end + 1));
 }
 
+type Turn = { role: "user" | "assistant"; content: string };
+
+async function completeAnthropic(system: string, turns: Turn[]): Promise<string> {
+  const res = await getAnthropic().messages.create({
+    model: getModel(),
+    max_tokens: APP_SETTINGS.maxOutputTokens,
+    system,
+    messages: turns,
+  });
+  if (res.stop_reason === "refusal") throw new AiOutputError("El modelo rechazó la petición. Prueba con otro tema.");
+  return res.content
+    .filter((b): b is Anthropic.TextBlock => b.type === "text")
+    .map((b) => b.text)
+    .join("\n");
+}
+
+/** Gemini (Google AI Studio, tiene nivel gratuito). API REST, sin SDK. */
+async function completeGemini(system: string, turns: Turn[]): Promise<string> {
+  const key = process.env.GEMINI_API_KEY;
+  if (!key) throw new AiConfigError("Falta GEMINI_API_KEY en las variables de entorno del servidor.");
+  const base = process.env.GEMINI_API_BASE || "https://generativelanguage.googleapis.com";
+  const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+  const res = await fetch(`${base}/v1beta/models/${model}:generateContent`, {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-goog-api-key": key },
+    body: JSON.stringify({
+      systemInstruction: { parts: [{ text: system }] },
+      contents: turns.map((t) => ({ role: t.role === "assistant" ? "model" : "user", parts: [{ text: t.content }] })),
+      generationConfig: { maxOutputTokens: APP_SETTINGS.maxOutputTokens, responseMimeType: "application/json" },
+    }),
+    signal: AbortSignal.timeout(110_000),
+  });
+  if (!res.ok) {
+    if (res.status === 429) throw new AiOutputError("Se ha alcanzado el límite gratuito de Gemini. Espera un minuto o inténtalo mañana.");
+    throw new AiOutputError(`Gemini respondió con error ${res.status}.`);
+  }
+  const data = (await res.json()) as { candidates?: Array<{ finishReason?: string; content?: { parts?: Array<{ text?: string }> } }>; promptFeedback?: { blockReason?: string } };
+  const cand = data.candidates?.[0];
+  if (!cand) throw new AiOutputError("El modelo rechazó la petición. Prueba con otro tema.");
+  return (cand.content?.parts ?? []).map((p) => p.text ?? "").join("\n");
+}
+
 /**
- * Pide a Claude un JSON y lo valida con `validate` (zod + reglas semánticas, devuelve lista de problemas).
+ * Pide al modelo un JSON y lo valida con `validate` (zod + reglas semánticas, devuelve lista de problemas).
  * Si falla, reintenta UNA vez indicando los errores concretos.
  */
 export async function generateValidatedJson<T>(opts: {
@@ -35,27 +78,13 @@ export async function generateValidatedJson<T>(opts: {
   user: string;
   validate: (data: unknown) => { ok: true; value: T } | { ok: false; problems: string[] };
 }): Promise<T> {
-  const client = getAnthropic();
-  const model = getModel();
-  const messages: Anthropic.MessageParam[] = [{ role: "user", content: opts.user }];
+  if (!aiConfigured()) throw new AiConfigError("No hay ninguna clave de IA configurada (ANTHROPIC_API_KEY o GEMINI_API_KEY).");
+  const complete = aiProvider() === "gemini" ? completeGemini : completeAnthropic;
+  const turns: Turn[] = [{ role: "user", content: opts.user }];
   let lastProblems: string[] = [];
 
   for (let attempt = 0; attempt < 2; attempt++) {
-    const res = await client.messages.create({
-      model,
-      max_tokens: APP_SETTINGS.maxOutputTokens,
-      system: opts.system,
-      messages,
-    });
-
-    if (res.stop_reason === "refusal") {
-      throw new AiOutputError("El modelo rechazó la petición. Prueba con otro tema.");
-    }
-    const text = res.content
-      .filter((b): b is Anthropic.TextBlock => b.type === "text")
-      .map((b) => b.text)
-      .join("\n");
-
+    const text = await complete(opts.system, turns);
     try {
       const data = extractJson(text);
       const result = opts.validate(data);
@@ -65,8 +94,8 @@ export async function generateValidatedJson<T>(opts: {
       lastProblems = [e instanceof Error ? e.message : "JSON no válido"];
     }
 
-    messages.push({ role: "assistant", content: text || "{}" });
-    messages.push({
+    turns.push({ role: "assistant", content: text || "{}" });
+    turns.push({
       role: "user",
       content: `Your JSON failed validation. Fix ALL of these problems and return the complete corrected JSON object only:\n- ${lastProblems.slice(0, 12).join("\n- ")}`,
     });
