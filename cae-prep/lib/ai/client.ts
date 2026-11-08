@@ -60,8 +60,19 @@ async function completeGemini(system: string, turns: Turn[]): Promise<string> {
     signal: AbortSignal.timeout(110_000),
   });
   if (!res.ok) {
+    const raw = await res.text().catch(() => "");
+    let detail = "";
+    try {
+      detail = (JSON.parse(raw) as { error?: { message?: string } }).error?.message ?? "";
+    } catch {
+      detail = raw.slice(0, 200);
+    }
+    console.error(`[gemini] ${res.status} (${model}): ${detail}`);
     if (res.status === 429) throw new AiOutputError("Se ha alcanzado el límite gratuito de Gemini. Espera un minuto o inténtalo mañana.");
-    throw new AiOutputError(`Gemini respondió con error ${res.status}.`);
+    if (res.status === 400 && /api key/i.test(detail)) throw new AiOutputError("La clave de Gemini no es válida. Revisa GEMINI_API_KEY en Vercel y vuelve a desplegar.");
+    if (res.status === 403) throw new AiOutputError(`Gemini ha rechazado la petición (403): ${detail.slice(0, 160) || "clave sin permisos o región no permitida"}.`);
+    if (res.status === 404) throw new AiOutputError(`Gemini no encuentra el modelo «${model}». Prueba a definir GEMINI_MODEL=gemini-2.0-flash en Vercel.`);
+    throw new AiOutputError(`Gemini respondió con error ${res.status}${detail ? `: ${detail.slice(0, 160)}` : ""}.`);
   }
   const data = (await res.json()) as { candidates?: Array<{ finishReason?: string; content?: { parts?: Array<{ text?: string }> } }>; promptFeedback?: { blockReason?: string } };
   const cand = data.candidates?.[0];
