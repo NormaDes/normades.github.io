@@ -43,13 +43,29 @@ async function completeAnthropic(system: string, turns: Turn[]): Promise<string>
     .join("\n");
 }
 
-/** Gemini (Google AI Studio, tiene nivel gratuito). API REST, sin SDK. */
-async function completeGemini(system: string, turns: Turn[]): Promise<string> {
-  const key = process.env.GEMINI_API_KEY;
-  if (!key) throw new AiConfigError("Falta GEMINI_API_KEY en las variables de entorno del servidor.");
-  const base = process.env.GEMINI_API_BASE || "https://generativelanguage.googleapis.com";
-  const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
-  const res = await fetch(`${base}/v1beta/models/${model}:generateContent`, {
+/** Modelo de Gemini descubierto en la cuenta (se guarda mientras el servidor siga vivo). */
+let discoveredGeminiModel: string | null = null;
+
+/** Pregunta a Google qué modelos «flash» puede usar esta clave y elige el más reciente. */
+async function discoverGeminiModel(base: string, key: string): Promise<string | null> {
+  try {
+    const res = await fetch(`${base}/v1beta/models?pageSize=200`, { headers: { "x-goog-api-key": key }, signal: AbortSignal.timeout(15_000) });
+    if (!res.ok) return null;
+    const data = (await res.json()) as { models?: Array<{ name?: string; supportedGenerationMethods?: string[] }> };
+    const names = (data.models ?? [])
+      .filter((m) => m.supportedGenerationMethods?.includes("generateContent"))
+      .map((m) => (m.name ?? "").replace(/^models\//, ""))
+      .filter((n) => /^gemini-[\d.]+-flash(-\d+)?$/.test(n) || /^gemini-flash-latest$/.test(n));
+    const version = (n: string) => Number((n.match(/gemini-([\d.]+)-flash/) ?? [])[1] ?? 0);
+    names.sort((a, b) => version(b) - version(a));
+    return names.find((n) => /-flash(-\d+)?$/.test(n) && !/latest/.test(n)) ?? names[0] ?? null;
+  } catch {
+    return null;
+  }
+}
+
+async function geminiRequest(base: string, key: string, model: string, system: string, turns: Turn[]): Promise<Response> {
+  return fetch(`${base}/v1beta/models/${model}:generateContent`, {
     method: "POST",
     headers: { "content-type": "application/json", "x-goog-api-key": key },
     body: JSON.stringify({
@@ -59,6 +75,27 @@ async function completeGemini(system: string, turns: Turn[]): Promise<string> {
     }),
     signal: AbortSignal.timeout(110_000),
   });
+}
+
+/** Gemini (Google AI Studio, tiene nivel gratuito). API REST, sin SDK. */
+async function completeGemini(system: string, turns: Turn[]): Promise<string> {
+  const key = process.env.GEMINI_API_KEY;
+  if (!key) throw new AiConfigError("Falta GEMINI_API_KEY en las variables de entorno del servidor.");
+  const base = process.env.GEMINI_API_BASE || "https://generativelanguage.googleapis.com";
+  let model = process.env.GEMINI_MODEL || discoveredGeminiModel || "gemini-flash-latest";
+  let res = await geminiRequest(base, key, model, system, turns);
+
+  // Modelo inexistente para esta clave: se busca uno disponible y se reintenta una vez
+  if (res.status === 404) {
+    const found = await discoverGeminiModel(base, key);
+    if (found && found !== model) {
+      console.warn(`[gemini] «${model}» no existe; uso «${found}»`);
+      model = found;
+      discoveredGeminiModel = found;
+      res = await geminiRequest(base, key, model, system, turns);
+    }
+  }
+
   if (!res.ok) {
     const raw = await res.text().catch(() => "");
     let detail = "";
@@ -71,7 +108,7 @@ async function completeGemini(system: string, turns: Turn[]): Promise<string> {
     if (res.status === 429) throw new AiOutputError("Se ha alcanzado el límite gratuito de Gemini. Espera un minuto o inténtalo mañana.");
     if (res.status === 400 && /api key/i.test(detail)) throw new AiOutputError("La clave de Gemini no es válida. Revisa GEMINI_API_KEY en Vercel y vuelve a desplegar.");
     if (res.status === 403) throw new AiOutputError(`Gemini ha rechazado la petición (403): ${detail.slice(0, 160) || "clave sin permisos o región no permitida"}.`);
-    if (res.status === 404) throw new AiOutputError(`Gemini no encuentra el modelo «${model}». Prueba a definir GEMINI_MODEL=gemini-2.0-flash en Vercel.`);
+    if (res.status === 404) throw new AiOutputError(`Gemini no encuentra el modelo «${model}» ni ningún otro «flash» para tu clave. Crea una clave nueva en aistudio.google.com (proyecto nuevo) y cámbiala en Vercel.`);
     throw new AiOutputError(`Gemini respondió con error ${res.status}${detail ? `: ${detail.slice(0, 160)}` : ""}.`);
   }
   const data = (await res.json()) as { candidates?: Array<{ finishReason?: string; content?: { parts?: Array<{ text?: string }> } }>; promptFeedback?: { blockReason?: string } };
