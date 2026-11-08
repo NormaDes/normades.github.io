@@ -8,7 +8,7 @@ export default function LegalNoticePage() {
   return (
     <>
       <p className="eyebrow text-accent">Legal</p>
-      <h1 className="mt-1 font-serif text-3xl font-bold">Aviso legal y condiciones de uso</h1>
+      <h1 className="mt-1 font-display text-3xl font-bold">Aviso legal y condiciones de uso</h1>
       <p className="mt-3 rounded-lg bg-warn-soft p-3 text-sm">
         <strong>Borrador pendiente de completar y revisar.</strong> Rellena los datos resaltados y haz que lo revise un profesional antes de abrir la plataforma al público.
       </p>

@@ -39,7 +39,7 @@ export function HomeStats() {
           <div key={i.label} className="bg-surface px-4 py-4">
             <dt className="eyebrow text-muted">{i.label}</dt>
             <dd className="mt-1.5 flex items-baseline gap-1.5">
-              <span className="font-serif text-3xl font-bold tabular-nums leading-none">{i.value}</span>
+              <span className="font-display text-3xl font-bold tabular-nums leading-none">{i.value}</span>
               <span className="text-xs text-muted">{i.unit}</span>
             </dd>
           </div>
@@ -53,7 +53,7 @@ export function HomeStats() {
         >
           <div className="min-w-0 flex-1">
             <p className="eyebrow text-accent">Tarea de hoy</p>
-            <p className="mt-1 font-serif text-lg font-bold leading-snug">{part.name}</p>
+            <p className="mt-1 font-display text-lg font-bold leading-snug">{part.name}</p>
             <p className="mt-0.5 text-sm text-muted">{s.reason}</p>
           </div>
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand text-brand-ink transition-transform group-hover:translate-x-0.5">

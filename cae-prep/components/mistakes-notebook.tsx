@@ -52,7 +52,7 @@ export function MistakesNotebook() {
   if (!mistakes.length) {
     return (
       <div className="rounded-xl border border-dashed border-line bg-surface p-8 text-center">
-        <p className="font-serif text-xl font-bold">Todavía no hay errores guardados</p>
+        <p className="font-display text-xl font-bold">Todavía no hay errores guardados</p>
         <p className="mx-auto mt-2 max-w-sm text-sm text-muted">Cada pregunta que falles aparecerá aquí con tu respuesta y la correcta, para que puedas repetirla cuando quieras.</p>
         <Link href="/practica" className="mt-5 inline-flex min-h-12 items-center gap-2 rounded-lg bg-brand px-5 text-sm font-semibold text-brand-ink">
           Ir a practicar <ArrowIcon width={18} height={18} />

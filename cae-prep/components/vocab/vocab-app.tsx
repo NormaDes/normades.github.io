@@ -211,14 +211,14 @@ function ReviewTab({ items, due, learned, onSave, onGoAdd }: { items: VocabItem[
           ].map(([l, v]) => (
             <div key={l as string} className="bg-surface px-4 py-4">
               <dt className="eyebrow text-muted">{l}</dt>
-              <dd className="mt-1.5 font-serif text-3xl font-bold leading-none tabular-nums">{v}</dd>
+              <dd className="mt-1.5 font-display text-3xl font-bold leading-none tabular-nums">{v}</dd>
             </div>
           ))}
         </dl>
 
         {items.length === 0 ? (
           <div className="mt-6 rounded-xl border border-dashed border-line bg-surface p-8 text-center">
-            <p className="font-serif text-xl font-bold">Tu banco de vocabulario está vacío</p>
+            <p className="font-display text-xl font-bold">Tu banco de vocabulario está vacío</p>
             <p className="mx-auto mt-2 max-w-sm text-sm text-muted">Guarda palabras mientras lees un artículo (selecciona el texto) o añádelas a mano. Las repasaremos con repetición espaciada.</p>
             <button type="button" onClick={onGoAdd} className="mt-5 inline-flex min-h-12 items-center gap-2 rounded-lg bg-brand px-5 text-sm font-semibold text-brand-ink">
               Añadir mi primera palabra <ArrowIcon width={18} height={18} />
@@ -228,7 +228,7 @@ function ReviewTab({ items, due, learned, onSave, onGoAdd }: { items: VocabItem[
           <div className="mt-6 flex flex-wrap items-center gap-4 rounded-xl border border-line border-l-[3px] border-l-accent bg-surface p-5">
             <div className="min-w-0 flex-1">
               <p className="eyebrow text-accent">Toca repasar</p>
-              <p className="mt-1 font-serif text-xl font-bold">
+              <p className="mt-1 font-display text-xl font-bold">
                 {due.length} {due.length === 1 ? "tarjeta" : "tarjetas"} para hoy
               </p>
               <p className="mt-0.5 text-sm text-muted">Unos {Math.max(2, Math.round(due.length * 0.4))} minutos. Si te cuesta, pulsa «Otra vez»: volverá a salir en la sesión.</p>
@@ -239,7 +239,7 @@ function ReviewTab({ items, due, learned, onSave, onGoAdd }: { items: VocabItem[
           </div>
         ) : (
           <div className="mt-6 rounded-xl border border-line bg-surface p-6 text-center">
-            <p className="font-serif text-xl font-bold">¡Todo al día!</p>
+            <p className="font-display text-xl font-bold">¡Todo al día!</p>
             <p className="mt-1 text-sm text-muted">{next ? `Tu próxima tarjeta toca ${dueLabel(next, new Date())}.` : "No tienes tarjetas pendientes."}</p>
           </div>
         )}
@@ -253,7 +253,7 @@ function ReviewTab({ items, due, learned, onSave, onGoAdd }: { items: VocabItem[
     return (
       <div className="rounded-xl border border-line bg-surface p-8 text-center">
         <p className="hand text-4xl text-accent">Class dismissed!</p>
-        <p className="mt-2 font-serif text-xl font-bold">Has repasado {total} {total === 1 ? "tarjeta" : "tarjetas"}</p>
+        <p className="mt-2 font-display text-xl font-bold">Has repasado {total} {total === 1 ? "tarjeta" : "tarjetas"}</p>
         <p className="mt-1 text-sm text-muted">
           {ok} bien o fácil · {stats.hard} difíciles · {stats.again} para repetir. Vuelve mañana: la constancia es lo que fija el vocabulario.
         </p>
@@ -275,7 +275,7 @@ function ReviewTab({ items, due, learned, onSave, onGoAdd }: { items: VocabItem[
 
       <div className="ruled min-h-[18rem] rounded-xl border border-line py-6 shadow-[0_14px_30px_-22px_rgba(1,26,59,0.5)]">
         <p className="eyebrow leading-none text-muted">{isNew(current) ? "Palabra nueva" : "Repaso"}</p>
-        <p className="mt-3 font-serif text-4xl font-bold leading-[1.15] tracking-tight">{current.term}</p>
+        <p className="mt-3 font-display text-4xl font-bold leading-[1.15] tracking-tight">{current.term}</p>
         {current.context && (
           <p className="mt-4 font-serif text-[1.02rem] italic leading-[1.5] text-muted">
             “<Highlight text={current.context} term={current.term} />”
@@ -367,7 +367,7 @@ function BankTab({ items, now, missing, ai, busy, onEnrich, onSave, onRemove }: 
         {shown.map((v) => (
           <li key={v.id} className="p-4">
             <button type="button" onClick={() => setOpen(open === v.id ? null : v.id)} aria-expanded={open === v.id} className="flex w-full items-baseline gap-3 text-left">
-              <span className="font-serif text-lg font-bold">{v.term}</span>
+              <span className="font-display text-lg font-bold">{v.term}</span>
               <span className="min-w-0 flex-1 truncate text-sm text-muted">{v.definition ?? "sin definición"}</span>
               <span className={`shrink-0 text-xs font-semibold ${isDue(v, now) ? "text-accent" : "text-muted"}`}>{dueLabel(v, now)}</span>
             </button>

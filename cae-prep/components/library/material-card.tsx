@@ -34,7 +34,7 @@ export function MaterialCard({ m, onDelete, canDelete }: { m: Material; onDelete
         {m.topic && <span className="text-muted">· {m.topic}</span>}
         {m.partId && <span className="text-muted">· {m.partId.toUpperCase()}</span>}
       </div>
-      <h3 className="mt-2 font-serif text-lg font-bold leading-snug">{m.title}</h3>
+      <h3 className="mt-2 font-display text-lg font-bold leading-snug">{m.title}</h3>
       {m.description && <p className="mt-1 text-sm text-muted">{m.description}</p>}
       {(m.author || m.license) && (
         <p className="mt-1 text-xs text-muted">

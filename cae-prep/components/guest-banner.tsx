@@ -10,7 +10,7 @@ export function GuestBanner() {
   if (!isSupabaseConfigured() || user !== null) return null;
   return (
     <section className="mt-8 rounded-xl border border-line bg-surface p-5">
-      <h2 className="font-serif text-xl font-bold">Crea una cuenta gratis y desbloquea más</h2>
+      <h2 className="font-display text-xl font-bold">Crea una cuenta gratis y desbloquea más</h2>
       <ul className="mt-2 grid gap-1.5 text-sm text-muted sm:grid-cols-2">
         <li>✓ Ejercicios nuevos y corrección de Writing y Speaking con IA</li>
         <li>✓ Tu progreso guardado en la nube, en todos tus dispositivos</li>

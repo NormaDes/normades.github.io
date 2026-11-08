@@ -28,7 +28,7 @@ export function MockHub() {
           return (
             <Link key={id} href={`/simulacro/${id}`} className="group flex flex-col rounded-xl border border-line bg-surface p-5 transition-all hover:-translate-y-0.5 hover:border-brand hover:shadow-[0_14px_30px_-18px_rgba(1,26,59,0.5)]">
               <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-brand-soft text-brand"><Icon width={22} height={22} /></span>
-              <p className="mt-4 font-serif text-xl font-bold leading-tight">{paper.name}</p>
+              <p className="mt-4 font-display text-xl font-bold leading-tight">{paper.name}</p>
               <p className="eyebrow mt-1 text-accent">{paper.durationMinutes} min · {parts.length} partes · {marks} marcas</p>
               <p className="mt-3 flex-1 text-sm text-muted">
                 {last ? <>Último: <strong className="text-ink">{last.scale}</strong> (≈ {last.level}) el {new Date(last.at).toLocaleDateString("es-ES", { day: "numeric", month: "short" })}</> : "Aún no has hecho este simulacro."}
@@ -43,7 +43,7 @@ export function MockHub() {
 
       {history.length > 0 && (
         <section className="mt-8">
-          <h2 className="font-serif text-xl font-bold">Historial</h2>
+          <h2 className="font-display text-xl font-bold">Historial</h2>
           <ul className="mt-3 divide-y divide-line overflow-hidden rounded-xl border border-line bg-surface">
             {history.slice(0, 8).map((h) => (
               <li key={h.id} className="flex items-center gap-3 px-4 py-3 text-sm">

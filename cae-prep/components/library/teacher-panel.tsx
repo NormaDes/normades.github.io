@@ -98,7 +98,7 @@ export function TeacherPanel() {
   return (
     <div className="space-y-8">
       <form onSubmit={submit} className="space-y-4 rounded-xl border border-line border-t-[3px] border-t-brand bg-surface p-5">
-        <h2 className="font-serif text-xl font-bold">Subir material</h2>
+        <h2 className="font-display text-xl font-bold">Subir material</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="block text-sm font-medium">Tipo
             <select value={kind} onChange={(e) => { setKind(e.target.value as MaterialKind); setFile(null); }} className={field}>
@@ -166,7 +166,7 @@ export function TeacherPanel() {
       </form>
 
       <section>
-        <h2 className="font-serif text-xl font-bold">Material subido ({list.length})</h2>
+        <h2 className="font-display text-xl font-bold">Material subido ({list.length})</h2>
         {list.length === 0 ? (
           <p className="mt-3 text-sm text-muted">Todavía no has subido nada.</p>
         ) : (

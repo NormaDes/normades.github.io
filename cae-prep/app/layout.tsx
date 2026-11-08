@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Caveat, Fraunces } from "next/font/google";
+import { Bricolage_Grotesque, Caveat, Geist, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
 
-const display = Fraunces({ subsets: ["latin"], variable: "--font-display", display: "swap" });
-const hand = Caveat({ subsets: ["latin"], variable: "--font-hand", display: "swap", weight: ["500", "700"] });
+const body = Geist({ subsets: ["latin"], variable: "--nf-body", display: "swap" });
+const display = Bricolage_Grotesque({ subsets: ["latin"], variable: "--nf-display", display: "swap", axes: ["opsz"] });
+const read = Source_Serif_4({ subsets: ["latin"], variable: "--nf-read", display: "swap", style: ["normal", "italic"] });
+const hand = Caveat({ subsets: ["latin"], variable: "--nf-hand", display: "swap", weight: ["500", "700"] });
 
 export const metadata: Metadata = {
   title: { default: "Englora · Preparación de exámenes de inglés", template: "%s · Englora" },
@@ -21,7 +23,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="es-ES" className={`${display.variable} ${hand.variable}`}>
+    <html lang="es-ES" className={`${body.variable} ${display.variable} ${read.variable} ${hand.variable}`}>
       <body>
         <a href="#contenido" className="sr-only rounded-lg bg-ink px-4 py-2 text-sm font-semibold text-white focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50">
           Saltar al contenido

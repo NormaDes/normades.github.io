@@ -75,7 +75,7 @@ export function ArticleReader() {
 
       <header className="mt-4 border-b-2 border-ink pb-5">
         <p className="eyebrow text-accent">{info.name}</p>
-        <h1 className="mt-1 font-serif text-3xl font-bold leading-tight md:text-4xl">{article.title}</h1>
+        <h1 className="mt-1 font-display text-3xl font-bold leading-tight md:text-4xl">{article.title}</h1>
         <p className="mt-3 text-sm text-muted">
           <strong className="text-ink">{article.author}</strong>
           {article.publishedAt && ` · ${fmtDate(article.publishedAt)}`} · {article.wordCount} palabras · nivel estimado {article.level}

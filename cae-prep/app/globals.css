@@ -38,9 +38,10 @@
   --color-bad: var(--bad);
   --color-bad-soft: var(--bad-soft);
   --color-warn-soft: var(--warn-soft);
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-serif: var(--font-display), ui-serif, "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
-  --font-hand: var(--font-hand), "Bradley Hand", "Segoe Print", cursive;
+  --font-sans: var(--nf-body), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: var(--nf-display), var(--nf-body), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--nf-read), ui-serif, "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --font-hand: var(--nf-hand), "Bradley Hand", "Segoe Print", cursive;
   /* Esquinas más sobrias que las «píldoras» habituales */
   --radius-md: 0.25rem;
   --radius-lg: 0.375rem;
@@ -63,8 +64,16 @@ body {
 /* Titulares con serif: carácter editorial */
 h1,
 h2 {
-  font-family: var(--font-serif);
-  letter-spacing: -0.015em;
+  font-family: var(--font-display);
+  letter-spacing: -0.022em;
+  font-weight: 700;
+}
+h1 {
+  font-weight: 800;
+  text-wrap: balance;
+}
+.font-display {
+  letter-spacing: -0.018em;
 }
 
 /* Texto de lectura de los ejercicios */
@@ -244,4 +253,76 @@ h2 {
 /* Tarjeta de horario */
 .timetable-cell {
   background-image: repeating-linear-gradient(to bottom, transparent 0 27px, rgb(1 43 111 / 0.05) 27px 28px);
+}
+
+/* ───────── Pulido de interfaz ───────── */
+
+/* Selectores con flecha propia (los nativos se ven distintos en cada navegador) */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2355607a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  padding-right: 2.25rem;
+  text-overflow: ellipsis;
+}
+
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea {
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+input:not([type="checkbox"]):not([type="radio"]):focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgb(1 43 111 / 0.14);
+}
+input::placeholder,
+textarea::placeholder {
+  color: #7a849c;
+}
+
+/* Botones táctiles */
+button,
+a[class*="bg-brand"],
+a[class*="bg-white"] {
+  transition: transform 0.12s ease, background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
+}
+button:not(:disabled):active {
+  transform: scale(0.985);
+}
+button:disabled {
+  cursor: not-allowed;
+}
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Entrada de página: sube suavemente, en cascada */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  #contenido > div > * {
+    animation: rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  #contenido > div > *:nth-child(2) { animation-delay: 60ms; }
+  #contenido > div > *:nth-child(3) { animation-delay: 110ms; }
+  #contenido > div > *:nth-child(4) { animation-delay: 160ms; }
+  #contenido > div > *:nth-child(n + 5) { animation-delay: 200ms; }
+}
+
+/* Sombras teñidas del azul de la marca */
+.shadow-card {
+  box-shadow: 0 1px 0 rgb(1 26 59 / 0.04), 0 10px 24px -18px rgb(1 26 59 / 0.35);
 }

@@ -19,7 +19,7 @@ export function PlanApp() {
   return (
     <div className="mx-auto max-w-3xl">
       <p className="eyebrow text-accent">Horario</p>
-      <h1 className="mt-1 font-serif text-3xl font-bold md:text-4xl">Tu plan de estudio</h1>
+      <h1 className="mt-1 font-display text-3xl font-bold md:text-4xl">Tu plan de estudio</h1>
       <p className="mb-6 mt-2 max-w-xl text-muted">Se adapta a la fecha de tu examen, al tiempo que tienes y a tus puntos débiles. Cada vez que practicas, se reajusta solo.</p>
 
       <section className="rounded-xl border border-line bg-surface p-5">
@@ -59,7 +59,7 @@ export function PlanApp() {
               </Chalkboard>
             ) : (
               <div className="rounded-xl border border-line bg-surface p-4">
-                <p className="font-serif text-lg font-bold capitalize">{fmtDay(d.day)}</p>
+                <p className="font-display text-lg font-bold capitalize">{fmtDay(d.day)}</p>
                 <TaskList day={d.day} tasks={d.tasks} study={d.study} isDone={isDone} toggle={toggle} />
               </div>
             )}

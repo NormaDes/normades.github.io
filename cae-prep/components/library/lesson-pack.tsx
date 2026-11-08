@@ -76,7 +76,7 @@ export function LessonPack({ pack, origin, sourceKey }: { pack: Pack; origin: Ex
 
       <section className="rounded-xl border border-line bg-surface p-4 md:p-5">
         <div className="flex items-baseline justify-between gap-3">
-          <h3 className="font-serif text-xl font-bold">Comprensión</h3>
+          <h3 className="font-display text-xl font-bold">Comprensión</h3>
           {answered > 0 && <span className="text-sm font-semibold tabular-nums">{score}/{pack.comprehension.length}</span>}
         </div>
         <div className="mt-4 space-y-6">
@@ -96,7 +96,7 @@ export function LessonPack({ pack, origin, sourceKey }: { pack: Pack; origin: Ex
 
       <section className="rounded-xl border border-line bg-surface p-4 md:p-5">
         <div className="flex flex-wrap items-baseline justify-between gap-3">
-          <h3 className="font-serif text-xl font-bold">Vocabulario C1</h3>
+          <h3 className="font-display text-xl font-bold">Vocabulario C1</h3>
           <button type="button" onClick={() => saveWords(pack.vocabulary.map((v) => v.term).filter((t) => !saved.has(t)))} disabled={saved.size === pack.vocabulary.length} className="min-h-9 rounded-lg border border-brand px-3 text-xs font-semibold text-brand disabled:opacity-50">
             {saved.size === pack.vocabulary.length ? "Todo guardado ✓" : "Guardar las 8 en mi vocabulario"}
           </button>
@@ -106,7 +106,7 @@ export function LessonPack({ pack, origin, sourceKey }: { pack: Pack; origin: Ex
             <li key={v.term} className="flex items-start gap-3 py-3">
               <div className="min-w-0 flex-1">
                 <p>
-                  <span className="font-serif text-lg font-bold">{v.term}</span> <span className="text-xs text-muted">{v.pos}</span>
+                  <span className="font-display text-lg font-bold">{v.term}</span> <span className="text-xs text-muted">{v.pos}</span>
                 </p>
                 <p className="text-sm">{v.definition}</p>
                 <p className="font-serif text-sm italic text-muted">{v.example}</p>
@@ -126,7 +126,7 @@ export function LessonPack({ pack, origin, sourceKey }: { pack: Pack; origin: Ex
       </section>
 
       <section className="rounded-xl border border-line bg-surface p-4 md:p-5">
-        <h3 className="font-serif text-xl font-bold">Colocaciones</h3>
+        <h3 className="font-display text-xl font-bold">Colocaciones</h3>
         <div className="mt-4 space-y-6">
           {pack.collocations.map((c, i) => (
             <div key={i}>

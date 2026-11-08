@@ -102,13 +102,13 @@ function ArticlesTab() {
       </div>
       <div className="mt-3 grid gap-2 sm:grid-cols-[1fr_auto_auto]">
         <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar por título o autor…" aria-label="Buscar" className={inputCls} />
-        <select value={length} onChange={(e) => setLength(e.target.value as LengthBucket | "all")} aria-label="Longitud" className={`${inputCls} sm:w-40`}>
+        <select value={length} onChange={(e) => setLength(e.target.value as LengthBucket | "all")} aria-label="Longitud" className={`${inputCls} sm:w-48`}>
           <option value="all">Cualquier longitud</option>
           <option value="short">Corto (&lt; 450)</option>
           <option value="medium">Medio (450–1000)</option>
           <option value="long">Largo (&gt; 1000)</option>
         </select>
-        <select value={level} onChange={(e) => setLevel(e.target.value as Level | "all")} aria-label="Dificultad" className={`${inputCls} sm:w-40`}>
+        <select value={level} onChange={(e) => setLevel(e.target.value as Level | "all")} aria-label="Dificultad" className={`${inputCls} sm:w-48`}>
           <option value="all">Cualquier nivel</option>
           <option value="B2+">B2+</option>
           <option value="C1">C1</option>
@@ -140,7 +140,7 @@ function ArticlesTab() {
                     <span className="text-accent">{a.level}</span>
                   </span>
                 </div>
-                <h3 className="mt-2 font-serif text-xl font-bold leading-snug group-hover:text-brand">{a.title}</h3>
+                <h3 className="mt-2 font-display text-xl font-bold leading-snug group-hover:text-brand">{a.title}</h3>
                 <p className="mt-1 line-clamp-2 text-sm text-muted">{a.excerpt}</p>
                 <p className="mt-2 text-xs text-muted">{a.author} · {a.license}</p>
               </Link>
@@ -205,7 +205,7 @@ function VideosTab({ materials, onChange }: { materials: Material[] | null; onCh
   return (
     <div className="space-y-8">
       <section>
-        <h2 className="font-serif text-xl font-bold">Charlas recomendadas</h2>
+        <h2 className="font-display text-xl font-bold">Charlas recomendadas</h2>
         <p className="mt-1 text-sm text-muted">Vídeos reales de YouTube (TED). Pega su transcripción para generar preguntas de comprensión, vocabulario C1 y ejercicios de colocaciones.</p>
         <ul className="mt-4 grid gap-3 sm:grid-cols-2">
           {curated.map((v) => (
@@ -218,7 +218,7 @@ function VideosTab({ materials, onChange }: { materials: Material[] | null; onCh
                 </div>
                 <div className="p-4">
                   <p className="eyebrow text-accent">{v.channel}</p>
-                  <p className="mt-1 font-serif text-lg font-bold leading-snug">{meta[v.id]?.title ?? v.title}</p>
+                  <p className="mt-1 font-display text-lg font-bold leading-snug">{meta[v.id]?.title ?? v.title}</p>
                   <p className="mt-0.5 text-sm text-muted">{v.speaker}</p>
                 </div>
               </Link>
@@ -228,7 +228,7 @@ function VideosTab({ materials, onChange }: { materials: Material[] | null; onCh
       </section>
 
       <section>
-        <h2 className="font-serif text-xl font-bold">Tus vídeos</h2>
+        <h2 className="font-display text-xl font-bold">Tus vídeos</h2>
         <div className="mt-3 space-y-3">
           <AddLink kind="video" onSaved={onChange} />
           {mine.length > 0 && (
@@ -242,7 +242,7 @@ function VideosTab({ materials, onChange }: { materials: Material[] | null; onCh
       </section>
 
       <section>
-        <h2 className="font-serif text-xl font-bold">Canales para seguir</h2>
+        <h2 className="font-display text-xl font-bold">Canales para seguir</h2>
         <ul className="mt-3 divide-y divide-line overflow-hidden rounded-xl border border-line bg-surface">
           {CHANNELS.map((c) => (
             <li key={c.url}>
@@ -264,13 +264,13 @@ function PodcastsTab({ materials, onChange }: { materials: Material[] | null; on
   return (
     <div className="space-y-8">
       <section>
-        <h2 className="font-serif text-xl font-bold">Podcasts para el oído</h2>
+        <h2 className="font-display text-xl font-bold">Podcasts para el oído</h2>
         <p className="mt-1 text-sm text-muted">Se abren en su web original. Si copias la transcripción, puedes <Link href="/biblioteca/pegar?kind=video" className="font-semibold text-brand underline">convertirla en ejercicios</Link>.</p>
         <ul className="mt-4 divide-y divide-line overflow-hidden rounded-xl border border-line bg-surface">
           {PODCASTS.map((p) => (
             <li key={p.url}>
               <a href={p.url} target="_blank" rel="noreferrer" className="block px-4 py-3.5 hover:bg-brand-soft/60">
-                <span className="font-serif text-lg font-bold">{p.title}</span> <span className="text-xs text-muted">· {p.by}</span>
+                <span className="font-display text-lg font-bold">{p.title}</span> <span className="text-xs text-muted">· {p.by}</span>
                 <span className="block text-sm text-muted">{p.note}</span>
               </a>
             </li>
@@ -278,7 +278,7 @@ function PodcastsTab({ materials, onChange }: { materials: Material[] | null; on
         </ul>
       </section>
       <section>
-        <h2 className="font-serif text-xl font-bold">Tus podcasts</h2>
+        <h2 className="font-display text-xl font-bold">Tus podcasts</h2>
         <div className="mt-3 space-y-3">
           <AddLink kind="podcast" onSaved={onChange} />
           {mine.length > 0 && (
@@ -303,7 +303,7 @@ function ClassTab({ materials }: { materials: Material[] | null }) {
   if (!list.length && guest) {
     return (
       <div className="rounded-xl border border-dashed border-line bg-surface p-8 text-center">
-        <p className="font-serif text-xl font-bold">El material de clase es para alumnos con cuenta</p>
+        <p className="font-display text-xl font-bold">El material de clase es para alumnos con cuenta</p>
         <p className="mx-auto mt-2 max-w-md text-sm text-muted">Inicia sesión (es gratis) para ver los audios, textos y vídeos que sube tu profesor.</p>
         <div className="mt-4 flex justify-center gap-3">
           <Link href="/login" className="inline-flex min-h-11 items-center rounded-lg bg-brand px-5 text-sm font-bold text-brand-ink">Entrar</Link>
@@ -315,7 +315,7 @@ function ClassTab({ materials }: { materials: Material[] | null }) {
   if (!list.length) {
     return (
       <div className="rounded-xl border border-dashed border-line bg-surface p-8 text-center">
-        <p className="font-serif text-xl font-bold">Todavía no hay material de clase</p>
+        <p className="font-display text-xl font-bold">Todavía no hay material de clase</p>
         <p className="mx-auto mt-2 max-w-md text-sm text-muted">Cuando tu profesor suba audios, textos o vídeos, aparecerán aquí, solo para los alumnos con sesión iniciada.</p>
       </div>
     );

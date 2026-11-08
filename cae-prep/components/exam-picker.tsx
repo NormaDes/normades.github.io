@@ -4,7 +4,7 @@ import { EXAM_CATALOG } from "@/config/catalog";
 export function ExamPicker() {
   return (
     <section className="mt-10" aria-labelledby="exams-title">
-      <h2 id="exams-title" className="mb-1 font-serif text-2xl font-bold">Tu examen</h2>
+      <h2 id="exams-title" className="mb-1 font-display text-2xl font-bold">Tu examen</h2>
       <p className="mb-3 text-sm text-muted">Englora crece examen a examen. Ahora puedes preparar el C1 Advanced; los demás llegarán pronto.</p>
       <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
         {EXAM_CATALOG.map((e) => (

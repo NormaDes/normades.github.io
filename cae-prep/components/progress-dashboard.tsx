@@ -36,7 +36,7 @@ function Panel({ title, hint, children }: { title: string; hint?: string; childr
   return (
     <section className="rounded-xl border border-line bg-surface p-4 md:p-5">
       <div className="flex items-baseline justify-between gap-3">
-        <h2 className="font-serif text-xl font-bold">{title}</h2>
+        <h2 className="font-display text-xl font-bold">{title}</h2>
         {hint && <span className="text-xs text-muted">{hint}</span>}
       </div>
       <div className="mt-3">{children}</div>
@@ -179,7 +179,7 @@ export function ProgressDashboard() {
   if (!p.totalAttempts) {
     return (
       <div className="rounded-xl border border-dashed border-line bg-surface p-8 text-center">
-        <p className="font-serif text-xl font-bold">Aquí verás tu progreso</p>
+        <p className="font-display text-xl font-bold">Aquí verás tu progreso</p>
         <p className="mx-auto mt-2 max-w-sm text-sm text-muted">Completa tu primer ejercicio y aparecerán tu acierto por parte, tu evolución, tus puntos débiles y tu racha.</p>
         <Link href="/practica" className="mt-5 inline-flex min-h-12 items-center gap-2 rounded-lg bg-brand px-5 text-sm font-semibold text-brand-ink">
           Empezar a practicar <ArrowIcon width={18} height={18} />
@@ -205,7 +205,7 @@ export function ProgressDashboard() {
           <div key={k.label} className="bg-surface px-4 py-4">
             <dt className="eyebrow text-muted">{k.label}</dt>
             <dd className="mt-1.5 flex items-baseline gap-1.5">
-              <span className="font-serif text-3xl font-bold leading-none tabular-nums">{k.value}</span>
+              <span className="font-display text-3xl font-bold leading-none tabular-nums">{k.value}</span>
               <span className="text-xs text-muted">{k.unit}</span>
             </dd>
           </div>
@@ -215,7 +215,7 @@ export function ProgressDashboard() {
       <Link href={`/practica/${p.suggestion.partId}`} className="group flex items-center gap-4 rounded-xl border border-line border-l-[3px] border-l-accent bg-surface p-4 transition-shadow hover:shadow-[0_10px_28px_-16px_rgba(1,26,59,0.45)]">
         <div className="min-w-0 flex-1">
           <p className="eyebrow text-accent">Recomendación de hoy</p>
-          <p className="mt-1 font-serif text-lg font-bold leading-snug">{sug.name}</p>
+          <p className="mt-1 font-display text-lg font-bold leading-snug">{sug.name}</p>
           <p className="mt-0.5 text-sm text-muted">{p.suggestion.reason}</p>
         </div>
         <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand text-brand-ink transition-transform group-hover:translate-x-0.5">

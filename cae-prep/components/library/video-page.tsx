@@ -65,7 +65,7 @@ export function VideoPage() {
   return (
     <div className="mx-auto max-w-3xl">
       <Link href="/biblioteca?tab=videos" className="text-sm text-muted hover:text-ink">← Vídeos</Link>
-      <h1 className="mt-3 font-serif text-2xl font-bold leading-tight md:text-3xl">{title || " "}</h1>
+      <h1 className="mt-3 font-display text-2xl font-bold leading-tight md:text-3xl">{title || " "}</h1>
 
       <div className="mt-4 overflow-hidden rounded-xl border border-line bg-ink shadow-[0_14px_30px_-20px_rgba(1,26,59,0.6)]">
         <div className="aspect-video">
@@ -84,7 +84,7 @@ export function VideoPage() {
       </p>
 
       <section className="mt-8">
-        <h2 className="font-serif text-xl font-bold">Transcripción</h2>
+        <h2 className="font-display text-xl font-bold">Transcripción</h2>
         <p className="mt-1 text-sm text-muted">Pega aquí la transcripción (en YouTube: ⋯ → «Mostrar transcripción»). Se guarda solo en este dispositivo y sirve para generar ejercicios.</p>
         <textarea
           value={loaded ? transcript : ""}

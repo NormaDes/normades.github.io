@@ -173,7 +173,7 @@ export function MockRunner({ paper }: { paper: PaperId }) {
       <div className="mx-auto max-w-3xl">
         <Link href="/simulacro" className="text-sm text-muted hover:text-ink">← Simulacros</Link>
         <p className="eyebrow mt-4 text-accent">Simulacro</p>
-        <h1 className="mt-1 font-serif text-3xl font-bold md:text-4xl">{info.name}</h1>
+        <h1 className="mt-1 font-display text-3xl font-bold md:text-4xl">{info.name}</h1>
 
         <Chalkboard className="mt-5 px-6 pb-10 pt-6">
           <p className="hand text-3xl leading-none">Reglas del examen</p>
@@ -191,7 +191,7 @@ export function MockRunner({ paper }: { paper: PaperId }) {
             const p = getPart(id);
             return (
               <li key={id} className="flex items-center gap-3 px-4 py-3 text-sm">
-                <span className="w-8 text-center font-serif text-xl font-bold text-brand/80">{p.number}</span>
+                <span className="w-8 text-center font-display text-xl font-bold text-brand/80">{p.number}</span>
                 <span className="min-w-0 flex-1 font-semibold">{p.name}</span>
                 <span className="text-xs text-muted">{p.questionCount * p.marksPerQuestion} marcas</span>
               </li>
@@ -214,7 +214,7 @@ export function MockRunner({ paper }: { paper: PaperId }) {
     return (
       <div className="mx-auto flex min-h-[50vh] max-w-md flex-col items-center justify-center text-center" role="status" aria-live="polite">
         <p className="hand text-4xl text-accent">Pens down!</p>
-        <p className="mt-3 font-serif text-xl font-bold">Corrigiendo tu simulacro…</p>
+        <p className="mt-3 font-display text-xl font-bold">Corrigiendo tu simulacro…</p>
         <p className="mt-1 text-sm text-muted">{progress}</p>
         <p className="mt-6 text-xs text-muted">La corrección de Writing puede tardar hasta un minuto por redacción.</p>
       </div>
@@ -275,7 +275,7 @@ export function MockRunner({ paper }: { paper: PaperId }) {
               const o = outcomes[id];
               return (
                 <section key={id}>
-                  <h2 className="mb-3 border-b-2 border-ink pb-2 font-serif text-xl font-bold">{partShort(id)} · {getPart(id).name}</h2>
+                  <h2 className="mb-3 border-b-2 border-ink pb-2 font-display text-xl font-bold">{partShort(id)} · {getPart(id).name}</h2>
                   {isWritingExercise(ex) ? (
                     o.evaluation ? <WritingFeedback evaluation={o.evaluation} text={texts[id] ?? ""} wordCount={countTextWords(texts[id] ?? "")} /> : <p className="text-sm text-muted">{o.note ?? "Sin corrección."}</p>
                   ) : isListeningExercise(ex) ? (
@@ -323,7 +323,7 @@ export function MockRunner({ paper }: { paper: PaperId }) {
         </div>
       </div>
 
-      <p className="mb-3 font-serif text-lg font-bold">{partShort(idCurrent)} · {getPart(idCurrent).name}</p>
+      <p className="mb-3 font-display text-lg font-bold">{partShort(idCurrent)} · {getPart(idCurrent).name}</p>
       <p className="mb-4 rounded-lg border border-line bg-surface p-3 font-serif text-sm italic">{getPart(idCurrent).instructions}</p>
 
       {parts.map((id, i) => {

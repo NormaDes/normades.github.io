@@ -6,7 +6,7 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
   return (
     <main id="contenido" className="mx-auto flex min-h-dvh max-w-md flex-col items-center justify-center px-4 text-center">
       <p className="eyebrow text-accent">Algo ha fallado</p>
-      <h1 className="mt-1 font-serif text-3xl font-bold">No hemos podido cargar esta pantalla</h1>
+      <h1 className="mt-1 font-display text-3xl font-bold">No hemos podido cargar esta pantalla</h1>
       <p className="mt-2 text-muted">Ha ocurrido un error inesperado. Tu progreso no se ha perdido. Prueba de nuevo y, si persiste, vuelve al inicio.</p>
       {error.digest && <p className="mt-2 text-xs text-muted">Código: {error.digest}</p>}
       <div className="mt-6 flex flex-wrap justify-center gap-3">
