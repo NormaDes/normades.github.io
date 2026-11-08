@@ -8,16 +8,12 @@ import { getPart, partLabel, type PartId } from "@/config/exam";
 import { checkExercise, type ExerciseResult, type UserAnswers } from "@/lib/checking";
 import { ApiError, fetchAiStatus, requestExercise, type AiStatus } from "@/lib/client/api";
 import { bankFor, countUnseen, pickFromBank } from "@/lib/exercises/bank";
+import { recordAutoGraded } from "@/lib/record";
 import { getSessionExercise } from "@/lib/session-exercises";
 import { SOURCE_LABEL, isListeningExercise, type AutoGradedExercise, type ReadingExercise } from "@/lib/schemas";
-import { clientPrefs, repo, type Mistake } from "@/lib/storage";
+import { clientPrefs, repo } from "@/lib/storage";
 
 type Status = "idle" | "loading" | "doing" | "review";
-
-const uid = () =>
-  typeof crypto !== "undefined" && "randomUUID" in crypto
-    ? crypto.randomUUID()
-    : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 
 const fmt = (s: number) => {
   const sign = s < 0 ? "-" : "";
@@ -138,37 +134,7 @@ export function PartRunner({ partId }: { partId: PartId }) {
     setStatus("review");
     window.scrollTo({ top: 0 });
 
-    const now = new Date().toISOString();
-    await repo.saveAttempt({
-      id: uid(),
-      exerciseId: exercise.id,
-      partId,
-      createdAt: now,
-      correctCount: res.correctCount,
-      total: res.total,
-      marks: res.marks,
-      maxMarks: res.maxMarks,
-      durationSec: duration,
-      timed: timerOn,
-      details: res.results.map((r) => ({ n: r.n, correct: r.correct, skill: r.skill })),
-    });
-    // Las preguntas acertadas ahora cierran sus fallos anteriores; los fallos que ya estaban pendientes no se duplican
-    await repo.resolveMistakes(exercise.id, res.results.filter((r) => r.correct).map((r) => r.n));
-    const pending = new Set((await repo.listMistakes()).filter((m) => !m.resolved && m.exerciseId === exercise.id).map((m) => m.n));
-    const mistakes: Mistake[] = res.results
-      .filter((r) => !r.correct && !pending.has(r.n))
-      .map((r) => ({
-        id: uid(),
-        exerciseId: exercise.id,
-        partId,
-        n: r.n,
-        skill: r.skill,
-        given: r.given,
-        expected: r.expected,
-        createdAt: now,
-        resolved: false,
-      }));
-    await repo.addMistakes(mistakes);
+    await recordAutoGraded(repo, { exerciseId: exercise.id, partId, result: res, durationSec: duration, timed: timerOn });
     refreshBank();
   }, [exercise, answers, partId, timerOn, refreshBank]);
 

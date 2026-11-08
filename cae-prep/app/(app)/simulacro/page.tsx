@@ -1,19 +1,15 @@
 import type { Metadata } from "next";
-import { ComingSoon } from "@/components/coming-soon";
+import { MockHub } from "@/components/mock/mock-hub";
 
 export const metadata: Metadata = { title: "Simulacro" };
 
-export default function Page() {
+export default function MockPage() {
   return (
-    <ComingSoon
-      title="Modo simulacro"
-      phase={4}
-      description="Examen completo por papers con los tiempos reales del examen y puntuación estimada al final."
-      bullets={[
-        "Reading & Use of English (90 min), Writing (90 min) y Listening (~40 min)",
-        "Los tiempos y el nº de preguntas se leen de config/exam.ts",
-        "Puntuación estimada por paper y nota CEFR aproximada",
-      ]}
-    />
+    <div className="mx-auto max-w-4xl">
+      <p className="eyebrow text-accent">Modo examen</p>
+      <h1 className="mt-1 font-serif text-3xl font-bold md:text-4xl">Simulacros con tiempos reales</h1>
+      <p className="mb-6 mt-2 max-w-xl text-muted">Un paper completo con una sola cuenta atrás, como el día del examen. Al entregar, corrección y puntuación estimada en la escala Cambridge.</p>
+      <MockHub />
+    </div>
   );
 }

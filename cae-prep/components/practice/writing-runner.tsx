@@ -9,6 +9,7 @@ import { bankFor, countUnseen, pickFromBank } from "@/lib/exercises/bank";
 import { getSessionExercise } from "@/lib/session-exercises";
 import { SOURCE_LABEL, type WritingExercise } from "@/lib/schemas";
 import { clientPrefs, repo } from "@/lib/storage";
+import { TYPE_LABEL, describeTask } from "@/lib/writing-task";
 import { CRITERIA, countTextWords, totalScore, type WritingEvaluation } from "@/lib/writing";
 
 type Status = "idle" | "loading" | "doing" | "evaluating" | "review";
@@ -26,28 +27,6 @@ const fmt = (s: number) => {
   const abs = Math.abs(s);
   return `${sign}${String(Math.floor(abs / 60)).padStart(2, "0")}:${String(abs % 60).padStart(2, "0")}`;
 };
-
-const TYPE_LABEL: Record<string, string> = {
-  essay: "Essay",
-  letter: "Letter",
-  email: "Email",
-  proposal: "Proposal",
-  report: "Report",
-  review: "Review",
-};
-
-/** Enunciado completo de una tarea, tal y como se manda a la IA y se muestra al usuario */
-function describeTask(ex: WritingExercise, taskIdx: number): { type: string; text: string } {
-  if (ex.partId === "w1") {
-    const d = ex.data;
-    return {
-      type: "essay",
-      text: `${d.question}\nNotes:\n${d.points.map((p, i) => `${i + 1}. ${p}`).join("\n")}\nWrite an essay discussing two of the points. You should explain which idea you think is more important, giving reasons to support your opinion.`,
-    };
-  }
-  const t = ex.data.tasks[taskIdx];
-  return { type: t.type, text: `${t.situation}\nIn your ${t.type} you should:\n${t.requirements.map((r) => `- ${r}`).join("\n")}` };
-}
 
 export function WritingRunner({ partId }: { partId: PartId }) {
   const part = getPart(partId);
