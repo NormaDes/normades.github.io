@@ -5,7 +5,8 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { WritingFeedback } from "@/components/practice/writing-feedback";
 import { getPart, partLabel, type PartId } from "@/config/exam";
 import { ApiError, fetchAiStatus, requestEvaluation, requestExercise, type AiStatus } from "@/lib/client/api";
-import { countUnseen, pickFromBank } from "@/lib/exercises/bank";
+import { bankFor, countUnseen, pickFromBank } from "@/lib/exercises/bank";
+import { getSessionExercise } from "@/lib/session-exercises";
 import { SOURCE_LABEL, type WritingExercise } from "@/lib/schemas";
 import { clientPrefs, repo } from "@/lib/storage";
 import { CRITERIA, countTextWords, totalScore, type WritingEvaluation } from "@/lib/writing";
@@ -100,6 +101,26 @@ export function WritingRunner({ partId }: { partId: PartId }) {
     setStatus("doing");
     window.scrollTo({ top: 0 });
   };
+
+  // Enlace con ?ex=<id> (p. ej. el essay generado desde un artículo)
+  useEffect(() => {
+    const wanted = new URLSearchParams(window.location.search).get("ex");
+    if (!wanted) return;
+    let cancelled = false;
+    const session = getSessionExercise(wanted);
+    if (session && session.partId === partId) {
+      void Promise.resolve().then(() => !cancelled && begin(session as WritingExercise));
+    } else {
+      bankFor(repo, partId).then((all) => {
+        const ex = all.find((e) => e.id === wanted);
+        if (ex && !cancelled) begin(ex as WritingExercise);
+      });
+    }
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [partId]);
 
   const fromBank = async () => {
     setError(null);
@@ -268,7 +289,13 @@ export function WritingRunner({ partId }: { partId: PartId }) {
       </div>
 
       <div className="mb-4 flex flex-wrap gap-2 text-xs">
-        <span className="rounded-full bg-warn-soft px-2.5 py-1 font-semibold">Enunciado de práctica generado</span>
+        {exercise.origin ? (
+          <span className="rounded-full bg-ok-soft px-2.5 py-1 font-semibold text-ok">
+            Basado en un texto real: {exercise.origin.url ? <a href={exercise.origin.url} target="_blank" rel="noreferrer" className="underline">{exercise.origin.title}</a> : exercise.origin.title} · {exercise.origin.sourceName}
+          </span>
+        ) : (
+          <span className="rounded-full bg-warn-soft px-2.5 py-1 font-semibold">Enunciado de práctica generado</span>
+        )}
         <span className="rounded-full bg-brand-soft px-2.5 py-1 font-semibold text-brand">{SOURCE_LABEL[exercise.source]}</span>
       </div>
       {notice && <p className="mb-4 rounded-xl bg-warn-soft p-3 text-sm">{notice}</p>}

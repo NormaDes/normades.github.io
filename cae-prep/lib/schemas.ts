@@ -335,12 +335,25 @@ export const SOURCE_LABEL: Record<ExerciseSource, string> = {
   teacher: "Material de clase",
 };
 
+/** Procedencia de un ejercicio basado en un texto real (artículo, vídeo, texto pegado) */
+export interface ExerciseOrigin {
+  title: string;
+  url?: string;
+  author?: string;
+  /** «The Guardian», «Wikipedia», «Texto pegado por el alumno»… */
+  sourceName: string;
+  license?: string;
+  /** Texto pegado por el alumno: el ejercicio NO se guarda (contiene el texto) y solo vive en esta sesión */
+  ephemeral?: boolean;
+}
+
 export type Exercise = ExerciseContent & {
   id: string;
   source: ExerciseSource;
   createdAt: string;
-  /** Los textos de práctica por parte NO son artículos reales: se muestran como "texto generado" */
-  isGeneratedText: true;
+  /** true = texto de práctica generado (no es un artículo real). false = basado en un texto real (ver `origin`) */
+  isGeneratedText: boolean;
+  origin?: ExerciseOrigin;
 };
 
 /** Ejercicios que se corrigen automáticamente (Reading y Listening) */

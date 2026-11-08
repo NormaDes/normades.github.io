@@ -9,7 +9,7 @@
     "lint": "eslint",
     "validate:seeds": "tsx scripts/validate-seeds.ts",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test tests/*.test.ts",
+    "test": "tsx --conditions=react-server --test tests/*.test.ts",
     "check": "npm run lint && npm run typecheck && npm run validate:seeds && npm test"
   },
   "dependencies": {

@@ -30,7 +30,7 @@ export function Nav() {
   const pathname = usePathname();
   const isAdmin = useIsAdmin();
   const [more, setMore] = useState(false);
-  const items = ITEMS.filter((i) => !i.admin || isAdmin);
+  const items = ITEMS.filter((i) => !i.admin || isAdmin === true);
   const main = items.filter((i) => i.mobile);
   const rest = items.filter((i) => !i.mobile);
   const moreActive = rest.some((i) => isActive(pathname, i.href));

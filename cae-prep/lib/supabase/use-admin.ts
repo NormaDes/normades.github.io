@@ -5,8 +5,8 @@ import { getBrowserClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 
 /** ¿El usuario con sesión es administrador/profesor? (rol en la tabla profiles) */
-export function useIsAdmin(): boolean {
-  const [admin, setAdmin] = useState(false);
+export function useIsAdmin(): boolean | null {
+  const [admin, setAdmin] = useState<boolean | null>(isSupabaseConfigured() ? null : false);
   useEffect(() => {
     if (!isSupabaseConfigured()) return;
     let cancelled = false;

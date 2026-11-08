@@ -8,6 +8,7 @@ import { getPart, partLabel, type PartId } from "@/config/exam";
 import { checkExercise, type ExerciseResult, type UserAnswers } from "@/lib/checking";
 import { ApiError, fetchAiStatus, requestExercise, type AiStatus } from "@/lib/client/api";
 import { bankFor, countUnseen, pickFromBank } from "@/lib/exercises/bank";
+import { getSessionExercise } from "@/lib/session-exercises";
 import { SOURCE_LABEL, isListeningExercise, type AutoGradedExercise, type ReadingExercise } from "@/lib/schemas";
 import { clientPrefs, repo, type Mistake } from "@/lib/storage";
 
@@ -81,6 +82,13 @@ export function PartRunner({ partId }: { partId: PartId }) {
     const wanted = new URLSearchParams(window.location.search).get("ex");
     if (!wanted) return;
     let cancelled = false;
+    const session = getSessionExercise(wanted);
+    if (session && session.partId === partId) {
+      void Promise.resolve().then(() => !cancelled && begin(session as AutoGradedExercise));
+      return () => {
+        cancelled = true;
+      };
+    }
     bankFor(repo, partId).then((all) => {
       const ex = all.find((e) => e.id === wanted);
       if (ex && !cancelled) begin(ex as AutoGradedExercise);
@@ -271,9 +279,16 @@ export function PartRunner({ partId }: { partId: PartId }) {
       </div>
 
       <div className="mb-4 flex flex-wrap gap-2 text-xs">
-        <span className="rounded-full bg-warn-soft px-2.5 py-1 font-semibold">
-          {part.paper === "listening" ? "Guion de práctica con voz sintética — no es una grabación real" : "Texto de práctica generado — no es un artículo real"}
-        </span>
+        {exercise.origin ? (
+          <span className="rounded-full bg-ok-soft px-2.5 py-1 font-semibold text-ok">
+            Texto real: {exercise.origin.url ? <a href={exercise.origin.url} target="_blank" rel="noreferrer" className="underline">{exercise.origin.title}</a> : exercise.origin.title}
+            {" · "}{exercise.origin.sourceName}{exercise.origin.license ? ` (${exercise.origin.license})` : ""}
+          </span>
+        ) : (
+          <span className="rounded-full bg-warn-soft px-2.5 py-1 font-semibold">
+            {part.paper === "listening" ? "Guion de práctica con voz sintética — no es una grabación real" : "Texto de práctica generado — no es un artículo real"}
+          </span>
+        )}
         <span className="rounded-full bg-brand-soft px-2.5 py-1 font-semibold text-brand">
           {SOURCE_LABEL[exercise.source]}
         </span>

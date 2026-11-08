@@ -3,6 +3,8 @@ import type { Exercise } from "@/lib/schemas";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { clientPrefs } from "@/lib/storage";
 import type { SpeakingEvaluation, SpokenAnswer } from "@/lib/speaking";
+import type { LessonPack } from "@/lib/lesson-pack";
+import type { ExerciseOrigin } from "@/lib/schemas";
 import type { VocabEnrichment } from "@/lib/vocab";
 import type { WritingEvaluation } from "@/lib/writing";
 
@@ -67,4 +69,21 @@ export function requestSpeakingFeedback(input: { partId: PartId; answers: Spoken
 
 export function requestVocabEnrich(items: Array<{ term: string; context?: string }>) {
   return postJson<{ items: VocabEnrichment[]; remainingToday: number }>("/api/vocab-enrich", { items });
+}
+
+export interface MaterialRequest {
+  mode: "r5" | "r7" | "r8" | "pack";
+  articleId?: string;
+  text?: string;
+  title?: string;
+  url?: string;
+  kind?: "article" | "video";
+}
+
+export function requestMaterialExercise(input: MaterialRequest & { mode: "r5" | "r7" | "r8" }) {
+  return postJson<{ exercise: Exercise; remainingToday: number }>("/api/material-exercise", input);
+}
+
+export function requestLessonPack(input: Omit<MaterialRequest, "mode">) {
+  return postJson<{ pack: LessonPack; origin: ExerciseOrigin; remainingToday: number }>("/api/material-exercise", { ...input, mode: "pack" });
 }

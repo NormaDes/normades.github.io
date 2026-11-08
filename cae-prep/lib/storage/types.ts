@@ -45,6 +45,29 @@ export interface VocabItem {
   dueAt: string;
 }
 
+export type MaterialKind = "audio" | "video" | "podcast" | "article" | "pdf" | "image" | "link";
+
+/** Material de la biblioteca: enlaces, audios, vídeos, PDFs… (los de clase los sube el profesor) */
+export interface Material {
+  id: string;
+  kind: MaterialKind;
+  title: string;
+  description?: string;
+  /** Archivo en el almacenamiento privado (bucket «materials») */
+  storagePath?: string;
+  url?: string;
+  /** Transcripción (audio/vídeo) para generar ejercicios */
+  transcript?: string;
+  partId?: string;
+  topic?: string;
+  author?: string;
+  license?: string;
+  sourceUrl?: string;
+  visibility: "private" | "class";
+  createdAt: string;
+  createdBy?: string;
+}
+
 export interface Mistake {
   id: string;
   exerciseId: string;
@@ -80,6 +103,10 @@ export interface Repository {
   /** Inserta o actualiza (clave: el término en minúsculas) */
   saveVocab(v: VocabItem): Promise<void>;
   deleteVocab(id: string): Promise<void>;
+
+  listMaterials(): Promise<Material[]>;
+  saveMaterial(m: Material): Promise<void>;
+  deleteMaterial(id: string): Promise<void>;
 
   saveWriting(w: WritingSubmission): Promise<void>;
   listWritings(): Promise<WritingSubmission[]>;

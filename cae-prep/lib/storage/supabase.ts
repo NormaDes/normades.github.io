@@ -3,7 +3,7 @@ import type { Exercise } from "@/lib/schemas";
 import type { SpeakingSubmission } from "@/lib/speaking";
 import { getBrowserClient } from "@/lib/supabase/client";
 import type { LocalRepository } from "@/lib/storage/local";
-import type { Attempt, Mistake, Repository, VocabItem } from "@/lib/storage/types";
+import type { Attempt, Material, MaterialKind, Mistake, Repository, VocabItem } from "@/lib/storage/types";
 import type { WritingSubmission } from "@/lib/writing";
 
 interface AttemptRow {
@@ -47,6 +47,24 @@ interface VocabRow {
   repetitions: number;
   lapses: number | null;
   due_at: string;
+  created_at: string;
+}
+
+interface MaterialRow {
+  id: string;
+  kind: MaterialKind;
+  title: string;
+  description: string | null;
+  storage_path: string | null;
+  url: string | null;
+  transcript: string | null;
+  part_id: string | null;
+  topic: string | null;
+  author: string | null;
+  license: string | null;
+  source_url: string | null;
+  visibility: "private" | "class";
+  created_by: string | null;
   created_at: string;
 }
 
@@ -176,6 +194,64 @@ export class SupabaseRepository implements Repository {
       "resolveMistakes",
       () => this.db.from("mistakes").update({ resolved: true }).eq("exercise_id", exerciseId).in("n", ns).eq("resolved", false),
       () => this.fallback.resolveMistakes(exerciseId, ns),
+    );
+  }
+
+  async listMaterials(): Promise<Material[]> {
+    const rows = await this.attempt<MaterialRow[]>(
+      "listMaterials",
+      () => this.db.from("materials").select("*").order("created_at", { ascending: false }).limit(500),
+      async () => [],
+    );
+    const remote = rows.map((r) => ({
+      id: r.id,
+      kind: r.kind,
+      title: r.title,
+      description: r.description ?? undefined,
+      storagePath: r.storage_path ?? undefined,
+      url: r.url ?? undefined,
+      transcript: r.transcript ?? undefined,
+      partId: r.part_id ?? undefined,
+      topic: r.topic ?? undefined,
+      author: r.author ?? undefined,
+      license: r.license ?? undefined,
+      sourceUrl: r.source_url ?? undefined,
+      visibility: r.visibility,
+      createdAt: r.created_at,
+      createdBy: r.created_by ?? undefined,
+    }));
+    const local = await this.fallback.listMaterials();
+    return [...remote, ...local.filter((l) => !remote.some((r) => r.id === l.id))];
+  }
+
+  async saveMaterial(m: Material) {
+    await this.attempt<unknown>(
+      "saveMaterial",
+      () =>
+        this.db.from("materials").upsert({
+          ...(/^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(m.id) ? { id: m.id } : {}),
+          kind: m.kind,
+          title: m.title,
+          description: m.description ?? null,
+          storage_path: m.storagePath ?? null,
+          url: m.url ?? null,
+          transcript: m.transcript ?? null,
+          part_id: m.partId ?? null,
+          topic: m.topic ?? null,
+          author: m.author ?? null,
+          license: m.license ?? null,
+          source_url: m.sourceUrl ?? null,
+          visibility: m.visibility,
+        }),
+      () => this.fallback.saveMaterial(m),
+    );
+  }
+
+  async deleteMaterial(id: string) {
+    await this.attempt<unknown>(
+      "deleteMaterial",
+      () => this.db.from("materials").delete().eq("id", id),
+      () => this.fallback.deleteMaterial(id),
     );
   }
 
