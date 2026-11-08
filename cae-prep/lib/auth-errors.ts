@@ -9,7 +9,12 @@ export function authErrorMessage(err: { message?: string; code?: string } | null
   if (code === "over_email_send_rate_limit" || code === "over_request_rate_limit" || msg.includes("rate limit")) return "Demasiados intentos seguidos. Espera unos minutos e inténtalo de nuevo.";
   if (code === "signup_disabled") return "El registro está desactivado en este momento.";
   if (msg.includes("fetch") || msg.includes("network")) return "No se puede conectar con el servidor. Revisa tu conexión.";
-  return "No se ha podido completar la operación. Inténtalo de nuevo.";
+  if (code === "email_provider_disabled") return "El registro con email está desactivado en Supabase (Authentication → Providers → Email).";
+  if (code === "email_address_invalid" || msg.includes("invalid email")) return "Ese email no es válido. Revísalo.";
+  if (msg.includes("redirect")) return "La URL de la web no está permitida en Supabase (Authentication → URL Configuration).";
+  if (msg.includes("error sending") || code === "unexpected_failure") return "Supabase no ha podido enviar el email de confirmación. Desactiva «Confirm email» o prueba más tarde.";
+  const detail = [code, err?.message].filter(Boolean).join(": ");
+  return `No se ha podido completar la operación${detail ? ` (${detail})` : ""}. Inténtalo de nuevo.`;
 }
 
 /** Solo permite redirigir a rutas internas (evita open redirect). */
