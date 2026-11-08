@@ -1,4 +1,4 @@
-import { aiConfigured } from "@/lib/ai/provider";
+import { aiConfigured, aiEnabled } from "@/lib/ai/provider";
 import { z } from "zod";
 import { PARTS, type PartId } from "@/config/exam";
 import { AiConfigError, AiOutputError } from "@/lib/ai/client";
@@ -59,6 +59,7 @@ export async function GET() {
   return json({
     configured: aiConfigured() && !needsLogin,
     needsLogin,
+    comingSoon: !aiEnabled(),
     accessCodeRequired: !isSupabaseConfigured() && Boolean(process.env.APP_ACCESS_CODE),
     remainingToday: await remainingToday(userId),
   });

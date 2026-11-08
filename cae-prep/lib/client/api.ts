@@ -18,6 +18,8 @@ export interface AiStatus {
   configured: boolean;
   /** Invitado: la IA existe pero hace falta iniciar sesión */
   needsLogin?: boolean;
+  /** La IA está apagada a propósito: se muestra «Próximamente» */
+  comingSoon?: boolean;
   accessCodeRequired: boolean;
   remainingToday: number;
 }

@@ -130,7 +130,7 @@ export function MockRunner({ paper }: { paper: PaperId }) {
             continue;
           }
           if (!aiOk) {
-            out[id] = { result: { partId: id, marks: 0, maxMarks: max, assessed: false }, note: ai?.needsLogin ? "La corrección de Writing necesita una cuenta: inicia sesión (gratis) para obtener la nota." : "La corrección de Writing necesita la IA, que no está configurada en este servidor." };
+            out[id] = { result: { partId: id, marks: 0, maxMarks: max, assessed: false }, note: ai?.comingSoon ? "La corrección de Writing con IA llegará pronto (próximamente)." : ai?.needsLogin ? "La corrección de Writing necesita una cuenta: inicia sesión (gratis) para obtener la nota." : "La corrección de Writing necesita la IA, que no está configurada en este servidor." };
             continue;
           }
           try {
@@ -199,7 +199,7 @@ export function MockRunner({ paper }: { paper: PaperId }) {
           })}
         </ul>
 
-        {paper === "writing" && ai && !ai.configured && <p className="mt-4 rounded-lg bg-warn-soft p-3 text-sm">{ai.needsLogin ? "Sin cuenta podrás escribir, pero la nota de Writing no se calculará. Inicia sesión (gratis) para obtenerla." : "La IA no está configurada: podrás escribir, pero la nota de Writing no se calculará."}</p>}
+        {paper === "writing" && ai && !ai.configured && <p className="mt-4 rounded-lg bg-warn-soft p-3 text-sm">{ai.comingSoon ? "La corrección de Writing con IA llegará pronto (próximamente). Podrás escribir igualmente." : ai.needsLogin ? "Sin cuenta podrás escribir, pero la nota de Writing no se calculará. Inicia sesión (gratis) para obtenerla." : "La IA no está configurada: podrás escribir, pero la nota de Writing no se calculará."}</p>}
         {error && <p role="alert" className="mt-4 rounded-lg bg-bad-soft p-3 text-sm text-bad">{error}</p>}
         <button type="button" onClick={start} disabled={phase === "loading"} className="mt-6 inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-lg bg-brand px-6 text-base font-semibold text-brand-ink disabled:opacity-60">
           {phase === "loading" ? "Preparando el examen…" : "Empezar el simulacro"} <ArrowIcon width={18} height={18} />

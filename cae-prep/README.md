@@ -35,7 +35,7 @@ cp .env.example .env.local   # y rellena ANTHROPIC_API_KEY (opcional para el ban
 npm run dev                   # http://localhost:3000
 ```
 
-Sin `ANTHROPIC_API_KEY` la app funciona con el banco inicial; solo se desactiva «Generar nuevo con IA».
+**La IA está apagada («Próximamente») por defecto.** Para activarla define `AI_ENABLED=true` junto con `ANTHROPIC_API_KEY` o `GEMINI_API_KEY`. Sin IA la app funciona con el banco inicial.
 
 Comandos útiles:
 

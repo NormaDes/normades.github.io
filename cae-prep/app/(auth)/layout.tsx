@@ -3,10 +3,10 @@ import { Logo } from "@/components/logo";
 import { SiteFooter } from "@/components/site-footer";
 
 const PERKS = [
-  "Ejercicios nuevos y corrección de Writing y Speaking con IA",
+  "Tu progreso y tu vocabulario en cualquier dispositivo",
   "Tu progreso guardado en la nube, en cualquier dispositivo",
   "Material de clase que sube tu profesor",
-  "Vocabulario con repaso espaciado y plan de estudio",
+  "Plan de estudio, simulacros e historial guardados",
 ];
 
 export default function AuthLayout({ children }: LayoutProps<"/">) {

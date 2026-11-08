@@ -348,7 +348,7 @@ function BankTab({ items, now, missing, ai, busy, onEnrich, onSave, onRemove }: 
     <div>
       <div className="flex flex-wrap items-center gap-2">
         <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar en tu banco…" aria-label="Buscar" className="h-11 min-w-0 flex-1 rounded-lg border border-line bg-surface px-3 text-[15px] focus:border-brand" />
-        {missing.length > 0 && (
+        {missing.length > 0 && !ai?.comingSoon && (
           <button type="button" disabled={!aiOk || busy} onClick={() => onEnrich(missing)} title={aiOk ? "" : "Requiere la IA configurada"} className="min-h-11 rounded-lg border border-brand px-4 text-sm font-semibold text-brand disabled:cursor-not-allowed disabled:opacity-50">
             {busy ? "Completando…" : `Completar con IA (${Math.min(8, missing.length)})`}
           </button>

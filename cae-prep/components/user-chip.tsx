@@ -32,7 +32,7 @@ export function UserChip({ variant }: { variant: "sidebar" | "topbar" | "bar" })
     return (
       <div className="rounded-lg border border-line bg-surface p-3">
         <p className="text-sm font-semibold">Estás como invitado</p>
-        <p className="mt-0.5 text-xs text-muted">Con cuenta: IA, progreso en la nube y material de clase.</p>
+        <p className="mt-0.5 text-xs text-muted">Con cuenta: progreso en la nube y material de clase.</p>
         <div className="mt-2.5 flex gap-2">
           <Link href="/login" className="flex-1 rounded-md bg-brand py-2 text-center text-xs font-bold text-brand-ink">Entrar</Link>
           <Link href="/registro" className="flex-1 rounded-md border border-line py-2 text-center text-xs font-semibold">Crear cuenta</Link>
