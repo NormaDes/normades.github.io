@@ -19,7 +19,7 @@ export default function LegalNoticePage() {
       </p>
 
       <h2>2. Qué es Englora</h2>
-      <p>Una herramienta de práctica para el examen Cambridge C1 Advanced. Los ejercicios, textos y guiones de práctica son <strong>originales o generados con inteligencia artificial</strong> y pueden contener errores; no son material oficial de Cambridge y la puntuación estimada es orientativa. Englora no está afiliada ni respaldada por Cambridge University Press &amp; Assessment.</p>
+      <p>Una herramienta de práctica para exámenes de inglés (hoy, Cambridge C1 Advanced). Los ejercicios, textos y guiones de práctica son <strong>originales o generados con inteligencia artificial</strong> y pueden contener errores; no son material oficial de ningún organismo examinador y la puntuación estimada es orientativa. Englora no está afiliada ni respaldada por Cambridge University Press &amp; Assessment ni por otros organismos examinadores.</p>
 
       <h2>3. Material de clase</h2>
       <p>El material que el profesorado comparte a través de la plataforma (audios, textos, vídeos, documentos) es de uso <strong>exclusivo del alumnado con cuenta</strong> y para su estudio personal. No se puede copiar, redistribuir ni publicar fuera de la plataforma. Los derechos pertenecen a sus respectivos autores y titulares.</p>

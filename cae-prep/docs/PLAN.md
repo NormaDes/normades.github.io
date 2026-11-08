@@ -1,4 +1,4 @@
-# CAE Prep — plan
+# Englora — plan
 
 App Next.js (App Router, TS, Tailwind) para preparar Cambridge C1 Advanced. UI en español, práctica en inglés.
 

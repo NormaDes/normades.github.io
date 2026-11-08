@@ -3,9 +3,9 @@ import type { MetadataRoute } from "next";
 /** Permite «Añadir a la pantalla de inicio» en el móvil y abrir la app a pantalla completa. */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Englora · English Exam Prep",
+    name: "Englora · Preparación de exámenes de inglés",
     short_name: "Englora",
-    description: "Prepara el Cambridge C1 Advanced: practica, mejora, aprueba.",
+    description: "Prepara tus exámenes de inglés: practica, mejora, aprueba.",
     start_url: "/",
     display: "standalone",
     background_color: "#f6f4ef",

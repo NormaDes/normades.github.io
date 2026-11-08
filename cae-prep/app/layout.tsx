@@ -6,9 +6,9 @@ const display = Fraunces({ subsets: ["latin"], variable: "--font-display", displ
 const hand = Caveat({ subsets: ["latin"], variable: "--font-hand", display: "swap", weight: ["500", "700"] });
 
 export const metadata: Metadata = {
-  title: { default: "Englora · English Exam Prep", template: "%s · Englora" },
+  title: { default: "Englora · Preparación de exámenes de inglés", template: "%s · Englora" },
   description:
-    "Englora: prepara el Cambridge C1 Advanced (CAE) con práctica por partes, simulacros, corrección con IA y explicaciones. Practice, improve, succeed.",
+    "Englora: prepara tus exámenes de inglés con práctica por partes, simulacros, corrección con IA y explicaciones. Ahora, Cambridge C1 Advanced. Practice, improve, succeed.",
 };
 
 export const viewport: Viewport = {

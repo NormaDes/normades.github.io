@@ -1,6 +1,6 @@
-# Englora — English Exam Prep
+# Englora — preparación de exámenes de inglés
 
-**Englora** es una web app para preparar el examen **Cambridge C1 Advanced (CAE)** (_Practice · Improve · Succeed_). Interfaz en español de España; todo el contenido de práctica en inglés. Pensada para usarse mucho desde el móvil.
+**Englora** es una web app para preparar exámenes de inglés (hoy, **Cambridge C1 Advanced**; el catálogo de `config/catalog.ts` recoge los siguientes) (_Practice · Improve · Succeed_). Interfaz en español de España; todo el contenido de práctica en inglés. Pensada para usarse mucho desde el móvil.
 
 > Estado: **Fase 4a + panel de progreso y cuaderno de errores** — Reading 1-8, Writing 1-2, Listening 1-4, Speaking 1-4 y **cuentas de usuario** (registro, inicio de sesión, datos por usuario). Ver [`docs/PLAN.md`](docs/PLAN.md).
 

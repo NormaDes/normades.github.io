@@ -40,7 +40,7 @@ export function Nav() {
       {/* Escritorio: barra lateral */}
       <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col overflow-y-auto border-r border-line bg-bg px-5 py-7 md:flex">
         <Logo variant="header" width={200} href="/" priority />
-        <p className="eyebrow mt-3 text-muted">Cambridge C1 Advanced</p>
+        <p className="eyebrow mt-3 text-muted">Exámenes de inglés</p>
 
         <nav aria-label="Navegación principal" className="mt-7 flex flex-1 flex-col gap-0.5">
           {items.map(({ href, label, Icon }) => {

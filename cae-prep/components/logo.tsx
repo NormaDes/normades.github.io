@@ -14,7 +14,7 @@ const FILES: Record<Variant, { src: string; w: number; h: number }> = {
 export function Logo({ variant = "header", width = 170, href, priority = false }: { variant?: Variant; width?: number; href?: string; priority?: boolean }) {
   const f = FILES[variant];
   const img = (
-    <Image src={f.src} alt="Englora — English Exam Prep" width={width} height={Math.round((width * f.h) / f.w)} priority={priority} style={{ width, height: "auto" }} />
+    <Image src={f.src} alt="Englora" width={width} height={Math.round((width * f.h) / f.w)} priority={priority} style={{ width, height: "auto" }} />
   );
   return href ? (
     <Link href={href} aria-label="Englora, ir al inicio" className="inline-block">

@@ -3,6 +3,7 @@ import { Chalkboard, TeacherNote } from "@/components/classroom";
 import { ExamCountdown } from "@/components/exam-countdown";
 import { Greeting } from "@/components/greeting";
 import { HomeStats } from "@/components/home-stats";
+import { ExamPicker } from "@/components/exam-picker";
 import { GuestBanner } from "@/components/guest-banner";
 import { TodayPlan } from "@/components/plan/today-plan";
 import { ArrowIcon, PAPER_ICONS } from "@/components/icons";
@@ -56,7 +57,9 @@ export default function Home() {
       <GuestBanner />
       <TodayPlan />
 
-      <h2 className="mb-3 mt-10 font-serif text-2xl font-bold">Las asignaturas del examen</h2>
+      <ExamPicker />
+
+      <h2 className="mb-3 mt-10 font-serif text-2xl font-bold">C1 Advanced · las pruebas del examen</h2>
       <div className="grid gap-3 sm:grid-cols-2">
         {PAPERS.map((paper) => {
           const Icon = PAPER_ICONS[paper.id];
