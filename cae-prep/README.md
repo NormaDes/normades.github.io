@@ -19,7 +19,10 @@
 - **Cuaderno de errores**: filtros por estado, parte y tipo de error; «Repetir ejercicio» abre ese ejercicio concreto y, al acertar de nuevo, el error se marca como resuelto solo.
 - **Cuenta atrás** hasta el examen en la portada (se guarda en el dispositivo).
 - Páginas de **Privacidad** y **Aviso legal** (borradores con campos por completar), casilla de aceptación en el registro, 404 y pantalla de error con marca, enlace «Saltar al contenido» y respeto de `prefers-reduced-motion`.
-- Resto de secciones (simulacro, biblioteca y vocabulario) con página «próximamente».
+- **Biblioteca**: artículos reales (The Guardian con clave gratuita, The Conversation, Wikipedia/Wikinews) con licencia y atribución, vídeos (TED y canales/podcasts recomendados, o pega tu propio enlace de YouTube), lector con subrayado que guarda vocabulario, y **convertir en ejercicio** (R5/R7/R8, resumen, essay) o en «paquete de clase». También puedes pegar un texto propio (no se guarda). El profesor (rol admin) sube material de clase desde `/profesor`.
+- **Vocabulario** con repetición espaciada SM-2: repaso diario, banco con definición/ejemplo/colocaciones (enriquecido con IA) y atajos de teclado.
+- **Simulacro**: Reading & UoE (90 min), Writing (90) y Listening (40) con una sola cuenta atrás, navegación entre partes, entrega automática al llegar a 0, corrección, nota estimada en la escala Cambridge (orientativa: ~60 % ≈ 180) e historial. Speaking no se simula (necesita examinador).
+- **Plan de estudio**: horario de 2 semanas según la fecha del examen (base → refuerzo → simulacros → descanso), minutos y días por semana, priorizando tus partes más débiles, con «Hoy en clase» en la portada.
 
 ## Arrancar en local
 
@@ -105,7 +108,8 @@ Hoy se guardan en `localStorage` (por dispositivo) a través de la interfaz `Rep
 ## Limitaciones conocidas
 
 - El banco inicial es más pequeño que los 5 por parte previstos: **2** en las partes 1-4, **1** en las 5-8 y en Listening, **3** enunciados de Writing 1, **2** juegos de Writing 2 y **2** por cada parte de Speaking. El resto se genera con IA y se cachea. Conviene que alguien con ojo de profesor revise los textos del banco.
-- Los textos de Reading y los guiones de Listening son generados (marcados como tal). Los artículos reales llegan en la Fase 4.
+- Los textos de Reading y los guiones de Listening del banco son generados (marcados como tal); la Biblioteca aporta textos reales. Los artículos, vídeos y oEmbed reales no se han probado contra internet (solo con servidores simulados); los IDs de vídeo curados se comprueban al cargar y se ocultan si fallan.
+- La nota del simulacro es una estimación; Writing en el simulacro necesita la IA configurada. El plan de estudio y el historial de simulacros se guardan en el dispositivo.
 - Las fotos de Speaking 2 se describen con texto; el esquema admite una URL de imagen real (`photos[].image`).
 - La voz sintética del navegador depende de las voces instaladas en el dispositivo; con audio real del profe el problema desaparece.
 - Speaking necesita permiso de micrófono y funciona mejor en Chrome/Edge; en Safari/Firefox la transcripción en directo puede no estar disponible (se puede escribir a mano).
