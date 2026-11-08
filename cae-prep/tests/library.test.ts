@@ -16,3 +16,12 @@ test("catálogo: IDs con formato válido y sin duplicados", () => {
   assert.equal(new Set(ids).size, ids.length);
   for (const v of CURATED_VIDEOS) assert.match(v.id, /^[\w-]{11}$/, v.title);
 });
+
+import { normalizeSupabaseUrl } from "@/lib/supabase/config";
+
+test("normalizeSupabaseUrl deja solo el origen", () => {
+  assert.equal(normalizeSupabaseUrl("https://abc.supabase.co/rest/v1/"), "https://abc.supabase.co");
+  assert.equal(normalizeSupabaseUrl(" https://abc.supabase.co "), "https://abc.supabase.co");
+  assert.equal(normalizeSupabaseUrl("abc.supabase.co/auth/v1"), "https://abc.supabase.co");
+  assert.equal(normalizeSupabaseUrl(""), "");
+});
