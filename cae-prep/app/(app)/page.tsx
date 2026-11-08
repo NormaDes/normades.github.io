@@ -3,6 +3,7 @@ import { HeroCard, TipBubble } from "@/components/brand-ui";
 import { ExamPicker } from "@/components/exam-picker";
 import { Greeting } from "@/components/greeting";
 import { GuestBanner } from "@/components/guest-banner";
+import { HeroStickers } from "@/components/hero-stickers";
 import { HeroPanel } from "@/components/hero-panel";
 import { HomeStats } from "@/components/home-stats";
 import { ArrowIcon, PAPER_ICONS } from "@/components/icons";
@@ -23,7 +24,8 @@ export default function Home() {
     <div>
       <HeroCard className="px-6 py-8 md:px-10 md:py-10">
         <div className="grid gap-8 md:grid-cols-[1.15fr_0.85fr] md:items-center">
-          <div>
+          <div className="relative">
+            <HeroStickers />
             <Greeting />
             <h1 className="mt-4 text-[2.5rem] font-semibold leading-[1.02] sm:text-5xl md:text-[3.6rem] md:leading-[1.08]">
               Practice.
@@ -63,7 +65,7 @@ export default function Home() {
           const t = PAPER_THEME[paper.id];
           const parts = partsOfPaper(paper.id).length;
           return (
-            <Link key={paper.id} href={`/practica#${paper.id}`} className={`group flex gap-4 rounded-3xl border-2 ${t.border} ${t.soft} p-5 transition-transform hover:-translate-y-1`}>
+            <Link key={paper.id} href={`/practica?prueba=${paper.id}`} className={`group flex gap-4 rounded-3xl border-2 ${t.border} ${t.soft} p-5 transition-transform hover:-translate-y-1`}>
               <span className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${t.solid} ${t.lift}`}>
                 <Icon width={30} height={30} weight="fill" />
               </span>

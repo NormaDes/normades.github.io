@@ -88,7 +88,10 @@ html {
 }
 
 body {
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image: radial-gradient(#d6ddf6 1.3px, transparent 1.3px);
+  background-size: 26px 26px;
+  background-attachment: fixed;
   color: var(--ink);
   font-family: var(--font-sans);
   font-size: 16px;

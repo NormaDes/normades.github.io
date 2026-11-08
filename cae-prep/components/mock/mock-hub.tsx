@@ -41,7 +41,7 @@ export function MockHub() {
         })}
       </div>
 
-      <p className="mt-4 text-sm text-muted">Speaking no se simula aquí porque necesita un compañero: practica sus 4 partes en <Link href="/practica#speaking" className="font-semibold text-brand underline">Practicar</Link>.</p>
+      <p className="mt-4 text-sm text-muted">Speaking no se simula aquí porque necesita un compañero: practica sus 4 partes en <Link href="/practica?prueba=speaking" className="font-semibold text-brand underline">Practicar</Link>.</p>
 
       {history.length > 0 && (
         <section className="mt-8">

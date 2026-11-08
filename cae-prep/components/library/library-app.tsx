@@ -1,5 +1,6 @@
 "use client";
 
+import { Briefcase, Cpu, Flask, GraduationCap, Heartbeat, Leaf, Newspaper, Palette, type Icon } from "@phosphor-icons/react";
 import { useUser } from "@/lib/supabase/use-user";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import Link from "next/link";
@@ -12,6 +13,20 @@ import { lengthBucket } from "@/lib/articles/text";
 import { CHANNELS, CURATED_VIDEOS, PODCASTS, parseYouTubeId } from "@/lib/library/catalog";
 import { repo, type Material } from "@/lib/storage";
 import { useQueryParam } from "@/lib/use-query-param";
+
+const TOPIC_TILE: Record<string, { tile: string; Glyph: Icon }> = {
+  tecnologia: { tile: "bg-brand-soft text-brand", Glyph: Cpu },
+  "medio-ambiente": { tile: "bg-ok-soft text-ok", Glyph: Leaf },
+  educacion: { tile: "bg-sun-soft text-[#7a5a00]", Glyph: GraduationCap },
+  salud: { tile: "bg-coral-soft text-accent-dark", Glyph: Heartbeat },
+  trabajo: { tile: "bg-tangerine-soft text-tangerine-dark", Glyph: Briefcase },
+  cultura: { tile: "bg-grape-soft text-grape-dark", Glyph: Palette },
+  ciencia: { tile: "bg-sky-soft text-[#0b6aa0]", Glyph: Flask },
+};
+function topicStyle(topic: string) {
+  const t = TOPIC_TILE[topic] ?? { tile: "bg-bg text-muted", Glyph: Newspaper };
+  return { tile: t.tile, icon: <t.Glyph size={30} weight="duotone" /> };
+}
 
 type Tab = "articulos" | "videos" | "podcasts" | "clase";
 const TABS: Array<[Tab, string]> = [["articulos", "Artículos"], ["videos", "Vídeos"], ["podcasts", "Podcasts"], ["clase", "Material de clase"]];
@@ -42,14 +57,13 @@ export function LibraryApp() {
 
   return (
     <div>
-      <div role="tablist" aria-label="Biblioteca" className="mb-6 flex gap-1 overflow-x-auto border-b border-line">
+      <div role="tablist" aria-label="Biblioteca" className="mb-6 flex items-center gap-2 overflow-x-auto pb-1">
         {TABS.map(([id, label]) => (
-          <button key={id} type="button" role="tab" aria-selected={tab === id} onClick={() => select(id)} className={`relative min-h-11 shrink-0 px-4 text-sm font-semibold ${tab === id ? "text-ink" : "text-muted hover:text-ink"}`}>
+          <button key={id} type="button" role="tab" aria-selected={tab === id} onClick={() => select(id)} className={`min-h-11 shrink-0 rounded-full px-5 text-sm font-extrabold transition-colors ${tab === id ? "bg-ok text-white shadow-[0_3px_0_#0a5f3e]" : "bg-surface text-muted ring-2 ring-line hover:text-ink"}`}>
             {label}
-            {tab === id && <span aria-hidden className="absolute inset-x-3 bottom-[-1px] h-[3px] rounded-t bg-accent" />}
           </button>
         ))}
-        <Link href="/biblioteca/pegar" className="ml-auto flex min-h-11 shrink-0 items-center px-4 text-sm font-semibold text-brand hover:text-accent-dark">Pegar un texto →</Link>
+        <Link href="/biblioteca/pegar" className="ml-auto flex min-h-11 shrink-0 items-center rounded-full bg-brand-soft px-4 text-sm font-extrabold text-brand hover:bg-brand hover:text-white">Pegar un texto →</Link>
       </div>
 
       {tab === "articulos" && <ArticlesTab />}
@@ -131,7 +145,11 @@ function ArticlesTab() {
         <ul className="mt-5 grid gap-3">
           {shown.map((a) => (
             <li key={a.id}>
-              <Link href={`/biblioteca/articulo?id=${encodeId(a.id)}`} className="group block rounded-xl border border-line bg-surface p-5 transition-all hover:-translate-y-0.5 hover:border-brand hover:shadow-[0_14px_30px_-18px_rgba(1,26,59,0.5)]">
+              <Link href={`/biblioteca/articulo?id=${encodeId(a.id)}`} className="group flex gap-4 rounded-3xl border-2 border-line bg-surface p-4 shadow-card transition-all hover:-translate-y-0.5 hover:border-brand/40 active:scale-[0.99] md:p-5">
+                <span className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${topicStyle(a.topic).tile}`} aria-hidden>
+                  {topicStyle(a.topic).icon}
+                </span>
+                <span className="block min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2 text-xs">
                   <span className="rounded-md bg-brand-soft px-2 py-0.5 font-semibold text-brand">{SOURCE_INFO[a.source].name}</span>
                   <span className="text-muted">{fmt(a.publishedAt)}</span>
@@ -140,9 +158,10 @@ function ArticlesTab() {
                     <span className="text-accent-dark">{a.level}</span>
                   </span>
                 </div>
-                <h3 className="mt-2 font-display text-xl font-bold leading-snug group-hover:text-brand">{a.title}</h3>
+                <h3 className="mt-2 font-display text-xl font-semibold leading-snug group-hover:text-brand">{a.title}</h3>
                 <p className="mt-1 line-clamp-2 text-sm text-muted">{a.excerpt}</p>
                 <p className="mt-2 text-xs text-muted">{a.author} · {a.license}</p>
+              </span>
               </Link>
             </li>
           ))}

@@ -12,10 +12,10 @@ type Filter = "all" | "due" | "new" | "learned" | "missing";
 
 const NEW_PER_SESSION = 15;
 const GRADES: Array<{ grade: Grade; label: string; key: string; tone: string }> = [
-  { grade: "again", label: "Otra vez", key: "1", tone: "border-bad/50 text-bad hover:bg-bad-soft" },
-  { grade: "hard", label: "Difícil", key: "2", tone: "border-line hover:bg-warn-soft" },
-  { grade: "good", label: "Bien", key: "3", tone: "border-brand/50 text-brand hover:bg-brand-soft" },
-  { grade: "easy", label: "Fácil", key: "4", tone: "border-ok/50 text-ok hover:bg-ok-soft" },
+  { grade: "again", label: "Otra vez", key: "1", tone: "border-accent/40 bg-coral-soft text-accent-dark" },
+  { grade: "hard", label: "Difícil", key: "2", tone: "border-sun-dark/40 bg-sun-soft text-[#7a5a00]" },
+  { grade: "good", label: "Bien", key: "3", tone: "border-brand/40 bg-brand-soft text-brand" },
+  { grade: "easy", label: "Fácil", key: "4", tone: "border-mint/50 bg-ok-soft text-ok" },
 ];
 
 const isNew = (v: VocabItem) => v.repetitions === 0 && v.lapses === 0 && v.intervalDays === 0;
@@ -35,7 +35,7 @@ function Highlight({ text, term }: { text: string; term: string }) {
   return (
     <>
       {text.slice(0, i)}
-      <mark className="rounded bg-warn-soft px-0.5 font-semibold text-ink">{text.slice(i, i + term.length)}</mark>
+      <mark className="rounded bg-sun px-1 font-bold text-[#4d3700]">{text.slice(i, i + term.length)}</mark>
       {text.slice(i + term.length)}
     </>
   );
@@ -111,11 +111,10 @@ export function VocabApp() {
 
   return (
     <div>
-      <div role="tablist" aria-label="Vocabulario" className="mb-5 flex gap-1 overflow-x-auto border-b border-line">
+      <div role="tablist" aria-label="Vocabulario" className="mb-5 flex gap-2 overflow-x-auto pb-1">
         {TABS.map(([id, label]) => (
-          <button key={id} type="button" role="tab" aria-selected={tab === id} onClick={() => setTab(id)} className={`relative min-h-11 shrink-0 px-4 text-sm font-semibold ${tab === id ? "text-ink" : "text-muted hover:text-ink"}`}>
+          <button key={id} type="button" role="tab" aria-selected={tab === id} onClick={() => setTab(id)} className={`min-h-11 shrink-0 rounded-full px-5 text-sm font-extrabold transition-colors ${tab === id ? "bg-grape text-white shadow-[0_3px_0_var(--grape-dark)]" : "bg-surface text-muted ring-2 ring-line hover:text-ink"}`}>
             {label}
-            {tab === id && <span aria-hidden className="absolute inset-x-3 bottom-[-1px] h-[3px] rounded-t bg-accent" />}
           </button>
         ))}
       </div>
@@ -273,33 +272,33 @@ function ReviewTab({ items, due, learned, onSave, onGoAdd }: { items: VocabItem[
         <span className="tabular-nums">{done}/{total}</span>
       </div>
 
-      <div className="ruled min-h-[18rem] rounded-xl border border-line py-6 shadow-[0_14px_30px_-22px_rgba(1,26,59,0.5)]">
-        <p className="eyebrow leading-none text-muted">{isNew(current) ? "Palabra nueva" : "Repaso"}</p>
-        <p className="mt-3 font-display text-4xl font-bold leading-[1.15] tracking-tight">{current.term}</p>
+      <div className="min-h-[12rem] rounded-[2rem] bg-gradient-to-br from-grape to-[#4f3bd8] p-6 text-white shadow-[0_6px_0_var(--grape-dark)] md:p-8">
+        <p className="eyebrow inline-block rounded-full bg-white/20 px-3 py-1">{isNew(current) ? "Palabra nueva" : "Repaso"}</p>
+        <p className="mt-4 font-display text-5xl font-semibold leading-[1.1] md:text-6xl">{current.term}</p>
         {current.context && (
-          <p className="mt-4 font-serif text-[1.02rem] italic leading-[1.5] text-muted">
+          <p className="mt-4 text-[1.05rem] font-semibold italic leading-[1.5] text-white/85">
             “<Highlight text={current.context} term={current.term} />”
           </p>
         )}
 
         {shown ? (
-          <div className="mt-5 space-y-3 border-t border-dashed border-line pt-4 pr-2 leading-snug">
-            {current.definition ? <p className="text-[1.02rem]">{current.definition}</p> : <p className="text-sm text-muted">Sin definición todavía: complétala con IA desde «Mi banco».</p>}
+          <div className="mt-6 space-y-3 rounded-2xl bg-white p-4 leading-snug text-ink">
+            {current.definition ? <p className="text-[1.05rem] font-semibold">{current.definition}</p> : <p className="text-sm text-muted">Sin definición todavía: complétala con IA desde «Mi banco».</p>}
             {current.example && (
-              <p className="font-serif text-[1.02rem] italic text-ink/80">
+              <p className="text-[1.02rem] font-semibold italic text-ink/80">
                 <Highlight text={current.example} term={current.term} />
               </p>
             )}
             {current.collocations.length > 0 && (
               <p className="flex flex-wrap gap-1.5">
                 {current.collocations.map((c) => (
-                  <span key={c} className="rounded-md bg-brand-soft px-2 py-0.5 text-xs font-semibold text-brand">{c}</span>
+                  <span key={c} className="rounded-full bg-grape-soft px-2.5 py-1 text-xs font-bold text-grape-dark">{c}</span>
                 ))}
               </p>
             )}
             {current.translation && (
-              <p className="text-sm text-muted">
-                <span className="hand text-lg text-accent-dark">ES </span>
+              <p className="text-sm font-semibold text-muted">
+                <span className="mr-1 rounded-full bg-accent px-2 py-0.5 text-[11px] font-extrabold text-white">ES</span>
                 {current.translation}
               </p>
             )}
@@ -310,14 +309,14 @@ function ReviewTab({ items, due, learned, onSave, onGoAdd }: { items: VocabItem[
       {shown ? (
         <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
           {GRADES.map((g) => (
-            <button key={g.grade} type="button" onClick={() => answer(g.grade)} className={`flex min-h-14 flex-col items-center justify-center rounded-lg border bg-surface text-sm font-semibold transition-colors ${g.tone}`}>
+            <button key={g.grade} type="button" onClick={() => answer(g.grade)} className={`flex min-h-16 flex-col items-center justify-center rounded-2xl border-2 text-base font-extrabold transition-transform active:scale-95 ${g.tone}`}>
               {g.label}
-              <span className="text-[11px] font-normal text-muted">{previewInterval(current, g.grade)} · tecla {g.key}</span>
+              <span className="text-[11px] font-bold opacity-70">{previewInterval(current, g.grade)} · tecla {g.key}</span>
             </button>
           ))}
         </div>
       ) : (
-        <button type="button" onClick={() => setShown(true)} className="mt-4 min-h-14 w-full rounded-lg bg-brand px-5 text-sm font-semibold text-brand-ink">
+        <button type="button" onClick={() => setShown(true)} className="mt-4 min-h-14 w-full rounded-2xl bg-brand px-5 text-base font-extrabold text-brand-ink">
           Mostrar respuesta <span className="ml-1 font-normal opacity-70">(Espacio)</span>
         </button>
       )}

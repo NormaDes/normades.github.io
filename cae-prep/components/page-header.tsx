@@ -15,12 +15,12 @@ const TONES: Record<Tone, { icon: string; eyebrow: string; band: string }> = {
 export function PageHeader({ icon, tone, eyebrow, title, children }: { icon: ReactNode; tone: Tone; eyebrow: string; title: string; children?: ReactNode }) {
   const t = TONES[tone];
   return (
-    <header className="mb-8 flex items-start gap-4 md:gap-5">
-      <span className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl md:h-16 md:w-16 ${t.icon}`}>{icon}</span>
+    <header className="mb-6 flex items-start gap-3 md:mb-8 md:gap-5">
+      <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl md:h-16 md:w-16 ${t.icon}`}>{icon}</span>
       <div className="min-w-0">
         <p className={`eyebrow ${t.eyebrow}`}>{eyebrow}</p>
-        <h1 className="mt-0.5 text-3xl leading-tight md:text-4xl">{title}</h1>
-        {children && <p className="mt-2 max-w-xl font-semibold text-muted">{children}</p>}
+        <h1 className="mt-0.5 text-2xl leading-tight sm:text-3xl md:text-4xl">{title}</h1>
+        {children && <p className="mt-1.5 max-w-xl text-sm font-semibold text-muted md:mt-2 md:text-base">{children}</p>}
       </div>
     </header>
   );
