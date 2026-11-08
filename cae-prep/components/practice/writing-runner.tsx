@@ -1,5 +1,6 @@
 "use client";
 
+import { AiOff } from "@/components/ai-off";
 import Link from "next/link";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { WritingFeedback } from "@/components/practice/writing-feedback";
@@ -231,7 +232,7 @@ export function WritingRunner({ partId }: { partId: PartId }) {
           {ai === null ? (
             "Comprobando IA…"
           ) : !ai.configured ? (
-            <>La IA no está configurada (falta una clave de IA: <code>GEMINI_API_KEY</code> o <code>ANTHROPIC_API_KEY</code>): podrás escribir con los enunciados del banco, pero no obtener la corrección.</>
+            <><AiOff ai={ai} what="obtener la corrección" /> Puedes escribir igualmente con los enunciados del banco.</>
           ) : (
             <>Usos de IA restantes hoy: <strong>{ai.remainingToday}</strong> (cada corrección y cada enunciado nuevo cuenta como 1)</>
           )}
@@ -337,7 +338,7 @@ export function WritingRunner({ partId }: { partId: PartId }) {
           </button>
           {aiDisabled && status !== "evaluating" && (
             <p className="mt-2 text-xs text-muted">
-              {ai?.configured ? "Has agotado los usos de IA de hoy." : "La evaluación requiere configurar una clave de IA (GEMINI_API_KEY o ANTHROPIC_API_KEY) en el servidor."}
+              {ai?.configured ? "Has agotado los usos de IA de hoy." : ai ? <AiOff ai={ai} what="evaluar" /> : "Comprobando IA…"}
             </p>
           )}
           {!aiDisabled && words < 40 && <p className="mt-2 text-xs text-muted">Escribe al menos 40 palabras para poder evaluarlo.</p>}

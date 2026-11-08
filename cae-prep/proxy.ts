@@ -5,8 +5,8 @@ import { SUPABASE_ANON_KEY, SUPABASE_URL, isSupabaseConfigured } from "@/lib/sup
 const PUBLIC_PREFIXES = ["/login", "/registro", "/recuperar", "/auth", "/privacidad", "/aviso-legal"];
 
 /**
- * Si Supabase está configurado: refresca la sesión y obliga a iniciar sesión
- * para ver la app (las rutas /api responden 401 por sí mismas). Si no, no hace nada.
+ * Si Supabase está configurado: refresca la sesión (la app es abierta a invitados;
+ * las rutas de IA responden 401 por sí mismas). Si no, no hace nada.
  */
 export async function proxy(request: NextRequest) {
   if (!isSupabaseConfigured()) return NextResponse.next();
@@ -31,7 +31,8 @@ export async function proxy(request: NextRequest) {
   const isPublic = PUBLIC_PREFIXES.some((p) => path === p || path.startsWith(p + "/"));
   const isApi = path.startsWith("/api/");
 
-  if (!user && !isPublic && !isApi) {
+  // Por defecto la app es abierta (invitados). Con REQUIRE_LOGIN=true se obliga a iniciar sesión.
+  if (process.env.REQUIRE_LOGIN === "true" && !user && !isPublic && !isApi) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.search = path === "/" ? "" : `?next=${encodeURIComponent(path + request.nextUrl.search)}`;

@@ -1,5 +1,6 @@
 "use client";
 
+import { AiOff } from "@/components/ai-off";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Recorder, type Recording } from "@/components/practice/recorder";
@@ -182,7 +183,7 @@ export function SpeakingRunner({ partId }: { partId: PartId }) {
           </button>
         </div>
         <p className="mt-3 text-xs text-muted">
-          {ai === null ? "Comprobando IA…" : !ai.configured ? <>La IA no está configurada (falta una clave de IA: <code>GEMINI_API_KEY</code> o <code>ANTHROPIC_API_KEY</code>): puedes grabarte, pero no obtener el feedback.</> : <>Usos de IA restantes hoy: <strong>{ai.remainingToday}</strong></>}
+          {ai === null ? "Comprobando IA…" : !ai.configured ? <><AiOff ai={ai} what="obtener el feedback" /> Puedes grabarte igualmente.</> : <>Usos de IA restantes hoy: <strong>{ai.remainingToday}</strong></>}
         </p>
         {ai?.configured && (
           <input type="text" value={topic} onChange={(e) => setTopic(e.target.value)} maxLength={80} placeholder="Tema opcional" aria-label="Tema opcional" className="mt-3 h-11 w-full rounded-xl border border-line bg-surface px-3 text-sm" />
@@ -282,7 +283,7 @@ export function SpeakingRunner({ partId }: { partId: PartId }) {
             {status === "evaluating" ? "Evaluando… (puede tardar hasta 1 minuto)" : "Obtener feedback con IA"}
           </button>
           {aiDisabled && status !== "evaluating" && (
-            <p className="mt-2 text-xs text-muted">{ai?.configured ? "Has agotado los usos de IA de hoy." : "El feedback requiere configurar una clave de IA (GEMINI_API_KEY o ANTHROPIC_API_KEY) en el servidor."}</p>
+            <p className="mt-2 text-xs text-muted">{ai?.configured ? "Has agotado los usos de IA de hoy." : ai ? <AiOff ai={ai} what="recibir feedback" /> : "Comprobando IA…"}</p>
           )}
           {!aiDisabled && totalWords < 15 && <p className="mt-2 text-xs text-muted">Graba o escribe al menos 15 palabras para poder evaluarlo.</p>}
         </>

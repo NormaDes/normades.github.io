@@ -16,6 +16,8 @@ export class ApiError extends Error {
 
 export interface AiStatus {
   configured: boolean;
+  /** Invitado: la IA existe pero hace falta iniciar sesión */
+  needsLogin?: boolean;
   accessCodeRequired: boolean;
   remainingToday: number;
 }
@@ -40,10 +42,7 @@ async function postJson<T>(url: string, payload: unknown): Promise<T> {
 
   let res = await send(clientPrefs.get<string>("accessCode", ""));
   if (res.status === 401 && isSupabaseConfigured()) {
-    // Sesión caducada: recarga completa al login (limpia el estado) y de vuelta a donde estabas
-    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
-    window.location.href = `/login?next=${encodeURIComponent(window.location.pathname)}`;
-    throw new ApiError("Tu sesión ha caducado. Inicia sesión de nuevo.", "unauthorized");
+    throw new ApiError("Esta función es para usuarios con cuenta. Inicia sesión (es gratis).", "login_required");
   }
   if (res.status === 401) {
     const code = window.prompt("Introduce el código de acceso de la app:") ?? "";

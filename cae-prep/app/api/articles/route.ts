@@ -6,7 +6,7 @@ export const maxDuration = 60;
 
 /** GET /api/articles?topic=tecnologia|…|all → resúmenes de artículos reales (con atribución y licencia) */
 export async function GET(request: Request) {
-  const auth = await authorize(request);
+  const auth = await authorize(request, { guestOk: true });
   if (!auth.ok) return auth.response;
   const t = new URL(request.url).searchParams.get("topic") ?? "all";
   const topic = (TOPICS.some((x) => x.id === t) ? t : "all") as TopicId | "all";

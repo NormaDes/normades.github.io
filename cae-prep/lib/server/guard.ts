@@ -21,13 +21,15 @@ export async function currentUserId(): Promise<string | null> {
 
 /**
  * Autoriza una petición a las rutas de IA:
- *  - con Supabase configurado: hace falta haber iniciado sesión;
+ *  - con Supabase configurado: hace falta haber iniciado sesión (salvo `guestOk`);
  *  - sin Supabase: se exige APP_ACCESS_CODE si está definido.
  */
-export async function authorize(request: Request): Promise<Authorization> {
+export async function authorize(request: Request, opts: { guestOk?: boolean } = {}): Promise<Authorization> {
   if (isSupabaseConfigured()) {
     const userId = await currentUserId();
-    return userId ? { ok: true, userId } : unauthorized("Tu sesión ha caducado. Inicia sesión de nuevo.");
+    if (userId) return { ok: true, userId };
+    // Rutas sin IA (artículos, vídeos): abiertas a invitados. Las de IA exigen cuenta.
+    return opts.guestOk ? { ok: true, userId: null } : unauthorized("Esta función es para usuarios con cuenta. Inicia sesión (es gratis).");
   }
   const code = process.env.APP_ACCESS_CODE;
   if (code && request.headers.get("x-access-code") !== code) return unauthorized("Código de acceso incorrecto o ausente.");

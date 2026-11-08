@@ -1,35 +1,44 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import type { User } from "@supabase/supabase-js";
 import { getBrowserClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
+import { displayName, useUser } from "@/lib/supabase/use-user";
 
-/** Nombre del usuario y botón «Salir». No se muestra si Supabase no está configurado (modo local). */
+/** Usuario con sesión y «Salir»; para invitados, invitación a entrar. Nada si no hay Supabase (modo local). */
 export function UserChip({ variant }: { variant: "sidebar" | "topbar" }) {
   const router = useRouter();
-  const [name, setName] = useState<string | null>(null);
-  const enabled = isSupabaseConfigured();
+  const user = useUser();
 
-  useEffect(() => {
-    if (!enabled) return;
-    getBrowserClient()
-      .auth.getUser()
-      .then(({ data }: { data: { user: User | null } }) => {
-        const u = data.user;
-        if (u) setName((u.user_metadata?.display_name as string | undefined) || u.email?.split("@")[0] || "Mi cuenta");
-      });
-  }, [enabled]);
+  if (!isSupabaseConfigured() || user === undefined) return null;
 
-  if (!enabled || !name) return null;
+  if (user === null) {
+    if (variant === "topbar") {
+      return (
+        <Link href="/login" className="rounded-lg bg-brand px-3 py-1.5 text-xs font-bold text-brand-ink">
+          Entrar
+        </Link>
+      );
+    }
+    return (
+      <div className="rounded-lg border border-line bg-surface p-3">
+        <p className="text-sm font-semibold">Estás como invitado</p>
+        <p className="mt-0.5 text-xs text-muted">Con cuenta: IA, progreso en la nube y material de clase.</p>
+        <div className="mt-2.5 flex gap-2">
+          <Link href="/login" className="flex-1 rounded-md bg-brand py-2 text-center text-xs font-bold text-brand-ink">Entrar</Link>
+          <Link href="/registro" className="flex-1 rounded-md border border-line py-2 text-center text-xs font-semibold">Crear cuenta</Link>
+        </div>
+      </div>
+    );
+  }
 
+  const name = displayName(user);
   const logout = async () => {
     await getBrowserClient().auth.signOut();
-    router.replace("/login");
+    router.replace("/");
     router.refresh();
   };
-
   const initial = name.charAt(0).toUpperCase();
 
   if (variant === "topbar") {

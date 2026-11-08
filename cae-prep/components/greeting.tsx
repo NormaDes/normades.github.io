@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
-import type { User } from "@supabase/supabase-js";
-import { getBrowserClient } from "@/lib/supabase/client";
-import { isSupabaseConfigured } from "@/lib/supabase/config";
+import { useSyncExternalStore } from "react";
+import { displayName, useUser } from "@/lib/supabase/use-user";
 
 const hourNow = () => new Date().getHours();
 
@@ -14,17 +12,8 @@ export function Greeting() {
     hourNow,
     () => -1,
   );
-  const [name, setName] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!isSupabaseConfigured()) return;
-    getBrowserClient()
-      .auth.getUser()
-      .then(({ data }: { data: { user: User | null } }) => {
-        const u = data.user;
-        if (u) setName(((u.user_metadata?.display_name as string | undefined) || u.email?.split("@")[0] || "").split(" ")[0] || null);
-      });
-  }, []);
+  const user = useUser();
+  const name = user ? displayName(user).split(" ")[0] || null : null;
 
   if (hour < 0) return <p className="hand text-3xl leading-none text-white/90 md:text-4xl">&nbsp;</p>;
 

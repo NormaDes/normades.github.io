@@ -48,7 +48,7 @@ npm run build           # build de producción
 
 ## Cuentas de usuario (Supabase)
 
-Si defines `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY`, la app **exige iniciar sesión** (registro con email y contraseña, recuperación de contraseña) y guarda los intentos, errores, redacciones y ejercicios de cada usuario en Supabase, aislados por RLS. Sin esas variables la app funciona en modo local, sin cuentas.
+Si defines `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY`, la app ofrece **cuentas opcionales**: se puede usar como **invitado** (práctica con el banco, simulacros de Reading y Listening, biblioteca, vocabulario y plan; todo guardado en el dispositivo) o iniciar sesión (email y contraseña, o Google) para desbloquear la **IA** (ejercicios nuevos, corrección de Writing y Speaking, conversión de textos), el **material de clase** y el progreso en la nube. Con `REQUIRE_LOGIN=true` se vuelve obligatorio. Con cuenta se guardan los intentos, errores, redacciones y ejercicios de cada usuario en Supabase, aislados por RLS. Sin esas variables la app funciona en modo local, sin cuentas.
 
 Configuración, una sola vez:
 
@@ -56,7 +56,8 @@ Configuración, una sola vez:
 2. En *Authentication → URL Configuration*: **Site URL** = la URL de tu web (p. ej. `https://cae-prep-normades.vercel.app`) y, en **Redirect URLs**, añade `https://cae-prep-normades.vercel.app/**` (y `http://localhost:3000/**` para desarrollo). Sin esto, los enlaces de los emails de confirmación y de recuperar contraseña no funcionan.
 3. *Authentication → Providers → Email*: activo. Decide si activas **Confirm email**: activado es más seguro (cada alumno confirma su correo); desactivado es más cómodo para una clase pequeña. La app funciona con ambos.
 4. Variables en Vercel: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (tipo *Config*) y `SUPABASE_SERVICE_ROLE_KEY` (tipo *Secret*; se usa para contar los usos de IA por usuario). Después, *Redeploy*.
-5. Regístrate en la app y hazte administrador (así podrás compartir material con la clase):
+5. **Google (opcional)**: Google Cloud Console → *APIs y servicios → Credenciales → Crear ID de cliente de OAuth* (tipo *Aplicación web*), con la URI de redirección `https://TU_PROYECTO.supabase.co/auth/v1/callback`; después, en Supabase *Authentication → Providers → Google*, activa y pega *Client ID* y *Client Secret*.
+6. Regístrate en la app y hazte administrador (así podrás compartir material con la clase):
 
 ```sql
 update public.profiles set role = 'admin'

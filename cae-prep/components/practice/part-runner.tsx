@@ -1,5 +1,6 @@
 "use client";
 
+import { AiOff } from "@/components/ai-off";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { ExerciseView } from "@/components/practice/exercise-view";
@@ -199,7 +200,7 @@ export function PartRunner({ partId }: { partId: PartId }) {
           {ai === null ? (
             "Comprobando IA…"
           ) : !ai.configured ? (
-            <>La generación con IA no está configurada (falta una clave de IA: <code>GEMINI_API_KEY</code> o <code>ANTHROPIC_API_KEY</code>). Puedes practicar con el banco inicial.</>
+            <><AiOff ai={ai} what="generar ejercicios nuevos con IA" /> Mientras tanto puedes practicar con el banco.</>
           ) : (
             <>Generaciones con IA restantes hoy: <strong>{ai.remainingToday}</strong></>
           )}

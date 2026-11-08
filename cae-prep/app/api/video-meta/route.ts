@@ -27,7 +27,7 @@ async function check(id: string): Promise<Meta> {
 
 /** GET /api/video-meta?ids=a,b,c → estado de cada vídeo de YouTube (ok / invalid / unknown) y su título real */
 export async function GET(request: Request) {
-  const auth = await authorize(request);
+  const auth = await authorize(request, { guestOk: true });
   if (!auth.ok) return auth.response;
   const ids = [...new Set((new URL(request.url).searchParams.get("ids") ?? "").split(",").filter((x) => /^[\w-]{11}$/.test(x)))].slice(0, 24);
   const entries = await Promise.all(ids.map(async (id) => [id, await check(id)] as const));

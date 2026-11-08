@@ -1,5 +1,6 @@
 "use client";
 
+import { AiOff } from "@/components/ai-off";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { LessonPack } from "@/components/library/lesson-pack";
@@ -103,7 +104,7 @@ export function Converter({ source, sourceKey, words }: { source: Omit<MaterialR
         )}
         {busy && <p className="mt-3 text-xs text-muted">Esto puede tardar hasta un minuto…</p>}
         {error && <p role="alert" className="mt-3 rounded-lg bg-bad-soft p-3 text-sm text-bad">{error}</p>}
-        {ai && !ai.configured && <p className="mt-3 text-xs text-muted">La IA no está configurada en este servidor (falta una clave de IA: <code>GEMINI_API_KEY</code> o <code>ANTHROPIC_API_KEY</code>).</p>}
+        {ai && !ai.configured && <p className="mt-3 text-xs text-muted"><AiOff ai={ai} what="convertir textos en ejercicios" /></p>}
         {ai?.configured && ai.remainingToday <= 0 && <p className="mt-3 text-xs text-muted">Has agotado los usos de IA de hoy.</p>}
         {ai?.configured && ai.remainingToday > 0 && <p className="mt-3 text-xs text-muted">Usos de IA restantes hoy: <strong>{ai.remainingToday}</strong></p>}
       </section>

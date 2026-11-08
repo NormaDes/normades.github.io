@@ -1,5 +1,7 @@
 "use client";
 
+import { useUser } from "@/lib/supabase/use-user";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { MaterialCard } from "@/components/library/material-card";
@@ -294,8 +296,22 @@ function PodcastsTab({ materials, onChange }: { materials: Material[] | null; on
 
 /* ───────── Material de clase ───────── */
 function ClassTab({ materials }: { materials: Material[] | null }) {
+  const user = useUser();
+  const guest = isSupabaseConfigured() && user === null;
   if (!materials) return <div className="h-32 animate-pulse rounded-xl bg-line/60" aria-busy="true" />;
   const list = materials.filter((m) => m.visibility === "class");
+  if (!list.length && guest) {
+    return (
+      <div className="rounded-xl border border-dashed border-line bg-surface p-8 text-center">
+        <p className="font-serif text-xl font-bold">El material de clase es para alumnos con cuenta</p>
+        <p className="mx-auto mt-2 max-w-md text-sm text-muted">Inicia sesión (es gratis) para ver los audios, textos y vídeos que sube tu profesor.</p>
+        <div className="mt-4 flex justify-center gap-3">
+          <Link href="/login" className="inline-flex min-h-11 items-center rounded-lg bg-brand px-5 text-sm font-bold text-brand-ink">Entrar</Link>
+          <Link href="/registro" className="inline-flex min-h-11 items-center rounded-lg border border-line px-5 text-sm font-semibold">Crear cuenta</Link>
+        </div>
+      </div>
+    );
+  }
   if (!list.length) {
     return (
       <div className="rounded-xl border border-dashed border-line bg-surface p-8 text-center">

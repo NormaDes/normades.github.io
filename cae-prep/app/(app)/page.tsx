@@ -3,6 +3,7 @@ import { Chalkboard, TeacherNote } from "@/components/classroom";
 import { ExamCountdown } from "@/components/exam-countdown";
 import { Greeting } from "@/components/greeting";
 import { HomeStats } from "@/components/home-stats";
+import { GuestBanner } from "@/components/guest-banner";
 import { TodayPlan } from "@/components/plan/today-plan";
 import { ArrowIcon, PAPER_ICONS } from "@/components/icons";
 import { PAPERS, partsOfPaper } from "@/config/exam";
@@ -52,6 +53,7 @@ export default function Home() {
         <TeacherNote className="mt-2 md:mt-0">{tip}</TeacherNote>
       </div>
 
+      <GuestBanner />
       <TodayPlan />
 
       <h2 className="mb-3 mt-10 font-serif text-2xl font-bold">Las asignaturas del examen</h2>

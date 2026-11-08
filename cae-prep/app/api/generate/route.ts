@@ -55,8 +55,10 @@ export async function POST(request: Request) {
 /** GET /api/generate → estado (¿IA configurada? ¿cuántas generaciones quedan hoy?) */
 export async function GET() {
   const userId = await currentUserId();
+  const needsLogin = isSupabaseConfigured() && !userId;
   return json({
-    configured: aiConfigured(),
+    configured: aiConfigured() && !needsLogin,
+    needsLogin,
     accessCodeRequired: !isSupabaseConfigured() && Boolean(process.env.APP_ACCESS_CODE),
     remainingToday: await remainingToday(userId),
   });

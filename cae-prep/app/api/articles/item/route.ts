@@ -4,7 +4,7 @@ import { authorize } from "@/lib/server/guard";
 
 /** GET /api/articles/item?id=<base64url> → artículo completo (si la licencia lo permite) o solo extracto */
 export async function GET(request: Request) {
-  const auth = await authorize(request);
+  const auth = await authorize(request, { guestOk: true });
   if (!auth.ok) return auth.response;
   const code = new URL(request.url).searchParams.get("id") ?? "";
   const article = code ? await getArticle(decodeId(code)) : null;
