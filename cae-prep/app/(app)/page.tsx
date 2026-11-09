@@ -81,6 +81,14 @@ export default function Home() {
         })}
       </div>
 
+      <section className="mt-12 flex flex-wrap items-center gap-4 rounded-3xl border-2 border-sun-dark/30 bg-sun-soft p-5 shadow-[0_4px_0_rgba(217,159,0,0.35)]">
+        <div className="min-w-0 flex-1">
+          <p className="font-display text-xl font-semibold text-[#4d3700]">Englora abre pronto al público</p>
+          <p className="text-sm font-semibold text-[#6b4b00]">Apúntate a la lista de espera y recibe ventajas de los primeros inscritos.</p>
+        </div>
+        <Link href="/lista-espera" className="inline-flex min-h-12 items-center whitespace-nowrap rounded-2xl bg-ink px-5 text-sm font-extrabold text-white">Apuntarme</Link>
+      </section>
+
       <ExamPicker />
     </div>
   );

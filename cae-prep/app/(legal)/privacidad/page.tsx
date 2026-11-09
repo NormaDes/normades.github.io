@@ -58,7 +58,10 @@ export default function PrivacyPage() {
       <h2>7. Menores</h2>
       <p>El servicio está dirigido a personas de 14 años o más. Si eres menor de esa edad, necesitas el consentimiento de tu madre, padre o tutor legal.</p>
 
-      <h2>8. Cookies</h2>
+      <h2>8. Lista de espera</h2>
+      <p>Si te apuntas a la lista de espera guardamos tu email, tu nombre (si lo indicas), el examen que preparas, tu perfil (estudiante, profesor o academia) y la web desde la que llegaste. Los usamos solo para avisarte del lanzamiento y de novedades de Englora. Puedes pedir que te borremos en cualquier momento escribiendo al correo de contacto.</p>
+
+      <h2>9. Cookies</h2>
       <p>Solo usamos cookies técnicas estrictamente necesarias para mantener tu sesión. No usamos cookies de publicidad ni de seguimiento, por lo que no mostramos un banner de consentimiento.</p>
     </>
   );

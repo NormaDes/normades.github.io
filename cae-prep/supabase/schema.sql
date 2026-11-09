@@ -224,3 +224,18 @@ create policy "materials files read"   on storage.objects for select to authenti
 create policy "materials files write"  on storage.objects for insert to authenticated with check (bucket_id = 'materials' and public.is_admin());
 create policy "materials files update" on storage.objects for update to authenticated using (bucket_id = 'materials' and public.is_admin());
 create policy "materials files delete" on storage.objects for delete to authenticated using (bucket_id = 'materials' and public.is_admin());
+
+-- ─────────────────────────────────────────────────────────────
+-- Lista de espera (marketing). Solo se escribe/lee desde el servidor con la clave de servicio.
+-- ─────────────────────────────────────────────────────────────
+create table if not exists public.waitlist (
+  id          uuid primary key default gen_random_uuid(),
+  email       text not null unique,
+  name        text,
+  exam        text not null default 'c1-advanced',
+  role        text not null default 'alumno',
+  source      text,
+  consent     boolean not null default true,
+  created_at  timestamptz not null default now()
+);
+alter table public.waitlist enable row level security;   -- sin políticas: nadie la lee desde el navegador

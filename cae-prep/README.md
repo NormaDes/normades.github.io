@@ -133,6 +133,10 @@ npm test        # tests unitarios (corrección, validación, progreso)
 
 Las páginas `/privacidad` y `/aviso-legal` son **borradores**: rellena los campos resaltados (responsable, NIF, domicilio, email de contacto, regiones de los proveedores) y haz que las revise un profesional. Es obligatorio al guardar datos personales de otras personas.
 
+## Lista de espera
+
+`/lista-espera` recoge emails (tabla `waitlist`, solo accesible desde el servidor con `SUPABASE_SERVICE_ROLE_KEY`; hay que ejecutar `supabase/schema.sql`). Con campo trampa anti-bots, límite por IP y casilla de privacidad. Los administradores ven el recuento y descargan un CSV desde `/profesor`. Admite `?ref=` o `?utm_source=` para saber desde qué red llega cada alta.
+
 ## Identidad visual (actualizada)
 
 Estilo colorido y juguetón: azul del logo como color de marca, coral de acento y un color por prueba (Reading azul, Writing coral, Listening verde, Speaking naranja). Tipografías Fredoka (titulares) y Nunito (texto), iconos Phosphor, barra superior en escritorio y barra inferior en móvil, botones con relieve. Las clases antiguas de pizarra y notas adhesivas ya no existen (`components/brand-ui.tsx`).
