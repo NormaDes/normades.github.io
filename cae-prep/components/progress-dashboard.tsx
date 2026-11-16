@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowIcon } from "@/components/icons";
 import { getPart } from "@/config/exam";
+import { inExam, useExam } from "@/lib/use-exam";
 import { computeProgress, localDay, partShort, skillLabel, type DayPoint } from "@/lib/progress";
 import { repo, type Attempt } from "@/lib/storage";
 
@@ -165,7 +166,8 @@ export function ProgressDashboard() {
     };
   }, []);
 
-  const p = useMemo(() => (attempts ? computeProgress(attempts) : null), [attempts]);
+  const exam = useExam();
+  const p = useMemo(() => (attempts ? computeProgress(attempts.filter((a) => inExam(a, exam)), new Date(), exam) : null), [attempts, exam]);
 
   if (!p) {
     return (
@@ -196,7 +198,7 @@ export function ProgressDashboard() {
   ];
 
   const weakest = p.parts.length > 1 ? [...p.parts].sort((a, b) => a.accuracy - b.accuracy)[0] : null;
-  const sug = getPart(p.suggestion.partId);
+  const sug = getPart(p.suggestion.partId, exam);
 
   return (
     <div className="space-y-5">
@@ -229,8 +231,8 @@ export function ProgressDashboard() {
             {p.parts.map((s) => (
               <BarRow
                 key={s.partId}
-                label={partShort(s.partId)}
-                sub={getPart(s.partId).name}
+                label={partShort(s.partId, exam)}
+                sub={getPart(s.partId, exam).name}
                 value={s.accuracy}
                 detail={`${s.attempts} ${s.attempts === 1 ? "intento" : "intentos"}${weakest?.partId === s.partId ? " · tu parte más floja" : ""}`}
                 mark

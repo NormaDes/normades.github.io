@@ -1,4 +1,4 @@
-import type { PartId } from "@/config/exam";
+import type { ExamId, PartId } from "@/config/exam";
 import type { Exercise } from "@/lib/schemas";
 import type { SpeakingSubmission } from "@/lib/speaking";
 import type { WritingSubmission } from "@/lib/writing";
@@ -22,6 +22,8 @@ export interface Attempt {
   durationSec: number;
   timed: boolean;
   details: AttemptDetail[];
+  /** Examen (si falta, C1 Advanced) */
+  exam?: ExamId;
 }
 
 /** Pregunta fallada, guardada para el cuaderno de errores */
@@ -78,6 +80,7 @@ export interface Mistake {
   expected: string;
   createdAt: string;
   resolved: boolean;
+  exam?: ExamId;
 }
 
 /**

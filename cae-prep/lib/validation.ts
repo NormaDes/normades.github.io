@@ -1,4 +1,4 @@
-import { KWT_RULES, getPart, type PartId } from "@/config/exam";
+import { DEFAULT_EXAM, getPart, kwtRange, type ExamId, type PartId } from "@/config/exam";
 import { containsWholeWord, countWords } from "@/lib/checking";
 import { letterOf, schemaForPart, type ExerciseContent } from "@/lib/schemas";
 
@@ -31,10 +31,11 @@ function checkNumbering(ns: number[], count: number, problems: string[]) {
 
 const isOneWord = (s: string) => /^[\p{L}][\p{L}'-]*$/u.test(s.trim());
 
-export function validateContent(partId: PartId, data: unknown): string[] {
+export function validateContent(partId: PartId, data: unknown, exam: ExamId = DEFAULT_EXAM): string[] {
   const problems: string[] = [];
-  const count = getPart(partId).questionCount;
-  const parsed = schemaForPart(partId).safeParse(data);
+  const count = getPart(partId, exam).questionCount;
+  const kwt = kwtRange(exam);
+  const parsed = schemaForPart(partId, exam).safeParse(data);
   if (!parsed.success) {
     return parsed.error.issues.slice(0, 8).map((i) => `${i.path.join(".")}: ${i.message}`);
   }
@@ -63,7 +64,7 @@ export function validateContent(partId: PartId, data: unknown): string[] {
     }
     case "r6": {
       const d = content.data;
-      const n = getPart(partId).choices ?? 4;
+      const n = getPart(partId, exam).choices ?? 4;
       checkNumbering(d.questions.map((q) => q.n), count, problems);
       d.texts.forEach((t, i) => {
         if (t.label !== letterOf(i)) problems.push(`El texto ${i + 1} debe llamarse "${letterOf(i)}".`);
@@ -73,7 +74,7 @@ export function validateContent(partId: PartId, data: unknown): string[] {
     }
     case "r7": {
       const d = content.data;
-      const n = getPart(partId).choices ?? 7;
+      const n = getPart(partId, exam).choices ?? 7;
       checkMarkers(d.text, count, problems);
       checkNumbering(d.gaps.map((g) => g.n), count, problems);
       d.paragraphs.forEach((p, i) => {
@@ -86,7 +87,7 @@ export function validateContent(partId: PartId, data: unknown): string[] {
     }
     case "r8": {
       const d = content.data;
-      const n = getPart(partId).choices ?? 5;
+      const n = getPart(partId, exam).choices ?? 5;
       checkNumbering(d.questions.map((q) => q.n), count, problems);
       d.sections.forEach((s, i) => {
         if (s.label !== letterOf(i)) problems.push(`La sección ${i + 1} debe llamarse "${letterOf(i)}".`);
@@ -129,7 +130,7 @@ export function validateContent(partId: PartId, data: unknown): string[] {
     }
     case "l4": {
       const d = content.data;
-      const optionCount = getPart(partId).choices ?? 8;
+      const optionCount = getPart(partId, exam).choices ?? 8;
       checkNumbering(d.questions.map((q) => q.n), count, problems);
       const perTask = count / 2;
       for (const task of [1, 2]) {
@@ -194,8 +195,8 @@ export function validateContent(partId: PartId, data: unknown): string[] {
         const kw = it.keyword.toLowerCase();
         for (const a of it.answers) {
           const words = countWords(a);
-          if (words < KWT_RULES.minWords || words > KWT_RULES.maxWords) {
-            problems.push(`Ítem ${it.n}: "${a}" tiene ${words} palabras (debe tener entre ${KWT_RULES.minWords} y ${KWT_RULES.maxWords}, contando la keyword).`);
+          if (words < kwt.min || words > kwt.max) {
+            problems.push(`Ítem ${it.n}: "${a}" tiene ${words} palabras (debe tener entre ${kwt.min} y ${kwt.max}, contando la keyword).`);
           }
           if (!containsWholeWord(a, kw)) {
             problems.push(`Ítem ${it.n}: "${a}" no contiene la keyword "${it.keyword}" sin cambiar.`);

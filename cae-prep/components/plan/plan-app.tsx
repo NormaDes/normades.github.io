@@ -2,6 +2,9 @@
 
 import Link from "next/link";
 import { CalendarIcon } from "@/components/icons";
+import { ExamSoon } from "@/components/exam-soon";
+import { DEFAULT_EXAM } from "@/config/exam";
+import { useExam } from "@/lib/use-exam";
 import { PageHeader } from "@/components/page-header";
 import { HeroCard } from "@/components/brand-ui";
 import { usePlan } from "@/components/plan/use-plan";
@@ -12,8 +15,17 @@ const KIND_TAG: Record<PlanTask["kind"], string> = { practice: "Práctica", voca
 const fmtDay = (d: string) => new Date(`${d}T12:00:00`).toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "short" });
 
 export function PlanApp() {
+  const exam = useExam();
   const { settings, today, plan, isDone, toggle } = usePlan(14);
   if (!today) return null;
+  if (exam !== DEFAULT_EXAM) {
+    return (
+      <div className="mx-auto max-w-3xl">
+        <PageHeader icon={<CalendarIcon width={32} height={32} weight="fill" />} tone="grape" eyebrow="Horario" title="Tu plan de estudio" />
+        <ExamSoon exam={exam} what="El plan de estudio" />
+      </div>
+    );
+  }
 
   const toExam = settings.examDate ? daysBetween(today, settings.examDate) : null;
   const first = plan?.[0];

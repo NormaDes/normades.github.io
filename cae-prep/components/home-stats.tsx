@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ArrowIcon, BoltIcon, FlameIcon, StarIcon, TrophyIcon } from "@/components/icons";
 import { getPart } from "@/config/exam";
+import { inExam, useExam } from "@/lib/use-exam";
 import { computeProgress } from "@/lib/progress";
 import { repo, type Attempt } from "@/lib/storage";
 
@@ -18,7 +19,8 @@ export function HomeStats() {
     };
   }, []);
 
-  const p = attempts ? computeProgress(attempts) : null;
+  const exam = useExam();
+  const p = attempts ? computeProgress(attempts.filter((a) => inExam(a, exam)), new Date(), exam) : null;
   const streak = p?.streak ?? 0;
   const today = p?.heat.at(-1)?.count ?? 0;
 
@@ -30,7 +32,7 @@ export function HomeStats() {
   ];
 
   const s = p?.suggestion ?? null;
-  const part = s ? getPart(s.partId) : null;
+  const part = s ? getPart(s.partId, exam) : null;
 
   return (
     <div>
@@ -53,7 +55,7 @@ export function HomeStats() {
 
       {s && part && (
         <Link
-          href={`/practica/${s.partId}`}
+          href={`/practica/${s.partId}${exam === "c1-advanced" ? "" : `?examen=${exam}`}`}
           className="group mt-4 flex items-center gap-4 rounded-3xl border-2 border-line bg-surface p-4 shadow-card transition-transform hover:-translate-y-0.5"
         >
           <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-accent text-white shadow-[0_4px_0_var(--accent-dark)]">

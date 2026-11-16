@@ -1,4 +1,4 @@
-import { PARTS, getPart, type PartId } from "@/config/exam";
+import { DEFAULT_EXAM, getPart, partsOf, type ExamId, type PartId } from "@/config/exam";
 import type { Attempt } from "@/lib/storage/types";
 
 /** Día local en formato YYYY-MM-DD */
@@ -80,7 +80,7 @@ export function bestStreak(days: Set<string>): number {
 }
 
 /** Qué practicar hoy: la parte más floja (≥2 intentos) o, si no, la primera sin tocar */
-export function suggestNext(attempts: Attempt[]): Suggestion {
+export function suggestNext(attempts: Attempt[], exam: ExamId = DEFAULT_EXAM): Suggestion {
   const byPart = new Map<PartId, { ok: number; total: number; n: number }>();
   for (const a of attempts) {
     const cur = byPart.get(a.partId) ?? { ok: 0, total: 0, n: 0 };
@@ -93,19 +93,19 @@ export function suggestNext(attempts: Attempt[]): Suggestion {
   if (weak && weak.acc < 0.85) {
     return { partId: weak.id, reason: `Tu acierto aquí es del ${Math.round(weak.acc * 100)} %: es donde más puedes subir.` };
   }
-  const untouched = PARTS.find((p) => !byPart.has(p.id));
+  const untouched = partsOf(exam).find((p) => !byPart.has(p.id));
   if (untouched && attempts.length) return { partId: untouched.id, reason: "Aún no has practicado esta parte del examen." };
   return { partId: "r1", reason: "Un buen punto de partida: vocabulario y colocaciones en contexto." };
 }
 
-export function computeProgress(attempts: Attempt[], now: Date = new Date()): Progress {
+export function computeProgress(attempts: Attempt[], now: Date = new Date(), exam: ExamId = DEFAULT_EXAM): Progress {
   const days = new Set(attempts.map((a) => localDay(a.createdAt)));
   const correct = attempts.reduce((s, a) => s + a.correctCount, 0);
   const total = attempts.reduce((s, a) => s + a.total, 0);
 
   // Por parte (en el orden del examen)
   const parts: PartStat[] = [];
-  for (const p of PARTS) {
+  for (const p of partsOf(exam)) {
     const list = attempts.filter((a) => a.partId === p.id);
     if (!list.length) continue;
     const c = list.reduce((s, a) => s + a.correctCount, 0);
@@ -161,13 +161,13 @@ export function computeProgress(attempts: Attempt[], now: Date = new Date()): Pr
     daily,
     skills,
     heat,
-    suggestion: suggestNext(attempts),
+    suggestion: suggestNext(attempts, exam),
   };
 }
 
 /** Etiqueta corta de una parte: «Reading 1», «Writing 2»… */
-export function partShort(id: PartId): string {
-  const p = getPart(id);
+export function partShort(id: PartId, exam: ExamId = DEFAULT_EXAM): string {
+  const p = getPart(id, exam);
   const paper = { reading: "Reading", writing: "Writing", listening: "Listening", speaking: "Speaking" }[p.paper];
   return `${paper} ${p.number}`;
 }

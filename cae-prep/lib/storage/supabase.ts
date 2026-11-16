@@ -1,4 +1,4 @@
-import type { PartId } from "@/config/exam";
+import { DEFAULT_EXAM, type ExamId, type PartId } from "@/config/exam";
 import type { Exercise } from "@/lib/schemas";
 import type { SpeakingSubmission } from "@/lib/speaking";
 import { getBrowserClient } from "@/lib/supabase/client";
@@ -18,6 +18,7 @@ interface AttemptRow {
   timed: boolean;
   details: Attempt["details"];
   created_at: string;
+  exam?: ExamId | null;
 }
 
 interface MistakeRow {
@@ -30,6 +31,7 @@ interface MistakeRow {
   expected: string | null;
   resolved: boolean;
   created_at: string;
+  exam?: ExamId | null;
 }
 
 interface VocabRow {
@@ -109,6 +111,7 @@ export class SupabaseRepository implements Repository {
           timed: a.timed,
           details: a.details,
           created_at: a.createdAt,
+          ...(a.exam && a.exam !== DEFAULT_EXAM ? { exam: a.exam } : {}),
         }),
       () => this.fallback.saveAttempt(a),
     );
@@ -137,6 +140,7 @@ export class SupabaseRepository implements Repository {
       durationSec: r.duration_sec,
       timed: r.timed,
       details: r.details ?? [],
+      exam: r.exam ?? undefined,
     }));
   }
 
@@ -155,6 +159,7 @@ export class SupabaseRepository implements Repository {
             expected: m.expected,
             resolved: m.resolved,
             created_at: m.createdAt,
+            ...(m.exam && m.exam !== DEFAULT_EXAM ? { exam: m.exam } : {}),
           })),
         ),
       () => this.fallback.addMistakes(list),
@@ -177,6 +182,7 @@ export class SupabaseRepository implements Repository {
       expected: r.expected ?? "",
       createdAt: r.created_at,
       resolved: r.resolved,
+      exam: r.exam ?? undefined,
     }));
   }
 

@@ -32,7 +32,7 @@ test("keyword: coincidencia de palabra completa, sin flexionar", () => {
 test("banco inicial: todos los ejercicios son válidos y se corrigen a sí mismos", () => {
   assert.ok(SEED_EXERCISES.length >= 29);
   for (const ex of SEED_EXERCISES) {
-    assert.deepEqual(validateContent(ex.partId, ex.data), [], ex.id);
+    assert.deepEqual(validateContent(ex.partId, ex.data, ex.exam), [], ex.id);
     if (isWritingExercise(ex) || isSpeakingExercise(ex)) continue;
     const answers: Record<number, string> = {};
     if ("questions" in ex.data && ex.partId !== "l4" && ex.partId !== "l1") ex.data.questions.forEach((q) => (answers[q.n] = String((q as { correct: number }).correct)));

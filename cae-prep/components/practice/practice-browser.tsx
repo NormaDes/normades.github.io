@@ -4,15 +4,18 @@ import Link from "next/link";
 import { useState } from "react";
 import { ClockIcon, PAPER_ICONS } from "@/components/icons";
 import { PartBadge } from "@/components/practice/part-badge";
-import { PAPERS, partsOfPaper, type PaperId } from "@/config/exam";
+import { DEFAULT_EXAM, EXAMS, papersOf, partsOfPaper, type ExamId, type PaperId } from "@/config/exam";
 import { PAPER_THEME } from "@/lib/paper-theme";
 import { isImplemented } from "@/lib/schemas";
 import { useQueryParam } from "@/lib/use-query-param";
+import { setExam, useExam } from "@/lib/use-exam";
 
 const SHORT: Record<PaperId, string> = { reading: "Reading", writing: "Writing", listening: "Listening", speaking: "Speaking" };
 
 /** Selector de pruebas (una a la vez) y lista de sus partes como tarjetas grandes. */
 export function PracticeBrowser() {
+  const exam = useExam();
+  const PAPERS = papersOf(exam);
   const fromUrl = useQueryParam("prueba");
   const [picked, setPicked] = useState<PaperId | null>(null);
   const active = (picked ?? (PAPERS.some((p) => p.id === fromUrl) ? (fromUrl as PaperId) : "reading")) as PaperId;
@@ -22,6 +25,15 @@ export function PracticeBrowser() {
 
   return (
     <div>
+      <div role="group" aria-label="Examen" className="mb-4 flex flex-wrap items-center gap-2">
+        <span className="text-sm font-bold text-muted">Examen:</span>
+        {(Object.keys(EXAMS) as ExamId[]).map((id) => (
+          <button key={id} type="button" aria-pressed={exam === id} onClick={() => setExam(id)} className={`min-h-11 rounded-full px-5 text-sm font-extrabold ${exam === id ? "bg-brand text-brand-ink" : "bg-surface text-muted ring-2 ring-line hover:text-ink"}`}>
+            {EXAMS[id].name}
+          </button>
+        ))}
+      </div>
+
       <div role="tablist" aria-label="Prueba del examen" className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
         {PAPERS.map((p) => {
           const th = PAPER_THEME[p.id];
@@ -44,7 +56,7 @@ export function PracticeBrowser() {
               </span>
               <span className="min-w-0">
                 <span className="block truncate text-base">{SHORT[p.id]}</span>
-                <span className="block text-[11px] font-bold opacity-70">{partsOfPaper(p.id).length} partes</span>
+                <span className="block text-[11px] font-bold opacity-70">{partsOfPaper(p.id, exam).length} partes</span>
               </span>
             </button>
           );
@@ -64,8 +76,9 @@ export function PracticeBrowser() {
         </div>
 
         <ul className="mt-4 grid gap-3 md:grid-cols-2">
-          {partsOfPaper(active).map((p) => {
-            const ready = isImplemented(p.id);
+          {partsOfPaper(active, exam).map((p) => {
+            const ready = isImplemented(p.id, exam);
+            const href = `/practica/${p.id}${exam === DEFAULT_EXAM ? "" : `?examen=${exam}`}`;
             const inner = (
               <>
                 <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl font-display text-2xl font-semibold ${t.soft} ${t.text}`}>{p.number}</span>
@@ -76,13 +89,13 @@ export function PracticeBrowser() {
                     {p.marksPerQuestion > 0 && p.questionCount > 1 ? `${p.questionCount} preguntas · ` : ""}~{p.suggestedMinutes} min
                   </span>
                 </span>
-                {ready ? <PartBadge partId={p.id} /> : <span className="eyebrow shrink-0 text-muted">Pronto</span>}
+                {ready ? <PartBadge partId={p.id} exam={exam} /> : <span className="eyebrow shrink-0 text-muted">Pronto</span>}
               </>
             );
             return (
               <li key={p.id}>
                 {ready ? (
-                  <Link href={`/practica/${p.id}`} className="flex h-full items-start gap-4 rounded-3xl border-2 border-line bg-surface p-4 shadow-card transition-all hover:-translate-y-0.5 hover:border-brand/40 active:scale-[0.99]">
+                  <Link href={href} className="flex h-full items-start gap-4 rounded-3xl border-2 border-line bg-surface p-4 shadow-card transition-all hover:-translate-y-0.5 hover:border-brand/40 active:scale-[0.99]">
                     {inner}
                   </Link>
                 ) : (

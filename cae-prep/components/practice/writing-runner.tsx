@@ -6,7 +6,7 @@ import { AiOff } from "@/components/ai-off";
 import Link from "next/link";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { WritingFeedback } from "@/components/practice/writing-feedback";
-import { getPart, partLabel, type PartId } from "@/config/exam";
+import { DEFAULT_EXAM, getPart, partLabel, type ExamId, type PartId } from "@/config/exam";
 import { ApiError, fetchAiStatus, requestEvaluation, requestExercise, type AiStatus } from "@/lib/client/api";
 import { bankFor, countUnseen, pickFromBank } from "@/lib/exercises/bank";
 import { getSessionExercise } from "@/lib/session-exercises";
@@ -31,8 +31,8 @@ const fmt = (s: number) => {
   return `${sign}${String(Math.floor(abs / 60)).padStart(2, "0")}:${String(abs % 60).padStart(2, "0")}`;
 };
 
-export function WritingRunner({ partId }: { partId: PartId }) {
-  const part = getPart(partId);
+export function WritingRunner({ partId, exam = DEFAULT_EXAM }: { partId: PartId; exam?: ExamId }) {
+  const part = getPart(partId, exam);
   const theme = PAPER_THEME[part.paper];
   const PaperIcon = PAPER_ICONS[part.paper];
   const range = part.wordRange ?? { min: 220, max: 260 };
@@ -60,11 +60,11 @@ export function WritingRunner({ partId }: { partId: PartId }) {
   useEffect(() => {
     let cancelled = false;
     fetchAiStatus().then((s) => !cancelled && setAi(s));
-    countUnseen(repo, partId).then((i) => !cancelled && setBankInfo(i));
+    countUnseen(repo, partId, exam).then((i) => !cancelled && setBankInfo(i));
     return () => {
       cancelled = true;
     };
-  }, [partId]);
+  }, [partId, exam]);
 
   useEffect(() => {
     if (status !== "doing") return;
@@ -95,7 +95,7 @@ export function WritingRunner({ partId }: { partId: PartId }) {
     if (session && session.partId === partId) {
       void Promise.resolve().then(() => !cancelled && begin(session as WritingExercise));
     } else {
-      bankFor(repo, partId).then((all) => {
+      bankFor(repo, partId, exam).then((all) => {
         const ex = all.find((e) => e.id === wanted);
         if (ex && !cancelled) begin(ex as WritingExercise);
       });
@@ -104,13 +104,13 @@ export function WritingRunner({ partId }: { partId: PartId }) {
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [partId]);
+  }, [partId, exam]);
 
   const fromBank = async () => {
     setError(null);
     setNotice(null);
     setStatus("loading");
-    const pick = await pickFromBank(repo, partId);
+    const pick = await pickFromBank(repo, partId, exam);
     if (!pick) {
       setStatus("idle");
       setError("No hay enunciados en el banco para esta parte. Genera uno con IA.");
@@ -128,7 +128,7 @@ export function WritingRunner({ partId }: { partId: PartId }) {
       const { exercise: ex, remainingToday } = await requestExercise(partId, topic.trim() || undefined);
       await repo.saveExercise(ex);
       setAi((p) => (p ? { ...p, remainingToday } : p));
-      countUnseen(repo, partId).then(setBankInfo);
+      countUnseen(repo, partId, exam).then(setBankInfo);
       begin(ex as WritingExercise);
     } catch (e) {
       setStatus("idle");
@@ -143,7 +143,7 @@ export function WritingRunner({ partId }: { partId: PartId }) {
   };
 
   const words = countTextWords(text);
-  const aiDisabled = !ai?.configured || (ai?.remainingToday ?? 0) <= 0;
+  const aiDisabled = exam !== DEFAULT_EXAM || !ai?.configured || (ai?.remainingToday ?? 0) <= 0;
   const remaining = totalSeconds - elapsed;
 
   const evaluate = async () => {
@@ -206,7 +206,7 @@ export function WritingRunner({ partId }: { partId: PartId }) {
             <PaperIcon width={30} height={30} weight="fill" />
           </span>
           <div className="min-w-0">
-            <p className={`eyebrow ${theme.text}`}>{partLabel(partId)}</p>
+            <p className={`eyebrow ${theme.text}`}>{partLabel(partId, exam)}</p>
             <h1 className="mt-0.5 text-3xl leading-tight">{part.name}</h1>
             <p className="mt-1.5 text-sm font-semibold text-muted">{part.description}</p>
           </div>

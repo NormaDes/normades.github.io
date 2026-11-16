@@ -3,21 +3,22 @@ import { notFound } from "next/navigation";
 import { PartRunner } from "@/components/practice/part-runner";
 import { SpeakingRunner } from "@/components/practice/speaking-runner";
 import { WritingRunner } from "@/components/practice/writing-runner";
-import { getPart, isPartId } from "@/config/exam";
+import { EXAMS, examOrDefault, getPart, hasPart, isPartId } from "@/config/exam";
 import { isImplemented } from "@/lib/schemas";
 
-export async function generateMetadata({ params }: PageProps<"/practica/[partId]">): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: PageProps<"/practica/[partId]">): Promise<Metadata> {
   const { partId } = await params;
-  if (!isPartId(partId)) return { title: "Práctica" };
-  const p = getPart(partId);
-  return { title: `${p.name} · Práctica` };
+  const exam = examOrDefault((await searchParams).examen);
+  if (!isPartId(partId) || !hasPart(partId, exam)) return { title: "Práctica" };
+  return { title: `${getPart(partId, exam).name} · ${EXAMS[exam].name}` };
 }
 
-export default async function PracticePartPage({ params }: PageProps<"/practica/[partId]">) {
+export default async function PracticePartPage({ params, searchParams }: PageProps<"/practica/[partId]">) {
   const { partId } = await params;
-  if (!isPartId(partId) || !isImplemented(partId)) notFound();
-  const paper = getPart(partId).paper;
-  if (paper === "writing") return <WritingRunner partId={partId} />;
+  const exam = examOrDefault((await searchParams).examen);
+  if (!isPartId(partId) || !hasPart(partId, exam) || !isImplemented(partId, exam)) notFound();
+  const paper = getPart(partId, exam).paper;
+  if (paper === "writing") return <WritingRunner partId={partId} exam={exam} />;
   if (paper === "speaking") return <SpeakingRunner partId={partId} />;
-  return <PartRunner partId={partId} />;
+  return <PartRunner partId={partId} exam={exam} />;
 }

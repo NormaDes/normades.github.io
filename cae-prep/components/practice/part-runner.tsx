@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { ExerciseView } from "@/components/practice/exercise-view";
 import { ListeningView } from "@/components/practice/listening-view";
-import { getPart, partLabel, type PartId } from "@/config/exam";
+import { DEFAULT_EXAM, getPart, partLabel, type ExamId, type PartId } from "@/config/exam";
 import { checkExercise, type ExerciseResult, type UserAnswers } from "@/lib/checking";
 import { ApiError, fetchAiStatus, requestExercise, type AiStatus } from "@/lib/client/api";
 import { bankFor, countUnseen, pickFromBank } from "@/lib/exercises/bank";
@@ -24,8 +24,8 @@ const fmt = (s: number) => {
   return `${sign}${String(Math.floor(abs / 60)).padStart(2, "0")}:${String(abs % 60).padStart(2, "0")}`;
 };
 
-export function PartRunner({ partId }: { partId: PartId }) {
-  const part = getPart(partId);
+export function PartRunner({ partId, exam = DEFAULT_EXAM }: { partId: PartId; exam?: ExamId }) {
+  const part = getPart(partId, exam);
   const totalSeconds = part.suggestedMinutes * 60;
 
   const [status, setStatus] = useState<Status>("idle");
@@ -47,16 +47,16 @@ export function PartRunner({ partId }: { partId: PartId }) {
   const startedAt = useRef(0);
   const submitted = useRef(false);
 
-  const refreshBank = useCallback(async () => setBankInfo(await countUnseen(repo, partId)), [partId]);
+  const refreshBank = useCallback(async () => setBankInfo(await countUnseen(repo, partId, exam)), [partId, exam]);
 
   useEffect(() => {
     let cancelled = false;
     fetchAiStatus().then((s) => !cancelled && setAi(s));
-    countUnseen(repo, partId).then((info) => !cancelled && setBankInfo(info));
+    countUnseen(repo, partId, exam).then((info) => !cancelled && setBankInfo(info));
     return () => {
       cancelled = true;
     };
-  }, [partId]);
+  }, [partId, exam]);
 
   // Cronómetro
   useEffect(() => {
@@ -88,20 +88,20 @@ export function PartRunner({ partId }: { partId: PartId }) {
         cancelled = true;
       };
     }
-    bankFor(repo, partId).then((all) => {
+    bankFor(repo, partId, exam).then((all) => {
       const ex = all.find((e) => e.id === wanted);
       if (ex && !cancelled) begin(ex as AutoGradedExercise);
     });
     return () => {
       cancelled = true;
     };
-  }, [partId]);
+  }, [partId, exam]);
 
   const fromBank = async () => {
     setError(null);
     setNotice(null);
     setStatus("loading");
-    const pick = await pickFromBank(repo, partId);
+    const pick = await pickFromBank(repo, partId, exam);
     if (!pick) {
       setStatus("idle");
       setError("No hay ejercicios en el banco para esta parte. Genera uno con IA.");
@@ -137,9 +137,9 @@ export function PartRunner({ partId }: { partId: PartId }) {
     setStatus("review");
     window.scrollTo({ top: 0 });
 
-    await recordAutoGraded(repo, { exerciseId: exercise.id, partId, result: res, durationSec: duration, timed: timerOn });
+    await recordAutoGraded(repo, { exerciseId: exercise.id, partId, result: res, durationSec: duration, timed: timerOn, exam });
     refreshBank();
-  }, [exercise, answers, partId, timerOn, refreshBank]);
+  }, [exercise, answers, partId, timerOn, refreshBank, exam]);
 
   // Fin de tiempo: corrige automáticamente
   const remaining = totalSeconds - elapsed;
@@ -150,7 +150,7 @@ export function PartRunner({ partId }: { partId: PartId }) {
   const theme = PAPER_THEME[part.paper];
   const PaperIcon = PAPER_ICONS[part.paper];
   const answeredCount = Object.values(answers).filter((v) => v !== undefined && v.trim() !== "").length;
-  const aiDisabled = !ai?.configured || (ai?.remainingToday ?? 0) <= 0;
+  const aiDisabled = exam !== DEFAULT_EXAM || !ai?.configured || (ai?.remainingToday ?? 0) <= 0;
 
   // ───────────── Pantalla de inicio ─────────────
   if (status === "idle" || status === "loading") {
@@ -162,7 +162,7 @@ export function PartRunner({ partId }: { partId: PartId }) {
             <PaperIcon width={30} height={30} weight="fill" />
           </span>
           <div className="min-w-0">
-            <p className={`eyebrow ${theme.text}`}>{partLabel(partId)}</p>
+            <p className={`eyebrow ${theme.text}`}>{partLabel(partId, exam)}</p>
             <h1 className="mt-0.5 text-3xl leading-tight">{part.name}</h1>
             <p className="mt-1.5 text-sm font-semibold text-muted">{part.description}</p>
           </div>
@@ -211,7 +211,7 @@ export function PartRunner({ partId }: { partId: PartId }) {
           {ai === null ? (
             "Comprobando IA…"
           ) : !ai.configured ? (
-            <><AiOff ai={ai} what="generar ejercicios nuevos con IA" /> Mientras tanto puedes practicar con el banco.</>
+            <>{exam !== DEFAULT_EXAM ? "La IA para este examen llegará más adelante. Practica con el banco de ejercicios." : <><AiOff ai={ai} what="generar ejercicios nuevos con IA" /> Mientras tanto puedes practicar con el banco.</>}</>
           ) : (
             <>Generaciones con IA restantes hoy: <strong>{ai.remainingToday}</strong></>
           )}

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { getPart, type PartId } from "@/config/exam";
+import { DEFAULT_EXAM, getPart, type ExamId, type PartId } from "@/config/exam";
 
 /**
  * Esquemas zod del contenido de cada ejercicio. El nº de preguntas (y de textos/párrafos/secciones)
@@ -354,6 +354,8 @@ export type Exercise = ExerciseContent & {
   /** true = texto de práctica generado (no es un artículo real). false = basado en un texto real (ver `origin`) */
   isGeneratedText: boolean;
   origin?: ExerciseOrigin;
+  /** Examen al que pertenece (si falta, C1 Advanced) */
+  exam?: ExamId;
 };
 
 /** Ejercicios que se corrigen automáticamente (Reading y Listening) */
@@ -375,12 +377,15 @@ export const IMPLEMENTED_PARTS: PartId[] = [
   "s1", "s2", "s3", "s4",
 ];
 
-export function isImplemented(id: PartId): boolean {
-  return IMPLEMENTED_PARTS.includes(id);
+/** B2 First: partes con ejercicios (el resto aparece como «Pronto») */
+export const IMPLEMENTED_PARTS_B2: PartId[] = ["r1", "r2", "r3", "r4", "r5", "r7", "r8", "w1", "w2"];
+
+export function isImplemented(id: PartId, exam: ExamId = DEFAULT_EXAM): boolean {
+  return (exam === "b2-first" ? IMPLEMENTED_PARTS_B2 : IMPLEMENTED_PARTS).includes(id);
 }
 
-export function schemaForPart(partId: PartId) {
-  const part = getPart(partId);
+export function schemaForPart(partId: PartId, exam: ExamId = DEFAULT_EXAM) {
+  const part = getPart(partId, exam);
   const count = part.questionCount;
   const choices = part.choices ?? 0;
   switch (partId) {

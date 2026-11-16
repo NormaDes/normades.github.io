@@ -1,22 +1,14 @@
 import Link from "next/link";
 import { HeroCard, TipBubble } from "@/components/brand-ui";
+import { ExamPapers } from "@/components/exam-papers";
 import { ExamPicker } from "@/components/exam-picker";
 import { Greeting } from "@/components/greeting";
 import { GuestBanner } from "@/components/guest-banner";
 import { HeroStickers } from "@/components/hero-stickers";
 import { HeroPanel } from "@/components/hero-panel";
 import { HomeStats } from "@/components/home-stats";
-import { ArrowIcon, PAPER_ICONS } from "@/components/icons";
-import { PAPERS, partsOfPaper } from "@/config/exam";
-import { PAPER_THEME } from "@/lib/paper-theme";
+import { ArrowIcon } from "@/components/icons";
 import { tipOfTheDay } from "@/lib/tips";
-
-const PAPER_BLURB: Record<string, string> = {
-  reading: "Textos, huecos y transformaciones, con la explicación de cada opción.",
-  writing: "Essay, carta, informe o reseña, corregidos con los 4 criterios oficiales.",
-  listening: "Audios con solo 2 reproducciones, como en el examen.",
-  speaking: "Graba tu voz y recibe feedback de gramática, vocabulario y fluidez.",
-};
 
 export default function Home() {
   const tip = tipOfTheDay();
@@ -58,28 +50,7 @@ export default function Home() {
         <TipBubble>{tip}</TipBubble>
       </div>
 
-      <h2 className="mb-4 mt-12 text-2xl md:text-3xl">Las pruebas del examen</h2>
-      <div className="grid gap-4 sm:grid-cols-2">
-        {PAPERS.map((paper) => {
-          const Icon = PAPER_ICONS[paper.id];
-          const t = PAPER_THEME[paper.id];
-          const parts = partsOfPaper(paper.id).length;
-          return (
-            <Link key={paper.id} href={`/practica?prueba=${paper.id}`} className={`group flex gap-4 rounded-3xl border-2 ${t.border} ${t.soft} p-5 transition-transform hover:-translate-y-1`}>
-              <span className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${t.solid} ${t.lift}`}>
-                <Icon width={30} height={30} weight="fill" />
-              </span>
-              <div className="min-w-0">
-                <p className="font-display text-xl font-semibold leading-tight">{paper.name}</p>
-                <p className={`eyebrow mt-1 ${t.text}`}>
-                  {parts} partes · {paper.durationMinutes} min
-                </p>
-                <p className="mt-2 text-sm font-semibold leading-relaxed text-muted">{PAPER_BLURB[paper.id]}</p>
-              </div>
-            </Link>
-          );
-        })}
-      </div>
+      <ExamPapers />
 
       <section className="mt-12 flex flex-wrap items-center gap-4 rounded-3xl border-2 border-sun-dark/30 bg-sun-soft p-5 shadow-[0_4px_0_rgba(217,159,0,0.35)]">
         <div className="min-w-0 flex-1">

@@ -1,4 +1,4 @@
-import type { PartId } from "@/config/exam";
+import { DEFAULT_EXAM, type ExamId, type PartId } from "@/config/exam";
 import type { Exercise } from "@/lib/schemas";
 import { r1Seeds } from "@/lib/exercises/seeds/r1";
 import { r2Seeds } from "@/lib/exercises/seeds/r2";
@@ -11,13 +11,15 @@ import { r8Seeds } from "@/lib/exercises/seeds/r8";
 import { w1Seeds, w2Seeds } from "@/lib/exercises/seeds/writing";
 import { l1Seeds, l2Seeds, l3Seeds, l4Seeds } from "@/lib/exercises/seeds/listening";
 import { s1Seeds, s2Seeds, s3Seeds, s4Seeds } from "@/lib/exercises/seeds/speaking";
+import { b2r1Seeds, b2r2Seeds, b2r3Seeds, b2r4Seeds } from "@/lib/exercises/seeds/b2-reading-a";
+import { b2r5Seeds, b2r7Seeds, b2r8Seeds, b2w1Seeds, b2w2Seeds } from "@/lib/exercises/seeds/b2-reading-b";
 
 const SEED_DATE = "2026-11-06T00:00:00.000Z";
 
-function wrap<T extends { id: string; data: unknown }>(partId: PartId, list: T[]): Exercise[] {
+function wrap<T extends { id: string; data: unknown }>(partId: PartId, list: T[], exam?: ExamId): Exercise[] {
   return list.map(
     (s) =>
-      ({ id: s.id, partId, data: s.data, source: "seed", createdAt: SEED_DATE, isGeneratedText: true }) as Exercise,
+      ({ id: s.id, partId, data: s.data, source: "seed", createdAt: SEED_DATE, isGeneratedText: true, ...(exam ? { exam } : {}) }) as Exercise,
   );
 }
 
@@ -41,8 +43,18 @@ export const SEED_EXERCISES: Exercise[] = [
   ...wrap("s2", s2Seeds),
   ...wrap("s3", s3Seeds),
   ...wrap("s4", s4Seeds),
+  // B2 First
+  ...wrap("r1", b2r1Seeds, "b2-first"),
+  ...wrap("r2", b2r2Seeds, "b2-first"),
+  ...wrap("r3", b2r3Seeds, "b2-first"),
+  ...wrap("r4", b2r4Seeds, "b2-first"),
+  ...wrap("r5", b2r5Seeds, "b2-first"),
+  ...wrap("r7", b2r7Seeds, "b2-first"),
+  ...wrap("r8", b2r8Seeds, "b2-first"),
+  ...wrap("w1", b2w1Seeds, "b2-first"),
+  ...wrap("w2", b2w2Seeds, "b2-first"),
 ];
 
-export function seedsForPart(partId: PartId): Exercise[] {
-  return SEED_EXERCISES.filter((e) => e.partId === partId);
+export function seedsForPart(partId: PartId, exam: ExamId = DEFAULT_EXAM): Exercise[] {
+  return SEED_EXERCISES.filter((e) => e.partId === partId && (e.exam ?? DEFAULT_EXAM) === exam);
 }

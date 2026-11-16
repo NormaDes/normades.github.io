@@ -4,11 +4,15 @@ import Link from "next/link";
 import { useSyncExternalStore } from "react";
 import { ArrowIcon, PAPER_ICONS } from "@/components/icons";
 import { PAPERS, getPart } from "@/config/exam";
+import { ExamSoon } from "@/components/exam-soon";
+import { DEFAULT_EXAM } from "@/config/exam";
+import { useExam } from "@/lib/use-exam";
 import { PAPER_THEME } from "@/lib/paper-theme";
 import { MOCK_PAPERS, mockParts, type MockRecord } from "@/lib/mock";
 import { clientPrefs } from "@/lib/storage";
 
 export function MockHub() {
+  const exam = useExam();
   // Historial local (JSON) como valor estable para useSyncExternalStore
   const raw = useSyncExternalStore(
     clientPrefs.subscribe,
@@ -16,6 +20,7 @@ export function MockHub() {
     () => "[]",
   );
   const history = JSON.parse(raw) as MockRecord[];
+  if (exam !== DEFAULT_EXAM) return <ExamSoon exam={exam} what="Los simulacros" />;
 
   return (
     <div>

@@ -1,4 +1,4 @@
-import type { PartId } from "@/config/exam";
+import { DEFAULT_EXAM, type ExamId, type PartId } from "@/config/exam";
 import { seedsForPart } from "@/lib/exercises/seeds";
 import type { Exercise } from "@/lib/schemas";
 import type { Repository } from "@/lib/storage";
@@ -9,15 +9,17 @@ export interface BankPick {
   fresh: boolean;
 }
 
-export async function bankFor(repo: Repository, partId: PartId): Promise<Exercise[]> {
-  return [...seedsForPart(partId), ...(await repo.listExercises(partId))];
+const sameExam = (e: { exam?: ExamId }, exam: ExamId) => (e.exam ?? DEFAULT_EXAM) === exam;
+
+export async function bankFor(repo: Repository, partId: PartId, exam: ExamId = DEFAULT_EXAM): Promise<Exercise[]> {
+  return [...seedsForPart(partId, exam), ...(await repo.listExercises(partId)).filter((e) => sameExam(e, exam))];
 }
 
 /** Elige un ejercicio del banco: primero uno no visto; si no quedan, el hecho hace más tiempo. */
-export async function pickFromBank(repo: Repository, partId: PartId): Promise<BankPick | null> {
-  const all = await bankFor(repo, partId);
+export async function pickFromBank(repo: Repository, partId: PartId, exam: ExamId = DEFAULT_EXAM): Promise<BankPick | null> {
+  const all = await bankFor(repo, partId, exam);
   if (!all.length) return null;
-  const attempts = await repo.listAttempts(partId);
+  const attempts = (await repo.listAttempts(partId)).filter((a) => sameExam(a, exam));
   const lastSeen = new Map<string, string>();
   for (const a of attempts) {
     const prev = lastSeen.get(a.exerciseId);
@@ -31,8 +33,8 @@ export async function pickFromBank(repo: Repository, partId: PartId): Promise<Ba
   return { exercise: oldest, fresh: false };
 }
 
-export async function countUnseen(repo: Repository, partId: PartId): Promise<{ unseen: number; total: number }> {
-  const all = await bankFor(repo, partId);
-  const seen = new Set((await repo.listAttempts(partId)).map((a) => a.exerciseId));
+export async function countUnseen(repo: Repository, partId: PartId, exam: ExamId = DEFAULT_EXAM): Promise<{ unseen: number; total: number }> {
+  const all = await bankFor(repo, partId, exam);
+  const seen = new Set((await repo.listAttempts(partId)).filter((a) => sameExam(a, exam)).map((a) => a.exerciseId));
   return { unseen: all.filter((e) => !seen.has(e.id)).length, total: all.length };
 }

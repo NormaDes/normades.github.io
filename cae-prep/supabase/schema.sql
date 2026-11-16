@@ -59,6 +59,7 @@ create table if not exists public.attempts (
   created_at    timestamptz not null default now()
 );
 create index if not exists attempts_user_idx on public.attempts (user_id, created_at desc);
+alter table public.attempts add column if not exists exam text not null default 'c1-advanced';   -- varios exámenes
 
 create table if not exists public.mistakes (
   id          uuid primary key default gen_random_uuid(),
@@ -72,6 +73,7 @@ create table if not exists public.mistakes (
   resolved    boolean not null default false,
   created_at  timestamptz not null default now()
 );
+alter table public.mistakes add column if not exists exam text not null default 'c1-advanced';
 create index if not exists mistakes_user_idx on public.mistakes (user_id, resolved);
 
 create table if not exists public.submissions (          -- redacciones y respuestas de Speaking con su feedback

@@ -75,7 +75,7 @@ export function containsWholeWord(haystack: string, word: string): boolean {
 }
 
 export function checkExercise(exercise: AutoGradedExercise, answers: UserAnswers): ExerciseResult {
-  const part = getPart(exercise.partId);
+  const part = getPart(exercise.partId, exercise.exam);
   const results: QuestionResult[] = [];
 
   switch (exercise.partId) {

@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ArrowIcon } from "@/components/icons";
 import { partShort, skillLabel } from "@/lib/progress";
 import { repo, type Mistake } from "@/lib/storage";
+import { inExam, useExam } from "@/lib/use-exam";
 
 type View = "pending" | "resolved" | "all";
 
@@ -12,6 +13,7 @@ const chip = (active: boolean) =>
   `min-h-9 rounded-lg border px-3 text-xs font-semibold transition-colors ${active ? "border-brand bg-brand text-brand-ink" : "border-line bg-surface hover:border-brand"}`;
 
 export function MistakesNotebook() {
+  const exam = useExam();
   const [mistakes, setMistakes] = useState<Mistake[] | null>(null);
   const [view, setView] = useState<View>("pending");
   const [skill, setSkill] = useState<string>("all");
@@ -25,7 +27,7 @@ export function MistakesNotebook() {
     };
   }, []);
 
-  const base = useMemo(() => (mistakes ?? []).filter((m) => (view === "all" ? true : view === "pending" ? !m.resolved : m.resolved)), [mistakes, view]);
+  const base = useMemo(() => (mistakes ?? []).filter((m) => inExam(m, exam)).filter((m) => (view === "all" ? true : view === "pending" ? !m.resolved : m.resolved)), [mistakes, view, exam]);
   const skills = useMemo(() => {
     const c = new Map<string, number>();
     base.forEach((m) => c.set(m.skill, (c.get(m.skill) ?? 0) + 1));
@@ -71,7 +73,7 @@ export function MistakesNotebook() {
           <select value={safePart} onChange={(e) => setPart(e.target.value)} aria-label="Filtrar por parte" className="ml-auto min-h-9 rounded-lg border border-line bg-surface px-2 text-xs font-semibold">
             <option value="all">Todas las partes</option>
             {parts.map((id) => (
-              <option key={id} value={id}>{partShort(id)}</option>
+              <option key={id} value={id}>{partShort(id, exam)}</option>
             ))}
           </select>
         )}
@@ -97,7 +99,7 @@ export function MistakesNotebook() {
           {shown.map((m) => (
             <li key={m.id} className={`p-4 ${m.resolved ? "opacity-60" : ""}`}>
               <div className="flex flex-wrap items-center gap-2 text-xs">
-                <span className="rounded-md bg-brand-soft px-2 py-0.5 font-semibold text-brand">{partShort(m.partId)}</span>
+                <span className="rounded-md bg-brand-soft px-2 py-0.5 font-semibold text-brand">{partShort(m.partId, exam)}</span>
                 <span className="font-medium text-muted">{skillLabel(m.skill)}</span>
                 <span className="text-muted">· pregunta {m.n}</span>
                 <time className="ml-auto text-muted" dateTime={m.createdAt}>
@@ -111,7 +113,7 @@ export function MistakesNotebook() {
                 <span className="font-semibold text-ok">{m.expected}</span>
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
-                <Link href={`/practica/${m.partId}?ex=${encodeURIComponent(m.exerciseId)}`} className="inline-flex min-h-9 items-center gap-1.5 rounded-lg bg-brand px-3 text-xs font-semibold text-brand-ink">
+                <Link href={`/practica/${m.partId}?ex=${encodeURIComponent(m.exerciseId)}${m.exam && m.exam !== "c1-advanced" ? `&examen=${m.exam}` : ""}`} className="inline-flex min-h-9 items-center gap-1.5 rounded-lg bg-brand px-3 text-xs font-semibold text-brand-ink">
                   Repetir ejercicio <ArrowIcon width={14} height={14} />
                 </Link>
                 <button type="button" onClick={() => toggle(m)} className="min-h-9 rounded-lg border border-line px-3 text-xs font-semibold hover:border-brand">

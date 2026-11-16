@@ -133,6 +133,10 @@ npm test        # tests unitarios (corrección, validación, progreso)
 
 Las páginas `/privacidad` y `/aviso-legal` son **borradores**: rellena los campos resaltados (responsable, NIF, domicilio, email de contacto, regiones de los proveedores) y haz que las revise un profesional. Es obligatorio al guardar datos personales de otras personas.
 
+## Varios exámenes
+
+`config/exam.ts` define cada examen (`EXAMS`): partes, marcas, tiempos y reglas. Los ejercicios comparten «tipo» (`r1`…`s4`) y llevan el campo `exam`; intentos y fallos también (`exam` en `attempts` y `mistakes`: vuelve a ejecutar `supabase/schema.sql`). El alumno elige examen en la portada o en *Practicar*. **B2 First**: Reading (7 partes) y Writing (2) con 1 ejercicio por parte (textos originales: conviene que un profesor los revise); Listening y Speaking aparecen como «Pronto»; simulacros, plan y IA solo para C1 por ahora. El panel de clase del profesor suma todos los exámenes.
+
 ## Lista de espera
 
 `/lista-espera` recoge emails (tabla `waitlist`, solo accesible desde el servidor con `SUPABASE_SERVICE_ROLE_KEY`; hay que ejecutar `supabase/schema.sql`). Con campo trampa anti-bots, límite por IP y casilla de privacidad. Los administradores ven el recuento y descargan un CSV desde `/profesor`. Admite `?ref=` o `?utm_source=` para saber desde qué red llega cada alta.

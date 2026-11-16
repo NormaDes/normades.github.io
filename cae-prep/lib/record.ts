@@ -1,4 +1,4 @@
-import type { PartId } from "@/config/exam";
+import type { ExamId, PartId } from "@/config/exam";
 import type { ExerciseResult } from "@/lib/checking";
 import type { Mistake, Repository } from "@/lib/storage/types";
 
@@ -11,7 +11,7 @@ const uid = () =>
  */
 export async function recordAutoGraded(
   repo: Repository,
-  p: { exerciseId: string; partId: PartId; result: ExerciseResult; durationSec: number; timed: boolean },
+  p: { exerciseId: string; partId: PartId; result: ExerciseResult; durationSec: number; timed: boolean; exam?: ExamId },
 ): Promise<void> {
   const now = new Date().toISOString();
   const { result: res } = p;
@@ -27,11 +27,12 @@ export async function recordAutoGraded(
     durationSec: p.durationSec,
     timed: p.timed,
     details: res.results.map((r) => ({ n: r.n, correct: r.correct, skill: r.skill })),
+    exam: p.exam,
   });
   await repo.resolveMistakes(p.exerciseId, res.results.filter((r) => r.correct).map((r) => r.n));
   const pending = new Set((await repo.listMistakes()).filter((m) => !m.resolved && m.exerciseId === p.exerciseId).map((m) => m.n));
   const mistakes: Mistake[] = res.results
     .filter((r) => !r.correct && !pending.has(r.n))
-    .map((r) => ({ id: uid(), exerciseId: p.exerciseId, partId: p.partId, n: r.n, skill: r.skill, given: r.given, expected: r.expected, createdAt: now, resolved: false }));
+    .map((r) => ({ id: uid(), exerciseId: p.exerciseId, partId: p.partId, n: r.n, skill: r.skill, given: r.given, expected: r.expected, createdAt: now, resolved: false, exam: p.exam }));
   await repo.addMistakes(mistakes);
 }

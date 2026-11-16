@@ -6,7 +6,7 @@ import { validateContent } from "../lib/validation";
 
 let failed = 0;
 for (const ex of SEED_EXERCISES) {
-  const problems = validateContent(ex.partId, ex.data);
+  const problems = validateContent(ex.partId, ex.data, ex.exam);
   if (problems.length) {
     failed++;
     console.error(`✗ ${ex.id}`);
