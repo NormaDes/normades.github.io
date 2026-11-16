@@ -22,7 +22,7 @@ export function PlanApp() {
     <div>
       <PageHeader icon={<CalendarIcon width={32} height={32} weight="fill" />} tone="grape" eyebrow="Horario" title="Tu plan de estudio">Se adapta a la fecha de tu examen, al tiempo que tienes y a tus puntos débiles. Cada vez que practicas, se reajusta solo.</PageHeader>
 
-      <section className="rounded-xl border border-line bg-surface p-5">
+      <section className="rounded-3xl border border-line shadow-card bg-surface p-5">
         <div className="grid gap-4 sm:grid-cols-3">
           <label className="text-sm font-semibold">
             Fecha del examen
@@ -58,7 +58,7 @@ export function PlanApp() {
                 <TaskList day={d.day} tasks={d.tasks} study={d.study} isDone={isDone} toggle={toggle} dark />
               </HeroCard>
             ) : (
-              <div className="rounded-xl border border-line bg-surface p-4">
+              <div className="rounded-3xl border border-line shadow-card bg-surface p-4">
                 <p className="font-display text-lg font-bold capitalize">{fmtDay(d.day)}</p>
                 <TaskList day={d.day} tasks={d.tasks} study={d.study} isDone={isDone} toggle={toggle} />
               </div>

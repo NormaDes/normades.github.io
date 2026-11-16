@@ -74,7 +74,7 @@ export function LessonPack({ pack, origin, sourceKey }: { pack: Pack; origin: Ex
         <p className="mt-2 font-serif text-[1.02rem] leading-relaxed">{pack.summary}</p>
       </section>
 
-      <section className="rounded-xl border border-line bg-surface p-4 md:p-5">
+      <section className="rounded-3xl border border-line shadow-card bg-surface p-4 md:p-5">
         <div className="flex items-baseline justify-between gap-3">
           <h3 className="font-display text-xl font-bold">Comprensión</h3>
           {answered > 0 && <span className="text-sm font-semibold tabular-nums">{score}/{pack.comprehension.length}</span>}
@@ -94,7 +94,7 @@ export function LessonPack({ pack, origin, sourceKey }: { pack: Pack; origin: Ex
         </div>
       </section>
 
-      <section className="rounded-xl border border-line bg-surface p-4 md:p-5">
+      <section className="rounded-3xl border border-line shadow-card bg-surface p-4 md:p-5">
         <div className="flex flex-wrap items-baseline justify-between gap-3">
           <h3 className="font-display text-xl font-bold">Vocabulario C1</h3>
           <button type="button" onClick={() => saveWords(pack.vocabulary.map((v) => v.term).filter((t) => !saved.has(t)))} disabled={saved.size === pack.vocabulary.length} className="min-h-9 rounded-lg border border-brand px-3 text-xs font-semibold text-brand disabled:opacity-50">
@@ -109,7 +109,7 @@ export function LessonPack({ pack, origin, sourceKey }: { pack: Pack; origin: Ex
                   <span className="font-display text-lg font-bold">{v.term}</span> <span className="text-xs text-muted">{v.pos}</span>
                 </p>
                 <p className="text-sm">{v.definition}</p>
-                <p className="font-serif text-sm italic text-muted">{v.example}</p>
+                <p className="font-semibold text-sm italic text-muted">{v.example}</p>
                 <p className="mt-1 flex flex-wrap gap-1.5">
                   {v.collocations.map((c) => (
                     <span key={c} className="rounded-md bg-brand-soft px-2 py-0.5 text-xs font-semibold text-brand">{c}</span>
@@ -125,7 +125,7 @@ export function LessonPack({ pack, origin, sourceKey }: { pack: Pack; origin: Ex
         </ul>
       </section>
 
-      <section className="rounded-xl border border-line bg-surface p-4 md:p-5">
+      <section className="rounded-3xl border border-line shadow-card bg-surface p-4 md:p-5">
         <h3 className="font-display text-xl font-bold">Colocaciones</h3>
         <div className="mt-4 space-y-6">
           {pack.collocations.map((c, i) => (

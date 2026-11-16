@@ -186,7 +186,7 @@ export function MockRunner({ paper }: { paper: PaperId }) {
           </ul>
         </HeroCard>
 
-        <ul className="mt-5 divide-y divide-line overflow-hidden rounded-xl border border-line bg-surface">
+        <ul className="mt-5 divide-y divide-line overflow-hidden rounded-3xl border border-line shadow-card bg-surface">
           {parts.map((id) => {
             const p = getPart(id);
             return (
@@ -201,7 +201,7 @@ export function MockRunner({ paper }: { paper: PaperId }) {
 
         {paper === "writing" && ai && !ai.configured && <p className="mt-4 rounded-lg bg-warn-soft p-3 text-sm">{ai.comingSoon ? "La corrección de Writing con IA llegará pronto (próximamente). Podrás escribir igualmente." : ai.needsLogin ? "Sin cuenta podrás escribir, pero la nota de Writing no se calculará. Inicia sesión (gratis) para obtenerla." : "La IA no está configurada: podrás escribir, pero la nota de Writing no se calculará."}</p>}
         {error && <p role="alert" className="mt-4 rounded-lg bg-bad-soft p-3 text-sm text-bad">{error}</p>}
-        <button type="button" onClick={start} disabled={phase === "loading"} className="mt-6 inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-lg bg-brand px-6 text-base font-semibold text-brand-ink disabled:opacity-60">
+        <button type="button" onClick={start} disabled={phase === "loading"} className="mt-6 inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl bg-brand px-6 text-base font-extrabold text-brand-ink disabled:opacity-60">
           {phase === "loading" ? "Preparando el examen…" : "Empezar el simulacro"} <ArrowIcon width={18} height={18} />
         </button>
         <p className="mt-3 text-center text-xs text-muted">Sugerencia: busca un sitio tranquilo y apaga el móvil. {info.durationMinutes} minutos seguidos.</p>
@@ -241,7 +241,7 @@ export function MockRunner({ paper }: { paper: PaperId }) {
           <p className="mt-4 text-xs text-white/60">Estimación orientativa: ~60 % de las marcas equivale a 180 (aprobado C1). No es la conversión oficial de Cambridge.{!summary.assessedAll && " Alguna parte no se pudo evaluar y no cuenta en la nota."}</p>
         </HeroCard>
 
-        <ul className="mt-5 divide-y divide-line overflow-hidden rounded-xl border border-line bg-surface">
+        <ul className="mt-5 divide-y divide-line overflow-hidden rounded-3xl border border-line shadow-card bg-surface">
           {parts.map((id) => {
             const o = outcomes[id];
             const pct = o.result.maxMarks ? o.result.marks / o.result.maxMarks : 0;
@@ -263,8 +263,8 @@ export function MockRunner({ paper }: { paper: PaperId }) {
         </ul>
 
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
-          <button type="button" onClick={() => setReviewing((v) => !v)} className="min-h-12 rounded-lg bg-brand px-5 text-sm font-semibold text-brand-ink">{reviewing ? "Ocultar la revisión" : "Revisar mis respuestas"}</button>
-          <button type="button" onClick={() => { setPhase("intro"); setReviewing(false); }} className="min-h-12 rounded-lg border border-line px-5 text-sm font-semibold">Hacer otro simulacro</button>
+          <button type="button" onClick={() => setReviewing((v) => !v)} className="min-h-14 rounded-2xl bg-brand px-5 text-sm font-extrabold text-brand-ink">{reviewing ? "Ocultar la revisión" : "Revisar mis respuestas"}</button>
+          <button type="button" onClick={() => { setPhase("intro"); setReviewing(false); }} className="min-h-12 rounded-2xl border-2 border-line px-5 text-sm font-semibold">Hacer otro simulacro</button>
         </div>
         <p className="mt-3 text-xs text-muted">Tus fallos están en el cuaderno de errores, y todo cuenta en tu panel de progreso.</p>
 
@@ -298,14 +298,14 @@ export function MockRunner({ paper }: { paper: PaperId }) {
 
   return (
     <div className="mx-auto max-w-3xl">
-      <div className="sticky top-16 z-20 -mx-4 mb-4 border-b border-line bg-bg/95 px-4 py-2.5 backdrop-blur md:-mx-8 md:px-8">
+      <div className="sticky top-16 z-20 -mx-4 mb-4 border-b-2 border-line bg-white/95 px-4 py-2.5 backdrop-blur md:-mx-8 md:px-8">
         <div className="flex items-center justify-between gap-3">
-          <p className="truncate text-sm font-semibold">{info.name} · simulacro</p>
+          <p className="truncate text-sm font-extrabold">{info.name} · simulacro</p>
           <div className="flex items-center gap-2">
-            <span className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-sm font-bold tabular-nums ${low ? "bg-bad-soft text-bad" : "bg-brand-soft text-brand"}`} aria-label="Tiempo restante">
+            <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-extrabold tabular-nums ${low ? "bg-bad-soft text-bad" : "bg-brand-soft text-brand"}`} aria-label="Tiempo restante">
               <ClockIcon width={15} height={15} /> {fmt(remaining)}
             </span>
-            <button type="button" onClick={() => submit(false)} className="min-h-9 rounded-lg bg-ink px-3 text-xs font-bold text-white">Entregar</button>
+            <button type="button" onClick={() => submit(false)} className="min-h-10 rounded-xl bg-ink px-4 text-sm font-extrabold text-white">Entregar</button>
           </div>
         </div>
         <div className="-mx-1 mt-2 flex gap-1.5 overflow-x-auto px-1 pb-0.5" role="tablist" aria-label="Partes del examen">
@@ -314,7 +314,7 @@ export function MockRunner({ paper }: { paper: PaperId }) {
             const t = total(id);
             const done = a >= t;
             return (
-              <button key={id} type="button" role="tab" aria-selected={i === current} onClick={() => { setCurrent(i); window.scrollTo({ top: 0 }); }} className={`relative min-h-9 shrink-0 rounded-lg border px-3 text-xs font-semibold ${i === current ? "border-brand bg-brand text-brand-ink" : done ? "border-ok/50 bg-ok-soft text-ok" : "border-line bg-surface"}`}>
+              <button key={id} type="button" role="tab" aria-selected={i === current} onClick={() => { setCurrent(i); window.scrollTo({ top: 0 }); }} className={`relative min-h-11 shrink-0 rounded-xl border-2 px-3.5 text-sm font-extrabold ${i === current ? "border-brand bg-brand text-brand-ink" : done ? "border-ok/50 bg-ok-soft text-ok" : "border-line bg-surface"}`}>
                 {getPart(id).number}
                 <span className="ml-1 font-normal opacity-80">{a}/{t}</span>
               </button>
@@ -323,8 +323,8 @@ export function MockRunner({ paper }: { paper: PaperId }) {
         </div>
       </div>
 
-      <p className="mb-3 font-display text-lg font-bold">{partShort(idCurrent)} · {getPart(idCurrent).name}</p>
-      <p className="mb-4 rounded-lg border border-line bg-surface p-3 font-serif text-sm italic">{getPart(idCurrent).instructions}</p>
+      <p className="mb-3 font-display text-xl font-semibold">{partShort(idCurrent)} · {getPart(idCurrent).name}</p>
+      <p className="mb-4 rounded-2xl border-2 border-line bg-surface p-3.5 text-sm font-semibold italic">{getPart(idCurrent).instructions}</p>
 
       {parts.map((id, i) => {
         const ex = exercises[id];
@@ -346,7 +346,7 @@ export function MockRunner({ paper }: { paper: PaperId }) {
                   ))}
                 </div>
               )}
-              <section className="rounded-xl border border-line bg-surface p-4">
+              <section className="rounded-3xl border border-line shadow-card bg-surface p-4">
                 <p className="eyebrow text-muted">{TYPE_LABEL[task.type]}</p>
                 <div className="mt-2 whitespace-pre-line font-serif text-[1.02rem] leading-relaxed">{task.text}</div>
               </section>
@@ -364,9 +364,9 @@ export function MockRunner({ paper }: { paper: PaperId }) {
       })}
 
       <div className="mt-8 flex items-center justify-between gap-3">
-        <button type="button" disabled={current === 0} onClick={() => { setCurrent((c) => c - 1); window.scrollTo({ top: 0 }); }} className="min-h-12 rounded-lg border border-line px-5 text-sm font-semibold disabled:opacity-40">← Anterior</button>
+        <button type="button" disabled={current === 0} onClick={() => { setCurrent((c) => c - 1); window.scrollTo({ top: 0 }); }} className="min-h-12 rounded-2xl border-2 border-line px-5 text-sm font-semibold disabled:opacity-40">← Anterior</button>
         {current < parts.length - 1 ? (
-          <button type="button" onClick={() => { setCurrent((c) => c + 1); window.scrollTo({ top: 0 }); }} className="min-h-12 rounded-lg bg-brand px-5 text-sm font-semibold text-brand-ink">Siguiente →</button>
+          <button type="button" onClick={() => { setCurrent((c) => c + 1); window.scrollTo({ top: 0 }); }} className="min-h-14 rounded-2xl bg-brand px-5 text-sm font-extrabold text-brand-ink">Siguiente →</button>
         ) : (
           <button type="button" onClick={() => submit(false)} className="min-h-12 rounded-lg bg-ink px-6 text-sm font-bold text-white">Entregar el examen</button>
         )}

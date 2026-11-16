@@ -91,7 +91,7 @@ export function VideoPage() {
           onChange={(e) => onTranscript(e.target.value)}
           rows={9}
           placeholder="Pega la transcripción del vídeo…"
-          className="mt-3 w-full resize-y rounded-xl border border-line bg-surface p-4 text-[15px] leading-relaxed focus:border-brand"
+          className="mt-3 w-full resize-y rounded-3xl border border-line shadow-card bg-surface p-4 text-[15px] leading-relaxed focus:border-brand"
         />
         <p className={`mt-1 text-xs ${n >= 150 ? "text-ok" : "text-muted"}`}>{n} palabras {n < 150 && "· necesito al menos 150 para generar ejercicios"}</p>
       </section>

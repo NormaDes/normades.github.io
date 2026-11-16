@@ -59,7 +59,7 @@ export function PasteText() {
         </label>
         <label className="block text-sm font-medium">
           Texto
-          <textarea value={ready ? text : ""} onChange={(e) => setText(e.target.value)} rows={12} placeholder="Pega aquí el texto en inglés…" className="mt-1 w-full resize-y rounded-xl border border-line bg-surface p-4 text-[15px] leading-relaxed focus:border-brand" />
+          <textarea value={ready ? text : ""} onChange={(e) => setText(e.target.value)} rows={12} placeholder="Pega aquí el texto en inglés…" className="mt-1 w-full resize-y rounded-3xl border border-line shadow-card bg-surface p-4 text-[15px] leading-relaxed focus:border-brand" />
         </label>
         <p className={`text-xs ${n >= 150 ? "text-ok" : "text-muted"}`}>{n} palabras {n < 150 && "· necesito al menos 150"}{n > 2300 && " · se usarán las primeras ~2300"}</p>
       </div>

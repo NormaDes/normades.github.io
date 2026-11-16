@@ -48,7 +48,7 @@ export function WritingFeedback({ evaluation, text, wordCount }: { evaluation: W
   return (
     <div className="space-y-6">
       {/* Puntuación */}
-      <section className="rounded-2xl border border-line bg-surface p-5">
+      <section className="rounded-3xl border border-line shadow-card bg-surface p-5">
         <div className="flex items-center justify-between gap-4">
           <div>
             <p className="eyebrow text-muted">Corrección del profe (IA)</p>
@@ -92,7 +92,7 @@ export function WritingFeedback({ evaluation, text, wordCount }: { evaluation: W
             ))}
           </ul>
         </section>
-        <section className="rounded-2xl border border-line bg-surface p-4">
+        <section className="rounded-3xl border border-line shadow-card bg-surface p-4">
           <h3 className="text-sm font-semibold">Qué mejorar primero</h3>
           <ol className="mt-2 list-decimal space-y-1.5 pl-5 text-sm">
             {evaluation.priorities.map((s, i) => (
@@ -103,7 +103,7 @@ export function WritingFeedback({ evaluation, text, wordCount }: { evaluation: W
       </div>
 
       {/* Texto con errores marcados */}
-      <section className="rounded-2xl border border-line bg-surface p-4 md:p-6">
+      <section className="rounded-3xl border border-line shadow-card bg-surface p-4 md:p-6">
         <h3 className="text-sm font-semibold">Tu texto, con los errores marcados</h3>
         <p className="ruled mt-3 whitespace-pre-wrap rounded-lg border border-line font-serif text-[1.05rem]">
           {segments(text, evaluation.errors).map((s, i) =>
@@ -123,7 +123,7 @@ export function WritingFeedback({ evaluation, text, wordCount }: { evaluation: W
         <section className="space-y-2.5">
           <h3 className="text-sm font-semibold">Correcciones ({evaluation.errors.length})</h3>
           {evaluation.errors.map((e, i) => (
-            <div key={i} className="rounded-2xl border border-line bg-surface p-4 text-sm">
+            <div key={i} className="rounded-3xl border border-line shadow-card bg-surface p-4 text-sm">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-bad-soft text-xs font-bold text-bad">{i + 1}</span>
                 <span className="rounded-full bg-brand-soft px-2 py-0.5 text-[11px] font-semibold text-brand">{TYPE_ES[e.type] ?? e.type}</span>

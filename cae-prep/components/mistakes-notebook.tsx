@@ -54,7 +54,7 @@ export function MistakesNotebook() {
       <div className="rounded-xl border border-dashed border-line bg-surface p-8 text-center">
         <p className="font-display text-xl font-bold">Todavía no hay errores guardados</p>
         <p className="mx-auto mt-2 max-w-sm text-sm text-muted">Cada pregunta que falles aparecerá aquí con tu respuesta y la correcta, para que puedas repetirla cuando quieras.</p>
-        <Link href="/practica" className="mt-5 inline-flex min-h-12 items-center gap-2 rounded-lg bg-brand px-5 text-sm font-semibold text-brand-ink">
+        <Link href="/practica" className="mt-5 inline-flex min-h-12 items-center gap-2 rounded-2xl bg-brand px-5 text-sm font-extrabold text-brand-ink">
           Ir a practicar <ArrowIcon width={18} height={18} />
         </Link>
       </div>
@@ -89,11 +89,11 @@ export function MistakesNotebook() {
       )}
 
       {shown.length === 0 ? (
-        <p className="mt-6 rounded-xl border border-line bg-surface p-5 text-sm text-muted">
+        <p className="mt-6 rounded-3xl border border-line shadow-card bg-surface p-5 text-sm text-muted">
           {view === "pending" ? "¡No tienes errores pendientes! Sigue practicando para seguir mejorando." : "No hay errores con estos filtros."}
         </p>
       ) : (
-        <ul className="mt-5 divide-y divide-line overflow-hidden rounded-xl border border-line bg-surface">
+        <ul className="mt-5 divide-y divide-line overflow-hidden rounded-3xl border border-line shadow-card bg-surface">
           {shown.map((m) => (
             <li key={m.id} className={`p-4 ${m.resolved ? "opacity-60" : ""}`}>
               <div className="flex flex-wrap items-center gap-2 text-xs">

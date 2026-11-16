@@ -1,5 +1,7 @@
 "use client";
 
+import { PAPER_ICONS } from "@/components/icons";
+import { PAPER_THEME } from "@/lib/paper-theme";
 import { AiOff } from "@/components/ai-off";
 import Link from "next/link";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
@@ -31,6 +33,8 @@ const fmt = (s: number) => {
 
 export function WritingRunner({ partId }: { partId: PartId }) {
   const part = getPart(partId);
+  const theme = PAPER_THEME[part.paper];
+  const PaperIcon = PAPER_ICONS[part.paper];
   const range = part.wordRange ?? { min: 220, max: 260 };
   const totalSeconds = part.suggestedMinutes * 60;
 
@@ -196,22 +200,29 @@ export function WritingRunner({ partId }: { partId: PartId }) {
   if (status === "idle" || status === "loading") {
     return (
       <div className="mx-auto max-w-2xl">
-        <Link href="/practica" className="text-sm text-muted hover:text-ink">← Todas las partes</Link>
-        <p className="mt-4 text-sm font-medium text-brand">{partLabel(partId)}</p>
-        <h1 className="mt-1 text-2xl font-bold tracking-tight md:text-3xl">{part.name}</h1>
-        <p className="mt-2 text-muted">{part.description}</p>
-
-        <div className="mt-5 rounded-2xl border border-line bg-surface p-4 text-sm">
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted">Instrucciones del examen</p>
-          <p className="mt-1.5 font-serif italic">{part.instructions}</p>
+        <Link href="/practica" className="inline-flex min-h-11 items-center gap-1 text-sm font-bold text-muted hover:text-ink">← Todas las partes</Link>
+        <div className={`mt-2 flex items-start gap-4 rounded-3xl border-2 ${theme.border} ${theme.soft} p-5`}>
+          <span className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${theme.solid} ${theme.lift}`}>
+            <PaperIcon width={30} height={30} weight="fill" />
+          </span>
+          <div className="min-w-0">
+            <p className={`eyebrow ${theme.text}`}>{partLabel(partId)}</p>
+            <h1 className="mt-0.5 text-3xl leading-tight">{part.name}</h1>
+            <p className="mt-1.5 text-sm font-semibold text-muted">{part.description}</p>
+          </div>
         </div>
 
-        <div className="mt-4 rounded-2xl border border-line bg-surface p-4 text-sm">
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted">Cómo te evaluamos</p>
+        <div className="mt-4 rounded-3xl border-2 border-line bg-surface p-4 text-sm">
+          <p className="eyebrow text-muted">Instrucciones del examen</p>
+          <p className="mt-1.5 font-semibold italic">{part.instructions}</p>
+        </div>
+
+        <div className="mt-4 rounded-3xl border-2 border-line bg-surface p-4 text-sm">
+          <p className="eyebrow text-muted">Cómo te evaluamos</p>
           <p className="mt-1.5 text-muted">Con los 4 criterios oficiales, de 0 a 5 cada uno: {CRITERIA.map((c) => c.label).join(", ")}. Verás tus errores marcados y una versión mejorada.</p>
         </div>
 
-        <label className="mt-5 flex min-h-11 cursor-pointer items-center gap-3 text-sm">
+        <label className="mt-4 flex min-h-12 cursor-pointer items-center gap-3 rounded-2xl border-2 border-line bg-surface px-4 text-sm font-bold">
           <input type="checkbox" checked={timerOn} onChange={(e) => clientPrefs.set("timer", e.target.checked)} className="h-5 w-5 accent-[var(--brand)]" />
           Temporizador ({part.suggestedMinutes} min)
         </label>
@@ -219,11 +230,11 @@ export function WritingRunner({ partId }: { partId: PartId }) {
         {error && <p role="alert" className="mt-4 rounded-xl bg-bad-soft p-3 text-sm text-bad">{error}</p>}
 
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
-          <button type="button" onClick={fromBank} disabled={status === "loading"} className="min-h-12 rounded-xl bg-brand px-5 text-sm font-semibold text-brand-ink disabled:opacity-60">
+          <button type="button" onClick={fromBank} disabled={status === "loading"} className="min-h-14 rounded-2xl bg-brand px-5 text-base font-extrabold text-brand-ink disabled:opacity-60">
             {status === "loading" ? "Cargando…" : "Empezar (del banco)"}
             {bankInfo && status !== "loading" && <span className="ml-2 font-normal opacity-80">{bankInfo.unseen} sin hacer</span>}
           </button>
-          <button type="button" onClick={fromAi} disabled={status === "loading" || aiDisabled} className="min-h-12 rounded-xl border border-brand px-5 text-sm font-semibold text-brand disabled:cursor-not-allowed disabled:opacity-50">
+          <button type="button" onClick={fromAi} disabled={status === "loading" || aiDisabled} className="min-h-14 rounded-2xl border-2 border-brand px-5 text-base font-extrabold text-brand disabled:cursor-not-allowed disabled:opacity-50">
             Generar enunciado con IA
           </button>
         </div>
@@ -251,10 +262,15 @@ export function WritingRunner({ partId }: { partId: PartId }) {
 
   return (
     <div className="mx-auto max-w-3xl">
-      <div className="sticky top-16 z-20 -mx-4 mb-5 flex items-center justify-between gap-3 border-b border-line bg-bg/95 px-4 py-3 backdrop-blur md:-mx-8 md:px-8">
-        <div className="min-w-0">
-          <p className="truncate text-sm font-semibold">{part.name}</p>
-          <p className="truncate text-xs text-muted">{exercise.data.title}</p>
+      <div className="sticky top-16 z-20 -mx-4 mb-5 flex items-center justify-between gap-3 border-b-2 border-line bg-white/95 px-4 py-3 backdrop-blur md:-mx-8 md:px-8">
+        <div className="flex min-w-0 items-center gap-3">
+          <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${theme.solid}`}>
+            <PaperIcon width={22} height={22} weight="fill" />
+          </span>
+          <div className="min-w-0">
+            <p className="truncate text-sm font-extrabold">{part.name}</p>
+            <p className="truncate text-xs font-semibold text-muted">{exercise.data.title}</p>
+          </div>
         </div>
         {status !== "review" && (
           <div className="flex items-center gap-3 text-sm tabular-nums">
@@ -298,7 +314,7 @@ export function WritingRunner({ partId }: { partId: PartId }) {
         </div>
       )}
 
-      <section className="rounded-2xl border border-line bg-surface p-4 md:p-5">
+      <section className="rounded-3xl border-2 border-line bg-surface p-4 shadow-card md:p-5">
         <p className="text-xs font-semibold uppercase tracking-wide text-muted">{TYPE_LABEL[task.type]}</p>
         <div className="mt-2 whitespace-pre-line font-serif text-[1.02rem] leading-relaxed">{task.text}</div>
         <p className="mt-3 text-xs text-muted">Write your answer in {range.min}–{range.max} words.</p>
@@ -347,8 +363,8 @@ export function WritingRunner({ partId }: { partId: PartId }) {
 
       {status === "review" && (
         <div className="mt-8 grid gap-3 sm:grid-cols-2">
-          <button type="button" onClick={fromBank} className="min-h-12 rounded-xl bg-brand px-5 text-sm font-semibold text-brand-ink">Siguiente enunciado</button>
-          <button type="button" onClick={fromAi} disabled={aiDisabled} className="min-h-12 rounded-xl border border-brand px-5 text-sm font-semibold text-brand disabled:cursor-not-allowed disabled:opacity-50">Generar nuevo con IA</button>
+          <button type="button" onClick={fromBank} className="min-h-14 rounded-2xl bg-brand px-5 text-base font-extrabold text-brand-ink">Siguiente enunciado</button>
+          <button type="button" onClick={fromAi} disabled={aiDisabled} className="min-h-14 rounded-2xl border-2 border-brand px-5 text-base font-extrabold text-brand disabled:cursor-not-allowed disabled:opacity-50">Generar nuevo con IA</button>
           <button type="button" onClick={() => begin(exercise, taskIdx)} className="min-h-12 rounded-xl border border-line px-5 text-sm font-semibold">Reescribir este enunciado</button>
           <Link href="/practica" className="flex min-h-12 items-center justify-center rounded-xl border border-line px-5 text-sm font-semibold">Cambiar de parte</Link>
         </div>

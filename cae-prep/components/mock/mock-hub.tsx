@@ -46,7 +46,7 @@ export function MockHub() {
       {history.length > 0 && (
         <section className="mt-8">
           <h2 className="font-display text-xl font-bold">Historial</h2>
-          <ul className="mt-3 divide-y divide-line overflow-hidden rounded-xl border border-line bg-surface">
+          <ul className="mt-3 divide-y divide-line overflow-hidden rounded-3xl border border-line shadow-card bg-surface">
             {history.slice(0, 8).map((h) => (
               <li key={h.id} className="flex items-center gap-3 px-4 py-3 text-sm">
                 <span className="min-w-0 flex-1 font-semibold">{PAPERS.find((p) => p.id === h.paper)?.name}</span>

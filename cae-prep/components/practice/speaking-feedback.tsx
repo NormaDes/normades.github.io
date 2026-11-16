@@ -7,7 +7,7 @@ export function SpeakingFeedback({ evaluation }: { evaluation: SpeakingEvaluatio
   const total = speakingTotal(evaluation);
   return (
     <div className="space-y-6">
-      <section className="rounded-2xl border border-line bg-surface p-5">
+      <section className="rounded-3xl border border-line shadow-card bg-surface p-5">
         <div className="flex items-center justify-between gap-4">
           <p className="eyebrow text-muted">Valoración del profe (IA)</p>
           <ScoreBadge value={total} max={20} />
@@ -45,7 +45,7 @@ export function SpeakingFeedback({ evaluation }: { evaluation: SpeakingEvaluatio
             ))}
           </ul>
         </section>
-        <section className="rounded-2xl border border-line bg-surface p-4">
+        <section className="rounded-3xl border border-line shadow-card bg-surface p-4">
           <h3 className="text-sm font-semibold">Qué mejorar primero</h3>
           <ol className="mt-2 list-decimal space-y-1.5 pl-5 text-sm">
             {evaluation.priorities.map((s, i) => (
@@ -59,7 +59,7 @@ export function SpeakingFeedback({ evaluation }: { evaluation: SpeakingEvaluatio
         <section className="space-y-2.5">
           <h3 className="text-sm font-semibold">Correcciones ({evaluation.errors.length})</h3>
           {evaluation.errors.map((e, i) => (
-            <div key={i} className="rounded-2xl border border-line bg-surface p-4 text-sm">
+            <div key={i} className="rounded-3xl border border-line shadow-card bg-surface p-4 text-sm">
               <p className="font-serif text-[1.02rem]">
                 <span className="text-bad line-through">{e.quote}</span> → <span className="font-semibold text-ok">{e.correction}</span>
               </p>
@@ -70,7 +70,7 @@ export function SpeakingFeedback({ evaluation }: { evaluation: SpeakingEvaluatio
       )}
 
       {evaluation.upgrades.length > 0 && (
-        <section className="rounded-2xl border border-line bg-surface p-4">
+        <section className="rounded-3xl border border-line shadow-card bg-surface p-4">
           <h3 className="text-sm font-semibold">Sube el nivel de tu vocabulario</h3>
           <ul className="mt-3 space-y-2 text-sm">
             {evaluation.upgrades.map((u, i) => (

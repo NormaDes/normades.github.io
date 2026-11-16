@@ -222,8 +222,9 @@ h2 {
   background-image: linear-gradient(to bottom, transparent 0, transparent 31px, #e3e8fb 31px, #e3e8fb 32px);
   background-size: 100% 32px;
   background-attachment: local;
+  background-position: 0 6px;
   line-height: 32px;
-  padding: 0 1rem 0 1rem;
+  padding: 6px 1rem 0 1rem;
 }
 
 /* Sombra de tarjeta con tinte azul */

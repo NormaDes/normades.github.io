@@ -34,7 +34,7 @@ function BarRow({ label, sub, value, detail, mark }: { label: string; sub?: stri
 
 function Panel({ title, hint, children }: { title: string; hint?: string; children: React.ReactNode }) {
   return (
-    <section className="rounded-xl border border-line bg-surface p-4 md:p-5">
+    <section className="rounded-3xl border border-line shadow-card bg-surface p-4 md:p-5">
       <div className="flex items-baseline justify-between gap-3">
         <h2 className="font-display text-xl font-bold">{title}</h2>
         {hint && <span className="text-xs text-muted">{hint}</span>}
@@ -181,7 +181,7 @@ export function ProgressDashboard() {
       <div className="rounded-xl border border-dashed border-line bg-surface p-8 text-center">
         <p className="font-display text-xl font-bold">Aquí verás tu progreso</p>
         <p className="mx-auto mt-2 max-w-sm text-sm text-muted">Completa tu primer ejercicio y aparecerán tu acierto por parte, tu evolución, tus puntos débiles y tu racha.</p>
-        <Link href="/practica" className="mt-5 inline-flex min-h-12 items-center gap-2 rounded-lg bg-brand px-5 text-sm font-semibold text-brand-ink">
+        <Link href="/practica" className="mt-5 inline-flex min-h-12 items-center gap-2 rounded-2xl bg-brand px-5 text-sm font-extrabold text-brand-ink">
           Empezar a practicar <ArrowIcon width={18} height={18} />
         </Link>
       </div>
@@ -212,7 +212,7 @@ export function ProgressDashboard() {
         ))}
       </dl>
 
-      <Link href={`/practica/${p.suggestion.partId}`} className="group flex items-center gap-4 rounded-xl border border-line bg-surface p-4 transition-shadow hover:shadow-[0_10px_28px_-16px_rgba(1,26,59,0.45)]">
+      <Link href={`/practica/${p.suggestion.partId}`} className="group flex items-center gap-4 rounded-3xl border border-line shadow-card bg-surface p-4 transition-shadow hover:shadow-[0_10px_28px_-16px_rgba(1,26,59,0.45)]">
         <div className="min-w-0 flex-1">
           <p className="eyebrow text-accent-dark">Recomendación de hoy</p>
           <p className="mt-1 font-display text-lg font-bold leading-snug">{sug.name}</p>

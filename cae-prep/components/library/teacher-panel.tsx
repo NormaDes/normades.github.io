@@ -48,10 +48,10 @@ export function TeacherPanel() {
   }, []);
 
   if (!isSupabaseConfigured()) {
-    return <p className="rounded-xl border border-line bg-surface p-5 text-sm text-muted">El panel del profesor necesita las cuentas de usuario (Supabase) para compartir material con la clase.</p>;
+    return <p className="rounded-3xl border border-line shadow-card bg-surface p-5 text-sm text-muted">El panel del profesor necesita las cuentas de usuario (Supabase) para compartir material con la clase.</p>;
   }
   if (admin === null) return <div className="h-40 animate-pulse rounded-xl bg-line/60" aria-busy="true" />;
-  if (!admin) return <p className="rounded-xl border border-line bg-surface p-5 text-sm text-muted">Esta sección es solo para el profesor. Si deberías tener acceso, pídele que te haga administrador.</p>;
+  if (!admin) return <p className="rounded-3xl border border-line shadow-card bg-surface p-5 text-sm text-muted">Esta sección es solo para el profesor. Si deberías tener acceso, pídele que te haga administrador.</p>;
 
   const needsFile = ["audio", "pdf", "image"].includes(kind);
   const accept = KINDS.find((k) => k[0] === kind)?.[2];
@@ -97,7 +97,7 @@ export function TeacherPanel() {
 
   return (
     <div className="space-y-8">
-      <form onSubmit={submit} className="space-y-4 rounded-xl border border-line bg-surface p-5">
+      <form onSubmit={submit} className="space-y-4 rounded-3xl border border-line shadow-card bg-surface p-5">
         <h2 className="font-display text-xl font-bold">Subir material</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="block text-sm font-medium">Tipo
@@ -161,7 +161,7 @@ export function TeacherPanel() {
         </fieldset>
 
         {msg && <p role={msg.ok ? "status" : "alert"} className={`rounded-lg p-3 text-sm ${msg.ok ? "bg-ok-soft text-ok" : "bg-bad-soft text-bad"}`}>{msg.text}</p>}
-        <button type="submit" disabled={busy} className="min-h-12 w-full rounded-lg bg-brand px-5 text-sm font-semibold text-brand-ink disabled:opacity-60">{busy ? "Subiendo…" : "Publicar"}</button>
+        <button type="submit" disabled={busy} className="min-h-12 w-full rounded-2xl bg-brand px-5 text-sm font-extrabold text-brand-ink disabled:opacity-60">{busy ? "Subiendo…" : "Publicar"}</button>
         <p className="text-xs text-muted">Asegúrate de tener derecho a compartir el material con tus alumnos. Los alumnos solo podrán verlo dentro de la plataforma.</p>
       </form>
 

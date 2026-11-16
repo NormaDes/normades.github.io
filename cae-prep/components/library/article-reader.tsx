@@ -90,15 +90,15 @@ export function ArticleReader() {
       {article.fullTextAllowed && article.body ? (
         <>
           <p className="mt-4 text-xs text-muted">Selecciona una palabra o frase para guardarla en tu vocabulario.</p>
-          <div ref={bodyRef} className="exam-text-long mt-3 rounded-xl border border-line bg-surface p-5 font-serif text-[1.08rem] md:p-8">
+          <div ref={bodyRef} className="exam-text-long mt-3 rounded-3xl border border-line shadow-card bg-surface p-5 font-serif text-[1.08rem] md:p-8">
             {paragraphs.map((p, i) => (isHeading(p) ? <h2 key={i} className="mt-6 text-xl font-bold first:mt-0">{p}</h2> : <p key={i} className="mt-4 first:mt-0">{p}</p>))}
           </div>
         </>
       ) : (
-        <div className="mt-6 rounded-xl border border-line bg-surface p-5">
+        <div className="mt-6 rounded-3xl border border-line shadow-card bg-surface p-5">
           <p className="font-serif text-[1.05rem] italic">{article.excerpt}</p>
           <p className="mt-3 text-sm text-muted">Esta fuente solo permite mostrar un extracto.</p>
-          <a href={article.url} target="_blank" rel="noreferrer" className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-lg bg-brand px-4 text-sm font-semibold text-brand-ink">Leer el artículo completo <ArrowIcon width={16} height={16} /></a>
+          <a href={article.url} target="_blank" rel="noreferrer" className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-2xl bg-brand px-4 text-sm font-extrabold text-brand-ink">Leer el artículo completo <ArrowIcon width={16} height={16} /></a>
         </div>
       )}
 

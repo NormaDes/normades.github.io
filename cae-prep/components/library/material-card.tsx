@@ -27,7 +27,7 @@ export function MaterialCard({ m, onDelete, canDelete }: { m: Material; onDelete
   };
 
   return (
-    <li className="rounded-xl border border-line bg-surface p-4">
+    <li className="rounded-3xl border border-line shadow-card bg-surface p-4">
       <div className="flex flex-wrap items-center gap-2 text-xs">
         <span className="rounded-md bg-brand-soft px-2 py-0.5 font-semibold text-brand">{KIND_LABEL[m.kind]}</span>
         {m.visibility === "class" ? <span className="font-semibold text-ok">Clase</span> : <span className="text-muted">Privado</span>}
@@ -58,18 +58,18 @@ export function MaterialCard({ m, onDelete, canDelete }: { m: Material; onDelete
 
       <div className="mt-3 flex flex-wrap gap-2">
         {m.storagePath && (m.kind === "audio" || m.kind === "image" || m.kind === "pdf") && !src && (
-          <button type="button" onClick={open} disabled={busy} className="inline-flex min-h-10 items-center gap-1.5 rounded-lg bg-brand px-4 text-sm font-semibold text-brand-ink disabled:opacity-60">
+          <button type="button" onClick={open} disabled={busy} className="inline-flex min-h-10 items-center gap-1.5 rounded-2xl bg-brand px-4 text-sm font-extrabold text-brand-ink disabled:opacity-60">
             {m.kind === "audio" ? <PlayIcon width={16} height={16} /> : <ArrowIcon width={16} height={16} />}
             {busy ? "Abriendo…" : m.kind === "audio" ? "Escuchar" : m.kind === "pdf" ? "Abrir PDF" : "Ver"}
           </button>
         )}
         {yt && (
-          <Link href={`/biblioteca/video?v=${yt}&m=${m.id}`} className="inline-flex min-h-10 items-center gap-1.5 rounded-lg bg-brand px-4 text-sm font-semibold text-brand-ink">
+          <Link href={`/biblioteca/video?v=${yt}&m=${m.id}`} className="inline-flex min-h-10 items-center gap-1.5 rounded-2xl bg-brand px-4 text-sm font-extrabold text-brand-ink">
             <PlayIcon width={16} height={16} /> Ver vídeo
           </Link>
         )}
         {m.url && !yt && (
-          <a href={m.url} target="_blank" rel="noreferrer" className="inline-flex min-h-10 items-center gap-1.5 rounded-lg bg-brand px-4 text-sm font-semibold text-brand-ink">
+          <a href={m.url} target="_blank" rel="noreferrer" className="inline-flex min-h-10 items-center gap-1.5 rounded-2xl bg-brand px-4 text-sm font-extrabold text-brand-ink">
             Abrir <ArrowIcon width={16} height={16} />
           </a>
         )}
@@ -79,7 +79,7 @@ export function MaterialCard({ m, onDelete, canDelete }: { m: Material; onDelete
           </Link>
         )}
         {canDelete && onDelete && (
-          <button type="button" onClick={() => window.confirm(`¿Eliminar «${m.title}»?`) && onDelete()} className="ml-auto min-h-10 rounded-lg border border-line px-3 text-sm font-semibold text-bad hover:bg-bad-soft">
+          <button type="button" onClick={() => window.confirm(`¿Eliminar «${m.title}»?`) && onDelete()} className="ml-auto min-h-10 rounded-2xl border-2 border-line px-3 text-sm font-semibold text-bad hover:bg-bad-soft">
             Eliminar
           </button>
         )}
