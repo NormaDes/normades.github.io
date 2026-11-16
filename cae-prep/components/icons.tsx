@@ -13,6 +13,8 @@ import {
   Cards,
   Fire,
   Microphone,
+  Moon,
+  SunDim,
   PencilSimpleLine,
   DotsThreeOutline,
   PenNib,
@@ -63,6 +65,8 @@ export const StarIcon = make(Star, "fill");
 export const TrophyIcon = make(Trophy, "fill");
 export const SparkleIcon = make(Sparkle, "fill");
 export const BoltIcon = make(Lightning, "fill");
+export const MoonIcon = make(Moon, "fill");
+export const SunIcon = make(SunDim, "fill");
 
 export const PAPER_ICONS: Record<PaperId, (p: Props) => React.JSX.Element> = {
   reading: ReadingIcon,

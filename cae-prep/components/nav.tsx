@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { CalendarIcon, HomeIcon, LibraryIcon, MistakesIcon, MockIcon, MoreIcon, PracticeIcon, ProgressIcon, TeacherIcon, VocabIcon } from "@/components/icons";
 import { Logo } from "@/components/logo";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { UserChip } from "@/components/user-chip";
 import { useIsAdmin } from "@/lib/supabase/use-admin";
 
@@ -59,7 +60,8 @@ export function Nav() {
               );
             })}
           </nav>
-          <div className="ml-auto lg:ml-0">
+          <div className="ml-auto flex items-center gap-2 lg:ml-0">
+            <ThemeToggle />
             <UserChip variant="bar" />
           </div>
         </div>

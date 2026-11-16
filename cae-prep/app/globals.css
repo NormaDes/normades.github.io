@@ -39,6 +39,47 @@
   --warn-soft: #fff3c7;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0d1130;
+    --surface: #161b44;
+    --line: #2b3272;
+    --ink: #f1f3ff;
+    --muted: #a6aedd;
+    --brand-soft: #1b2566;
+    --coral-soft: #44202c;
+    --ok: #3bd69b;
+    --ok-soft: #0f3a2c;
+    --bad: #ff8a95;
+    --bad-soft: #43202a;
+    --sun-soft: #3b3210;
+    --tangerine-soft: #44291a;
+    --grape-soft: #2c2160;
+    --sky-soft: #123349;
+    --warn-soft: #3b3210;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0d1130;
+  --surface: #161b44;
+  --line: #2b3272;
+  --ink: #f1f3ff;
+  --muted: #a6aedd;
+  --brand-soft: #1b2566;
+  --coral-soft: #44202c;
+  --ok: #3bd69b;
+  --ok-soft: #0f3a2c;
+  --bad: #ff8a95;
+  --bad-soft: #43202a;
+  --sun-soft: #3b3210;
+  --tangerine-soft: #44291a;
+  --grape-soft: #2c2160;
+  --sky-soft: #123349;
+  --warn-soft: #3b3210;
+}
+
 @theme inline {
   --color-bg: var(--bg);
   --color-surface: var(--surface);
@@ -342,4 +383,122 @@ textarea::placeholder {
   .border.border-line {
     border-width: 2px;
   }
+}
+
+/* ───────── Modo oscuro: ajustes que no salen solo de los tokens ───────── */
+:root[data-theme="dark"] body {
+  background-image: radial-gradient(#1f2760 1.3px, transparent 1.3px);
+}
+:root[data-theme="dark"] .text-brand {
+  color: #9db3ff;
+}
+:root[data-theme="dark"] .text-accent-dark {
+  color: #ff8b97;
+}
+:root[data-theme="dark"] .text-grape-dark {
+  color: #c9b8ff;
+}
+:root[data-theme="dark"] .text-tangerine-dark {
+  color: #ffb683;
+}
+:root[data-theme="dark"] [class*="text-[#4d3700]"]:not([class~="bg-sun"]),
+:root[data-theme="dark"] [class*="text-[#6b4b00]"]:not([class~="bg-sun"]),
+:root[data-theme="dark"] [class*="text-[#7a5a00]"]:not([class~="bg-sun"]) {
+  color: #ffe7a0;
+}
+:root[data-theme="dark"] [class*="text-[#0b6aa0]"] {
+  color: #8fd3ff;
+}
+:root[data-theme="dark"] .bg-ok {
+  color: #04251a;
+}
+:root[data-theme="dark"] .bg-bad {
+  color: #2a060b;
+}
+:root[data-theme="dark"] [class*="bg-white/9"] {
+  background-color: rgb(22 27 68 / 0.92);
+}
+:root[data-theme="dark"] .ruled {
+  background-color: #161b44; background-image: linear-gradient(to bottom, transparent 0, transparent 31px, #2b3272 31px, #2b3272 32px);
+}
+:root[data-theme="dark"] .bg-white {
+  --ink: #1c2257; --muted: #5b6494; --line: #dde3f7; --bg: #f4f6ff; --brand-soft: #e6ecff; color-scheme: light;
+}
+:root[data-theme="dark"] img[alt="Englora"] {
+  background: #fff; padding: 5px 9px; border-radius: 12px; box-sizing: content-box;
+}
+:root[data-theme="dark"] select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a6aedd' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+:root[data-theme="dark"] input::placeholder,
+:root[data-theme="dark"] textarea::placeholder {
+  color: #7f88c0;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) body {
+    background-image: radial-gradient(#1f2760 1.3px, transparent 1.3px);
+  }
+  :root:not([data-theme="light"]) .text-brand {
+    color: #9db3ff;
+  }
+  :root:not([data-theme="light"]) .text-accent-dark {
+    color: #ff8b97;
+  }
+  :root:not([data-theme="light"]) .text-grape-dark {
+    color: #c9b8ff;
+  }
+  :root:not([data-theme="light"]) .text-tangerine-dark {
+    color: #ffb683;
+  }
+  :root:not([data-theme="light"]) [class*="text-[#4d3700]"]:not([class~="bg-sun"]),
+  :root:not([data-theme="light"]) [class*="text-[#6b4b00]"]:not([class~="bg-sun"]),
+  :root:not([data-theme="light"]) [class*="text-[#7a5a00]"]:not([class~="bg-sun"]) {
+    color: #ffe7a0;
+  }
+  :root:not([data-theme="light"]) [class*="text-[#0b6aa0]"] {
+    color: #8fd3ff;
+  }
+  :root:not([data-theme="light"]) .bg-ok {
+    color: #04251a;
+  }
+  :root:not([data-theme="light"]) .bg-bad {
+    color: #2a060b;
+  }
+  :root:not([data-theme="light"]) [class*="bg-white/9"] {
+    background-color: rgb(22 27 68 / 0.92);
+  }
+  :root:not([data-theme="light"]) .ruled {
+    background-color: #161b44; background-image: linear-gradient(to bottom, transparent 0, transparent 31px, #2b3272 31px, #2b3272 32px);
+  }
+  :root:not([data-theme="light"]) .bg-white {
+    --ink: #1c2257; --muted: #5b6494; --line: #dde3f7; --bg: #f4f6ff; --brand-soft: #e6ecff; color-scheme: light;
+  }
+  :root:not([data-theme="light"]) img[alt="Englora"] {
+    background: #fff; padding: 5px 9px; border-radius: 12px; box-sizing: content-box;
+  }
+  :root:not([data-theme="light"]) select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a6aedd' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  }
+  :root:not([data-theme="light"]) input::placeholder,
+  :root:not([data-theme="light"]) textarea::placeholder {
+    color: #7f88c0;
+  }
+  
+}
+
+/* Islas blancas dentro del modo oscuro: colores de texto como en claro */
+:root[data-theme="dark"] .bg-white .text-brand, .bg-white.text-brand { color: #2f5bff; }
+:root[data-theme="dark"] .bg-white .text-accent-dark, .bg-white.text-accent-dark { color: #c9283a; }
+:root[data-theme="dark"] .bg-white .text-grape-dark, .bg-white.text-grape-dark { color: #6d3fe0; }
+:root[data-theme="dark"] .bg-white .text-tangerine-dark, .bg-white.text-tangerine-dark { color: #b8570f; }
+:root[data-theme="dark"] .bg-white .text-ok, .bg-white.text-ok { color: #0e8a58; }
+:root[data-theme="dark"] .bg-white .text-bad, .bg-white.text-bad { color: #c9283a; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .bg-white .text-brand, .bg-white.text-brand { color: #2f5bff; }
+  :root:not([data-theme="light"]) .bg-white .text-accent-dark, .bg-white.text-accent-dark { color: #c9283a; }
+  :root:not([data-theme="light"]) .bg-white .text-grape-dark, .bg-white.text-grape-dark { color: #6d3fe0; }
+  :root:not([data-theme="light"]) .bg-white .text-tangerine-dark, .bg-white.text-tangerine-dark { color: #b8570f; }
+  :root:not([data-theme="light"]) .bg-white .text-ok, .bg-white.text-ok { color: #0e8a58; }
+  :root:not([data-theme="light"]) .bg-white .text-bad, .bg-white.text-bad { color: #c9283a; }
 }
