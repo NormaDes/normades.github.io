@@ -12,6 +12,7 @@ import { w1Seeds, w2Seeds } from "@/lib/exercises/seeds/writing";
 import { l1Seeds, l2Seeds, l3Seeds, l4Seeds } from "@/lib/exercises/seeds/listening";
 import { s1Seeds, s2Seeds, s3Seeds, s4Seeds } from "@/lib/exercises/seeds/speaking";
 import { b2r1Seeds, b2r2Seeds, b2r3Seeds, b2r4Seeds } from "@/lib/exercises/seeds/b2-reading-a";
+import { b2t1r1, b2t1r2, b2t1r3, b2t1r4 } from "@/lib/exercises/seeds/b2-import-t1";
 import { b2r5Seeds, b2r7Seeds, b2r8Seeds, b2w1Seeds, b2w2Seeds } from "@/lib/exercises/seeds/b2-reading-b";
 
 const SEED_DATE = "2026-11-06T00:00:00.000Z";
@@ -44,10 +45,10 @@ export const SEED_EXERCISES: Exercise[] = [
   ...wrap("s3", s3Seeds),
   ...wrap("s4", s4Seeds),
   // B2 First
-  ...wrap("r1", b2r1Seeds, "b2-first"),
-  ...wrap("r2", b2r2Seeds, "b2-first"),
-  ...wrap("r3", b2r3Seeds, "b2-first"),
-  ...wrap("r4", b2r4Seeds, "b2-first"),
+  ...wrap("r1", [...b2r1Seeds, ...b2t1r1], "b2-first"),
+  ...wrap("r2", [...b2r2Seeds, ...b2t1r2], "b2-first"),
+  ...wrap("r3", [...b2r3Seeds, ...b2t1r3], "b2-first"),
+  ...wrap("r4", [...b2r4Seeds, ...b2t1r4], "b2-first"),
   ...wrap("r5", b2r5Seeds, "b2-first"),
   ...wrap("r7", b2r7Seeds, "b2-first"),
   ...wrap("r8", b2r8Seeds, "b2-first"),
